@@ -1,0 +1,16 @@
+# .NET
+bin/
+obj/
+*.db
+# Node
+node_modules/
+dist/
+# Python
+__pycache__/
+.venv/
+.ipynb_checkpoints/
+# Secrets
+.env
+appsettings.Development.json
+# OS
+.DS_Store

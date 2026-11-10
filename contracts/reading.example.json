@@ -1,0 +1,10 @@
+[
+  { "crewId": "crew-1", "metric": "heart_rate",   "value": 72,   "unit": "bpm",   "takenAt": "2026-11-13T10:15:00Z", "source": "device" },
+  { "crewId": "crew-1", "metric": "spo2",         "value": 97,   "unit": "%",     "takenAt": "2026-11-13T10:15:00Z", "source": "device" },
+  { "crewId": "crew-1", "metric": "temperature",  "value": 36.8, "unit": "C",     "takenAt": "2026-11-13T10:15:00Z", "source": "device" },
+  { "crewId": "crew-1", "metric": "bp_systolic",  "value": 118,  "unit": "mmHg",  "takenAt": "2026-11-13T08:00:00Z", "source": "manual" },
+  { "crewId": "crew-1", "metric": "bp_diastolic", "value": 76,   "unit": "mmHg",  "takenAt": "2026-11-13T08:00:00Z", "source": "manual" },
+  { "crewId": "crew-1", "metric": "glucose",      "value": 95,   "unit": "mg/dL", "takenAt": "2026-11-13T08:05:00Z", "source": "manual" },
+  { "crewId": "crew-1", "metric": "sleep_hours",  "value": 6.5,  "unit": "h",     "takenAt": "2026-11-13T07:00:00Z", "source": "manual" },
+  { "crewId": "crew-1", "metric": "mood",         "value": 4,    "unit": "score", "takenAt": "2026-11-13T07:00:00Z", "source": "manual" }
+]
