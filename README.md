@@ -1,4 +1,6 @@
-# ريبو الفريق · هاكاثون ناسا القاهرة 2026
+# Space Monkeys 🚀
+
+ريبو الفريق في هاكاثون ناسا القاهرة 2026.
 
 التحدي:
 
@@ -54,6 +56,12 @@ Create Health Monitoring Software for Astronauts on Space Missions
 ---
 
 ## الفريق
+
+اسم الفريق:
+
+```
+Space Monkeys 🚀
+```
 
 | الاسم | الدور |
 |---|---|
