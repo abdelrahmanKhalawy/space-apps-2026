@@ -31,7 +31,7 @@ function CrewApp() {
   return (
     <div className="app">
       <header>
-        <h1>Space Monkeys</h1>
+        <h1>AstroPulse</h1>
         <p>Astronaut health monitoring · NASA Space Apps Cairo 2026</p>
       </header>
       <nav className="tabs" role="tablist" aria-label="Screens">
