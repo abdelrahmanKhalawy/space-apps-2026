@@ -1,110 +1,97 @@
-# Space Monkeys 🚀
+<!--
+  DRAFT for f5 (README and sources), written ahead of feature freeze (f1) so delivery
+  isn't rushed at the last minute. Before submitting: add the demo video link, confirm
+  the hardware status line below still matches reality, and remove this notice.
+-->
 
-ريبو الفريق في هاكاثون ناسا القاهرة 2026.
+# AstroPulse
 
-التحدي:
+**NASA Space Apps Challenge 2026, Cairo — Team Space Monkeys 🚀**
 
-```
-Create Health Monitoring Software for Astronauts on Space Missions
-```
+Challenge: [Create Health Monitoring Software for Astronauts on Space Missions](https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/)
 
-بنبني منظومة طبية للمركبة الفضائية: جهاز حقيقي بيقيس، وذكاء اصطناعي بيعرف الطبيعي بتاع كل رائد فضاء، وقرار "أتصرف لوحدي ولا أبلّغ" محسوب على تأخير الرسايل، وشاشة لطبيب الأرض. وكله بيتحكي كقصة: اليوم 143 في الطريق للمريخ.
-
-> ⚠️ ممنوع نكتب كود الحل قبل الجمعة 13 نوفمبر. الريبو ده فيه الفولدرات والبريفات والعقود المشتركة بس. أول سطر كود بيتكتب يوم الهاكاثون.
-
----
-
-## ابدأ من هنا
-
-1. افتح شجرة المهام وشوف إيه المتاح ليك دلوقتي:
-   ```
-   https://abdelrahmankhalawy.github.io/task-tree/
-   ```
-2. افتح البريف بتاع مهمتك من فهرس المهام:
-   ```
-   tasks/README.md
-   ```
-3. اقرا العقود المشتركة قبل ما تكتب أي حاجة بتتكلم مع جزء تاني:
-   ```
-   contracts/
-   ```
-4. اشتغل في فرع لوحدك، وافتح طلب دمج لما معايير القبول كلها تتحقق. التفاصيل هنا:
-   ```
-   docs/workflow.md
-   ```
-5. لما الطلب يندمج، علّم على المهمة في الشجرة عشان اللي بعدها تتفتح.
+**Live app:** https://space-monkeys-2026.azurewebsites.net
 
 ---
 
-## خريطة الريبو
+## The problem
 
-كل فولدر ليه صاحب. لو هتعدّل في فولدر مش بتاعك، كلّم صاحبه الأول.
+On a long mission, an astronaut carries most of the responsibility for noticing their own health problems before they become serious — and a message to Earth can take anywhere from about a second (ISS) to 20 minutes (Mars). Fixed "normal ranges" also don't hold up well in space: gravity, isolation, radiation, and a sealed environment change what's normal for a given person over time.
 
-| الفولدر | فيه إيه | صاحبه |
-|---|---|---|
-| `tasks/` | بريف لكل مهمة من الشجرة | عبدالرحمن |
-| `contracts/` | الاتفاقات اللي كل الأجزاء بتتكلم بيها | عبدالرحمن وشهد |
-| `api/` | السيرفر | عبدالرحمن |
-| `web/` | الشاشات | شهد |
-| `ai/` | الموديل وخدمته | شهد أشرف ومحمد |
-| `firmware/` | كود الجهاز | عمار |
-| `research/` | الحدود والمصادر ونصوص الشرح | ندى |
-| `data/` | البيانات التجريبية وسيناريو اليوم 143 | محمد |
-| `media/` | الفيديو والسلايدز والصور | ندى وعمار |
-| `docs/` | القرارات وطريقة الشغل والتسليم | التيم ليد |
+## What we built
 
----
+AstroPulse is a single web app with two views:
 
-## الفريق
+- **Crew view** — a finger-sensor device (or its on-screen simulator) reports heart rate, SpO₂, and skin temperature live; blood pressure, blood sugar, sleep and mood are logged by hand. Every reading is colored green/yellow/red against sourced thresholds, shown on a dashboard, a clickable interactive body, and a decision screen that tells the astronaut what to do and how long a reply from Earth will take.
+- **Ground control view** — the flight surgeon's screen, showing reports as they arrive after that same communication delay.
 
-اسم الفريق:
+Underneath, a model learns each astronaut's own baseline from their first week of readings and flags a real, sustained drift days before the fixed color thresholds would — even while the screen still reads green. When it flags something, the app explains which of NASA's five spaceflight hazards is responsible, in plain language, and forecasts how many days until that metric would turn red if the trend continues.
 
+### The three-moment demo
+
+1. **A finger on the sensor** — heart rate and SpO₂ appear live, the matching body part lights up by color.
+2. **Day 143, en route to Mars** — a two-week mock scenario plays: sleep drops, resting heart rate creeps up, the color is still green, and the model says *this isn't your normal, and it's isolation* — with a forecast for when it'll turn red.
+3. **Status turns red** — the app shows how long Earth's reply will take, and the ground control screen receives the report after that delay.
+
+## Try it
+
+Open the live link above — no install needed, works on a phone or laptop:
+
+1. On the **Status** tab, press **Simulate device** (top of the page) to start live readings — this stands in for the real finger-sensor hardware.
+2. Open **Body** to see the interactive body update live, by color.
+3. Open the **Log a check** tab to enter blood pressure, blood sugar, sleep, or mood.
+4. Click any metric card on the Status tab to expand its chart; when the model has flagged that metric, you'll also see why, what to do, and a forecast.
+5. Open `#ground` (linked in the footer) in a second tab for the ground-control (flight surgeon) view.
+
+### Run it locally
+
+```bash
+cd web && npm install && npm run build   # builds the screens into api/wwwroot
+cd ../api && dotnet run                  # http://localhost:5080
 ```
-Space Monkeys 🚀
-```
 
-| الاسم | الدور |
+Deployment steps (Azure) are in [`api/README.md`](api/README.md).
+
+## Hardware
+
+The current prototype is a small box the judge presses a finger against (MAX30102 for heart rate/SpO₂, plus a temperature sensor). **If the hardware isn't connected at demo time, the app falls back to the on-screen device simulator**, which sends the exact same data shape over the exact same path a real device would — this is a deliberate fallback built into the app, not a missing feature. The next version is planned as a wristband; see the slides for that concept.
+
+## Data
+
+The two-week "Day 143" scenario (`data/mock/day143.json`) is **synthetic, generated data**, not from a real person — see `data/README.md` and `data/mock/generate.py`. Precomputed AI results (`data/precomputed/`) let the demo run in full even if the AI service itself is unreachable.
+
+## Sources
+
+Full detail, with every link and an honest note on which ones are stronger than others, is in [`research/sources.md`](research/sources.md) (color thresholds) and [`research/explanations.json`](research/explanations.json) (space-hazard explanations, sourced from NASA). In short:
+
+- **Color thresholds** — American Heart Association (heart rate, blood pressure), MedlinePlus/NIH (oxygen saturation), CDC (blood sugar, sleep). Skin temperature has no precise clinical source and is an approximation; mood is a self-reported 1–5 scale with no clinical standard, included because NASA's Human Research Program tracks it as a leading indicator of isolation.
+- **Space-hazard explanations** — NASA (cardiovascular health in microgravity, cabin air quality, sleep in orbit, behavioral health and isolation). The blood-sugar/isolation link is our own inference from NASA's nutrition research, not a direct NASA statement — flagged as our weakest source.
+- **Challenge background** — NASA's own [challenge page](https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/) and its Resources tab (five hazards of human spaceflight, risks of human spaceflight).
+
+## AI usage
+
+We used Claude Code throughout the build: scaffolding the API and the screens; implementing readings storage, validation, SignalR live updates, and the ground-control report flow; researching and sourcing the color thresholds and space-hazard explanations from NASA, CDC, AHA, and MedlinePlus when the team member who owned that research was unavailable; building the baseline/anomaly-detection model, its FastAPI wrapper, and the trend-forecast model; and generating the synthetic two-week mock dataset. Every use is logged, with who requested it and what it covered, in [`docs/ai-usage.md`](docs/ai-usage.md).
+
+## Team
+
+| Name | Role |
 |---|---|
-| شهد أشرف | التيم ليد، والذكاء الاصطناعي |
-| محمد | الذكاء الاصطناعي |
-| عبدالرحمن | فول ستاك، وتوزيع التاسكات |
-| شهد | فول ستاك |
-| عمار | الهاردوير |
-| ندى | البحث |
+| Shahd Ashraf | Team lead, AI |
+| Mohamed | AI |
+| Abdelrahman | Full-stack, task planning |
+| Shahd | Full-stack |
+| Ammar | Hardware |
+| Nada | Research |
 
-الكلمة الأخيرة في أي خلاف على النطاق للتيم ليد.
+## Repo map
 
----
-
-## المراحل
-
-كل مرحلة بتخلص ببوابة. البوابة معناها لينك شغال يتسلم لو الوقت خلص فجأة.
-
-| المرحلة | آخر معاد | بتسلّم إيه |
-|---|---|---|
-| 0 · الانطلاق | الجمعة 11:30 الصبح | النطاق متثبت، والعقد متفق عليه، ولينك فاضي شغال |
-| 1 · نسخة تتسلم | الجمعة 5 العصر | إدخال، وألوان بمصادرها، ورسوم على البيانات التجريبية |
-| 2 · نسخة الفضاء | الجمعة 11 بالليل | الجهاز لايف، والذكاء الاصطناعي، وشاشة طبيب الأرض |
-| 3 · نسخة الإبهار | السبت 4 الفجر | الجسم التفاعلي، وتوقع الاتجاه، وشكل الجهاز |
-| 4 · التسليم | السبت 7 الصبح | الفيديو، والسلايدز، والتسليم المحلي والعالمي |
-
----
-
-## روابط مهمة
-
-- شجرة المهام:
-  ```
-  https://abdelrahmankhalawy.github.io/task-tree/
-  ```
-- القرارات التقنية:
-  ```
-  docs/decisions.md
-  ```
-- قائمة التسليم:
-  ```
-  docs/submission.md
-  ```
-- سجل استخدام الذكاء الاصطناعي (مطلوب في التسليم):
-  ```
-  docs/ai-usage.md
-  ```
+| Folder | What's in it |
+|---|---|
+| `api/` | ASP.NET Core server: readings, colors, live updates (SignalR), reports, AI result endpoints |
+| `web/` | React + Vite screens |
+| `ai/` | Baseline/anomaly model, cause explanations, trend forecast, and the FastAPI service wrapping them |
+| `firmware/` | ESP32 device code |
+| `research/` | Sourced color thresholds and space-hazard explanations |
+| `data/` | The Day 143 mock scenario and precomputed AI fallback results |
+| `contracts/` | The shared data/API shapes every part of the app follows |
+| `docs/` | Decisions, workflow, and this AI-usage log |
