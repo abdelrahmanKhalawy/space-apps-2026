@@ -4,6 +4,7 @@ import Dashboard from './dashboard/Dashboard.jsx'
 import DeviceSimulator from './live/DeviceSimulator.jsx'
 import CameraPulse from './live/CameraPulse.jsx'
 import useLive from './live/useLive.js'
+import useOutbox from './offline/useOutbox.js'
 import EntryForm from './entry/EntryForm.jsx'
 import GroundScreen from './ground/GroundScreen.jsx'
 
@@ -29,6 +30,7 @@ function CrewApp() {
   // a5: readings arrive live over SignalR (polling if the hub can't connect).
   // Both the Status and Body screens re-fetch whenever `tick` changes.
   const { tick } = useLive()
+  const { pending } = useOutbox()
   const SCREENS = { status: <Dashboard reloadKey={tick} />, body: <BodyView reloadKey={tick} />, log: <EntryForm />,
     checks: (
       <Suspense fallback={<p className="hint">Loading…</p>}>
@@ -64,6 +66,11 @@ function CrewApp() {
         <DeviceSimulator />
         <CameraPulse />
       </header>
+      {pending > 0 && (
+        <p className="notice" role="status">
+          {pending} reading{pending === 1 ? '' : 's'} saved on this device, waiting for a connection.
+        </p>
+      )}
       <nav className="tabs" role="tablist" aria-label="Screens">
         {TABS.map(t => (
           <button

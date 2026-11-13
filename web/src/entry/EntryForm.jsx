@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { BP, GLUCOSE, SLEEP, MOOD, METRIC_LABELS } from './metrics.js'
 import { validate, buildReadings, stepSleep } from './readings.js'
+import { queueReadings } from '../offline/outbox.js'
 
 const EMPTY = { systolic: '', diastolic: '', glucose: '', sleep: null, mood: null }
 
@@ -51,11 +52,12 @@ export default function EntryForm() {
 
     setStatus('sending')
     setProblem('')
+    const readings = buildReadings(parsed)
     try {
       const res = await fetch('/api/readings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(buildReadings(parsed)),
+        body: JSON.stringify(readings),
       })
       if (!res.ok) {
         setProblem(await readProblem(res))
@@ -66,8 +68,10 @@ export default function EntryForm() {
       setValues(EMPTY)
       setStatus('saved')
     } catch {
-      setProblem('Could not reach the server. Check the connection and try again. Nothing was saved.')
-      setStatus('failed')
+      // No connection: keep the reading on this device and send it when the link is back (offline/outbox.js).
+      queueReadings(readings)
+      setValues(EMPTY)
+      setStatus('queued')
     }
   }
 
@@ -91,6 +95,13 @@ export default function EntryForm() {
             ))}
           </ul>
           <small>Recorded at {formatTime(saved[0]?.takenAt)}</small>
+        </section>
+      )}
+
+      {status === 'queued' && (
+        <section className="saved" role="status" aria-live="polite">
+          <h3>Saved on this device</h3>
+          <p>There is no connection right now. Your reading is kept here and will be sent automatically when the link is back.</p>
         </section>
       )}
 

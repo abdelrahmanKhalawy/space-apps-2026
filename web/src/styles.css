@@ -421,3 +421,7 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 .chk-flag { color: var(--yellow); font-size: 0.9rem; }
 .chk-chart { display: grid; gap: 6px; justify-items: center; }
 .chk-line { width: 100%; padding: 6px 0; background: #fff; color: #000; border: 1px solid var(--line); border-radius: 8px; font-family: Georgia, serif; font-weight: 700; cursor: pointer; letter-spacing: 0.1em; }
+
+/* Read aloud */
+.speak { margin: 4px 0; padding: 4px 10px; min-height: 36px; border: 1px solid var(--line); border-radius: 999px; background: var(--bg); color: var(--text); font-size: 0.78rem; cursor: pointer; }
+.speak:hover { border-color: var(--accent); }

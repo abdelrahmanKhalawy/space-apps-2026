@@ -3,6 +3,7 @@ import { COLOR_NAMES, HAZARD_NAMES, METRIC_NAMES, unitLabel } from './metricInfo
 import { formatTime, formatValue } from './status.js'
 import WhyThisMatters from './WhyThisMatters.jsx'
 import EvidenceBadges from './EvidenceBadges.jsx'
+import SpeakButton from '../voice/SpeakButton.jsx'
 
 // The chart library is loaded the first time someone opens a card, so the cards appear fast.
 const MetricChart = lazy(() => import('./MetricChart.jsx'))
@@ -24,9 +25,12 @@ export default function MetricCard({ item, unit, readings, threshold, explain, f
       </button>
 
       {item.advice && (
-        <p className="card-advice" dir="auto">
-          {item.advice}
-        </p>
+        <>
+          <p className="card-advice" dir="auto">
+            {item.advice}
+          </p>
+          <SpeakButton text={item.advice} />
+        </>
       )}
       <p className="card-meta">
         {item.hazard && <span className="tag">{HAZARD_NAMES[item.hazard] ?? item.hazard}</span>}

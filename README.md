@@ -53,6 +53,10 @@ cd ../api && dotnet run                  # http://localhost:5080
 
 Deployment steps (Azure) are in [`api/README.md`](api/README.md).
 
+## Works when the link drops
+
+A mission's connection comes and goes, so the app is built to keep working: it is installable (a service worker keeps the app and the last data available offline), a reading logged with no connection is saved on the device and sent automatically when the link returns, and advice can be read out loud (Web Speech API) for hands-busy moments. The service worker's logic and the offline outbox are covered by `node web/src/offline/sw.test.mjs` and `outbox.test.mjs`. Note: we could not exercise a real service-worker registration in our test browser, so test "install" and "offline" once on a real phone.
+
 ## Hardware
 
 The current prototype is a small box the judge presses a finger against (MAX30102 for heart rate/SpO₂, plus a temperature sensor). **If the hardware isn't connected at demo time, the app falls back to the on-screen device simulator**, which sends the exact same data shape over the exact same path a real device would — this is a deliberate fallback built into the app, not a missing feature. The next version is planned as a wristband; see the slides for that concept.

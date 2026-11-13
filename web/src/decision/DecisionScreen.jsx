@@ -1,3 +1,4 @@
+import SpeakButton from '../voice/SpeakButton.jsx'
 import { useEffect, useState } from 'react'
 import { HAZARD_NAMES, METRIC_NAMES, unitLabel } from '../dashboard/metricInfo.js'
 import { formatValue } from '../dashboard/status.js'
@@ -128,6 +129,7 @@ export default function DecisionScreen({ status, units }) {
               <span className="pill pill-red">Red</span>
             </h3>
             {m.hazard && <p className="why">Linked hazard: {HAZARD_NAMES[m.hazard] ?? m.hazard}</p>}
+            <SpeakButton text={splitSteps(m.advice).join('. ')} label="Read the steps aloud" />
             <ol className="steps" dir="auto">
               {splitSteps(m.advice).map((step, i) => (
                 <li key={i}>{step}</li>

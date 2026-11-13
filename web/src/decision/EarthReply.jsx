@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { formatCountdown } from './mission.js'
+import SpeakButton from '../voice/SpeakButton.jsx'
 
 const CREW_ID = 'crew-1'
 const POLL_MS = 2000
@@ -44,6 +45,7 @@ export default function EarthReply() {
         <>
           <strong>Reply from Earth</strong>
           <p dir="auto">{latest.text}</p>
+          <SpeakButton text={latest.text} label="Read the reply aloud" />
           <small>Received {latest.deliverAt.slice(11, 19)} UTC</small>
         </>
       ) : (
