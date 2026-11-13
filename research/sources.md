@@ -71,3 +71,24 @@ https://ntrs.nasa.gov/api/citations/20230010798/downloads/071622%20CSP_Space%20P
 | النبض، الضغط | الجاذبية | تغيّرات القلب والأوعية الدموية في الجاذبية المتغيرة معروفة في أبحاث ناسا |
 | الأكسجين، الحرارة | البيئة المقفولة | مرتبطين بجودة هوا وحرارة الكابينة |
 | السكر، النوم، المزاج | العزلة والحبس | مرتبطين بضغط الحياة المعزولة الطويلة |
+
+---
+
+# مصادر نصوص الشرح الفضائي (n2)
+
+> مسودة مكان ندى. التفاصيل في `research/explanations.json`.
+
+- **النبض والضغط:** NASA, Cardiovascular Health in Microgravity — إزاحة السوائل لفوق، وضعف القلب والأوعية من عدم مقاومة الجاذبية.
+  https://www.nasa.gov/missions/station/cardiovascular-health-in-microgravity
+
+- **الأكسجين والحرارة:** NASA, Science in Space: Spacecraft Air Quality — تراكم ثاني أكسيد الكربون وأعراضه، وتأثير التهوية على حرارة الجلد.
+  https://www.nasa.gov/missions/station/iss-research/science-in-space-august-4-2023-spacecraft-air-quality/
+
+- **النوم:** NASA, Seven Ways Astronauts Improve Sleep — 16 شروق يومي بيكسر الساعة البيولوجية.
+  https://www.nasa.gov/humans-in-space/seven-ways-astronauts-improve-sleep-may-help-you-snooze-better-on-earth/
+
+- **المزاج:** NASA, About Human Factors and Behavioral Performance — العزلة والحبس أكبر خطر على الصحة السلوكية في المهام الطويلة.
+  https://www.nasa.gov/?p=630243
+
+- **السكر:** ⚠️ **أضعف ربط عندنا.** المصدر (NASA, Enhanced Diet May Help Astronauts Adapt to Spaceflight) بيتكلم عن المناعة والميكروبيوم، مش السكر مباشرة. الربط بتاعنا استنتاج (أكل متغيّر + نشاط أقل + ضغط العزلة)، مش قول صريح من ناسا. محتاج مصدر أدق من ندى.
+  https://www.nasa.gov/humans-in-space/enhanced-diet-may-help-astronauts-adapt-to-spaceflight/
