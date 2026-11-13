@@ -1,11 +1,11 @@
 import SpeakButton from '../voice/SpeakButton.jsx'
+import { buildReportWithConsent, loadConsent } from '../privacy/consent.js'
 import { useEffect, useState } from 'react'
 import { HAZARD_NAMES, METRIC_NAMES, unitLabel } from '../dashboard/metricInfo.js'
 import { formatValue } from '../dashboard/status.js'
 import {
   DEFAULT_MISSION,
   MISSIONS,
-  buildReport,
   formatCountdown,
   formatDuration,
   localTimes,
@@ -61,7 +61,8 @@ export default function DecisionScreen({ status, units }) {
   async function report() {
     if (sending) return
     setSending(true)
-    const body = buildReport({
+    const body = buildReportWithConsent({
+      consent: loadConsent(),
       crewId: status.crewId,
       mission,
       reds,

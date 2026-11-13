@@ -3,6 +3,8 @@ import DecisionScreen from '../decision/DecisionScreen.jsx'
 import EarthReply from '../decision/EarthReply.jsx'
 import MetricCard from './MetricCard.jsx'
 import IndexCard from './IndexCard.jsx'
+import PrivacyPanel from '../privacy/PrivacyPanel.jsx'
+import ReportSheet from '../report/ReportSheet.jsx'
 import SpaceWeather from '../environment/SpaceWeather.jsx'
 import { loadDashboard } from './load.js'
 import thresholds from './thresholds.js'
@@ -51,6 +53,7 @@ export default function Dashboard({ reloadKey = 0 }) {
         <span>{summarize(status)}</span>
       </div>
       <IndexCard readings={data.readings} thresholds={thresholds} />
+      <button type="button" className="cam-link print-btn" onClick={() => window.print()}>Print a summary for the flight surgeon</button>
       <SpaceWeather />
       {mode === 'sample' && (
         <p className="notice" role="note">
@@ -77,6 +80,8 @@ export default function Dashboard({ reloadKey = 0 }) {
           ))}
         </div>
       )}
+      <PrivacyPanel />
+      <ReportSheet status={status} readings={data.readings} thresholds={thresholds} explain={data.explain} forecast={data.forecast} />
     </section>
   )
 }
