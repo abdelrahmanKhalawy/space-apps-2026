@@ -18,6 +18,12 @@ builder.Services.AddDbContext<AppDb>(o => o.UseSqlite($"Data Source={Path.Combin
 var thresholdsPath = builder.Configuration["Thresholds:Path"]
     ?? Path.Combine(AppContext.BaseDirectory, "SeedData", "thresholds.json");
 builder.Services.AddSingleton(sp => Thresholds.Load(thresholdsPath, sp.GetRequiredService<ILoggerFactory>().CreateLogger("Thresholds")));
+
+// Space-hazard explanation text (n2), for the live /api/explain (i3).
+var explanationsPath = builder.Configuration["Explanations:Path"]
+    ?? Path.Combine(AppContext.BaseDirectory, "SeedData", "explanations.json");
+builder.Services.AddSingleton(sp => Explanations.Load(explanationsPath, sp.GetRequiredService<ILoggerFactory>().CreateLogger("Explanations")));
+
 builder.Services.AddSingleton<DemoClock>(); // the clock report delays run on (the demo can skip ahead)
 builder.Services.AddSignalR();
 

@@ -18,7 +18,7 @@ public static class SeedMockData
             return;
         }
 
-        using var doc = JsonDocument.Parse(await File.ReadAllTextAsync(path));
+        using var doc = JsonDocument.Parse(await File.ReadAllBytesAsync(path));
         var items = doc.RootElement.ValueKind == JsonValueKind.Array
             ? doc.RootElement.EnumerateArray().ToList()
             : [doc.RootElement];
