@@ -366,3 +366,21 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 .idx-drivers { margin: 0; padding-left: 18px; font-size: 0.88rem; line-height: 1.5; }
 .idx-note { margin: 4px 0 0; color: var(--muted); font-size: 0.85rem; }
 .idx-fine { margin: 6px 0 0; color: var(--muted); font-size: 0.72rem; }
+
+/* Crew of four: person or environment */
+.crew { margin-top: 16px; }
+.crew h2 { margin: 18px 0 4px; font-size: 1.3rem; }
+.crew-controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 10px 0; }
+.crew-verdict { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); border-left-width: 5px; background: var(--card); line-height: 1.5; font-size: 0.92rem; }
+.crew-none { border-left-color: var(--green); }
+.crew-personal { border-left-color: var(--yellow); }
+.crew-pair { border-left-color: #ff9f43; }
+.crew-shared { border-left-color: var(--red); }
+.tag-reasoning { align-self: flex-start; color: var(--muted); font-size: 0.72rem; }
+.crew-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 12px; margin: 12px 0; }
+.crew-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.crew-flagged { border-color: var(--red); }
+.crew-name { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; font-size: 0.9rem; margin-bottom: 6px; }
+.crew-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 0.8rem; color: var(--muted); }
+.crew-spark { width: 150px; height: 44px; }
+.crew-cabin { grid-column: 1 / -1; }

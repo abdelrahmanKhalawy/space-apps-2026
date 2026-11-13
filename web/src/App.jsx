@@ -8,11 +8,13 @@ import EntryForm from './entry/EntryForm.jsx'
 import GroundScreen from './ground/GroundScreen.jsx'
 
 const Evidence = lazy(() => import('./evidence/Evidence.jsx'))
+const CrewView = lazy(() => import('./crew/CrewView.jsx'))
 
 const TABS = [
   { id: 'status', label: 'Status' },
   { id: 'body', label: 'Body' },
   { id: 'log', label: 'Log a check' },
+  { id: 'crew', label: 'Crew' },
   { id: 'evidence', label: 'Evidence' },
 ]
 
@@ -26,6 +28,11 @@ function CrewApp() {
   // Both the Status and Body screens re-fetch whenever `tick` changes.
   const { tick } = useLive()
   const SCREENS = { status: <Dashboard reloadKey={tick} />, body: <BodyView reloadKey={tick} />, log: <EntryForm />,
+    crew: (
+      <Suspense fallback={<p className="hint">Loading…</p>}>
+        <CrewView />
+      </Suspense>
+    ),
     evidence: (
       <Suspense fallback={<p className="hint">Loading…</p>}>
         <Evidence />
