@@ -11,7 +11,13 @@ var dataDir = builder.Configuration["Db:Dir"]
 Directory.CreateDirectory(dataDir);
 builder.Services.AddDbContext<AppDb>(o => o.UseSqlite($"Data Source={Path.Combine(dataDir, "space.db")}"));
 
+// Color rules come from research/thresholds.json (copied next to the app on build/publish).
+var thresholdsPath = builder.Configuration["Thresholds:Path"]
+    ?? Path.Combine(AppContext.BaseDirectory, "SeedData", "thresholds.json");
+builder.Services.AddSingleton(sp => Thresholds.Load(thresholdsPath, sp.GetRequiredService<ILoggerFactory>().CreateLogger("Thresholds")));
+
 var app = builder.Build();
+app.Services.GetRequiredService<Thresholds>(); // load now, so a bad file is logged at startup
 
 using (var scope = app.Services.CreateScope())
 {
