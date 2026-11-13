@@ -36,6 +36,7 @@ app.MapGet("/api/health", () => Results.Text("ok"));
 app.MapReadings();
 app.MapReports();
 app.MapExplain();
+app.MapForecast();
 app.MapHub<ReadingsHub>("/hubs/readings");
 
 // The React app is built into wwwroot, so the API serves it from the same link.

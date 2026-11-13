@@ -64,6 +64,7 @@ export default function Dashboard({ reloadKey = 0 }) {
               readings={byMetric[item.metric] ?? []}
               threshold={thresholds[item.metric]}
               explain={data.explain?.[item.metric]}
+              forecast={data.forecast?.[item.metric]}
               open={openMetric === item.metric}
               onToggle={() => setOpenMetric(m => (m === item.metric ? null : item.metric))}
             />
