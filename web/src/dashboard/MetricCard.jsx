@@ -1,14 +1,14 @@
 import { Suspense, lazy } from 'react'
-import { COLOR_NAMES, HAZARD_NAMES, METRIC_NAMES, unitLabel } from './metricInfo.js'
+import { HAZARD_NAMES, METRIC_NAMES, SOURCE_LABELS, STATUS_WORDS, unitLabel } from './metricInfo.js'
 import { formatTime, formatValue } from './status.js'
-import WhyThisMatters from './WhyThisMatters.jsx'
+import WhyThisMatters, { ForecastLine } from './WhyThisMatters.jsx'
 import EvidenceBadges from './EvidenceBadges.jsx'
 import SpeakButton from '../voice/SpeakButton.jsx'
 
-// The chart library is loaded the first time someone opens a card, so the cards appear fast.
+// The chart is loaded the first time someone opens a card, so the cards appear fast.
 const MetricChart = lazy(() => import('./MetricChart.jsx'))
 
-export default function MetricCard({ item, unit, readings, threshold, explain, forecast, open, onToggle }) {
+export default function MetricCard({ item, unit, readings, threshold, explain, forecast, source, open, onToggle }) {
   const color = item.color ?? 'none'
   return (
     <article
@@ -21,8 +21,10 @@ export default function MetricCard({ item, unit, readings, threshold, explain, f
         <span className="card-value">
           {formatValue(item.metric, item.value)} <small>{unitLabel(unit)}</small>
         </span>
-        <span className={`pill pill-${color}`}>{COLOR_NAMES[item.color] ?? 'No range'}</span>
+        <span className={`pill pill-${color}`}>{STATUS_WORDS[item.color] ?? 'No range'}</span>
       </button>
+
+      <ForecastLine forecast={forecast} color={color} />
 
       {item.advice && (
         <>
@@ -35,6 +37,9 @@ export default function MetricCard({ item, unit, readings, threshold, explain, f
       <p className="card-meta">
         {item.hazard && <span className="tag">{HAZARD_NAMES[item.hazard] ?? item.hazard}</span>}
         <span>{formatTime(item.takenAt)}</span>
+      </p>
+      <p className="card-foot">
+        <span className="card-source">{SOURCE_LABELS[source] ?? ''}</span>
         <span className="open-hint">{open ? 'Hide chart' : 'Show chart'}</span>
       </p>
 
@@ -43,7 +48,7 @@ export default function MetricCard({ item, unit, readings, threshold, explain, f
           <Suspense fallback={<p className="hint">Loading chart…</p>}>
             <MetricChart metric={item.metric} readings={readings} threshold={threshold} />
           </Suspense>
-          <WhyThisMatters explain={explain} forecast={forecast} color={color} />
+          <WhyThisMatters explain={explain} color={color} />
           <EvidenceBadges metric={item.metric} />
         </div>
       )}

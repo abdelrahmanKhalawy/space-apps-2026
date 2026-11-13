@@ -49,8 +49,13 @@ export default function Dashboard({ reloadKey = 0 }) {
       <DecisionScreen status={status} units={units} />
       <EarthReply />
       <div className={`banner banner-${status.overall ?? 'none'}`} role="status" data-testid="overall">
-        <strong>Overall: {COLOR_NAMES[status.overall] ?? 'No data'}</strong>
-        <span>{summarize(status)}</span>
+        <span className="banner-icon" aria-hidden="true">
+          {status.overall === 'green' ? '✓' : '!'}
+        </span>
+        <div>
+          <strong>Overall: {COLOR_NAMES[status.overall] ?? 'No data'}</strong>
+          <span>{summarize(status)}</span>
+        </div>
       </div>
       <IndexCard readings={data.readings} thresholds={thresholds} />
       <button type="button" className="cam-link print-btn" onClick={() => window.print()}>Print a summary for the flight surgeon</button>
@@ -64,11 +69,17 @@ export default function Dashboard({ reloadKey = 0 }) {
       {items.length === 0 ? (
         <p className="hint">No readings yet. Use the Log tab to add your first check.</p>
       ) : (
+        <>
+        <div className="section-head">
+          <h2>Indicators</h2>
+          <span>{items.length} feeds</span>
+        </div>
         <div className="cards">
           {items.map(item => (
             <MetricCard
               key={item.metric}
               item={item}
+              source={byMetric[item.metric]?.at(-1)?.source}
               unit={byMetric[item.metric]?.[0]?.unit ?? thresholds[item.metric]?.unit ?? ''}
               readings={byMetric[item.metric] ?? []}
               threshold={thresholds[item.metric]}
@@ -79,6 +90,7 @@ export default function Dashboard({ reloadKey = 0 }) {
             />
           ))}
         </div>
+        </>
       )}
       <PrivacyPanel />
       <ReportSheet status={status} readings={data.readings} thresholds={thresholds} explain={data.explain} forecast={data.forecast} />
