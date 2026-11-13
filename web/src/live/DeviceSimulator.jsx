@@ -12,8 +12,8 @@ function reading(metric, unit, base, spread, takenAtMs) {
   return { crewId: CREW_ID, metric, value, unit, takenAt: iso(takenAtMs), source: 'device' }
 }
 
-/** "Press your finger on the sensor" button: sends the same 3 readings a real
- * device would, on the same path (POST /api/readings), every 2 seconds. */
+/** "Simulate readings" button: sends sample heart rate, SpO2 and skin temperature (there is no sensor hardware in
+ * this version) on the normal path (POST /api/readings), every 2 seconds. Use it to try the app without a camera. */
 export default function DeviceSimulator() {
   const [on, setOn] = useState(false)
   const [error, setError] = useState(false)
@@ -83,9 +83,9 @@ export default function DeviceSimulator() {
       className={on ? 'device-sim on' : 'device-sim'}
       onClick={() => setOn(v => !v)}
       aria-pressed={on}
-      title="Simulates the finger sensor, in case the real device isn't connected"
+      title="Sends sample heart rate, oxygen and skin temperature readings, for trying the app without a camera"
     >
-      {on ? '● Finger on sensor' : 'Simulate device'}
+      {on ? '● Sending sample readings' : 'Simulate readings'}
       {error && <small> — can't reach the server</small>}
     </button>
   )

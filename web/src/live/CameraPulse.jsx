@@ -144,7 +144,7 @@ export default function CameraPulse() {
   return (
     <div className="cam">
       {phase === 'idle' && (
-        <button type="button" className="device-sim cam-btn" onClick={start}>Measure pulse with phone camera</button>
+        <button type="button" className="cam-btn" onClick={start}>Measure my pulse with the phone camera</button>
       )}
       {phase !== 'idle' && (
         <div className="cam-panel" role="region" aria-label="Camera pulse measurement">
@@ -153,7 +153,7 @@ export default function CameraPulse() {
           {phase === 'error' && (
             <>
               <p className="cam-error">{msg}</p>
-              <p className="hint">The “Simulate device” button above works everywhere.</p>
+              <p className="hint">The “Simulate readings” button works everywhere.</p>
               <button type="button" className="cam-link" onClick={cancel}>Close</button>
             </>
           )}

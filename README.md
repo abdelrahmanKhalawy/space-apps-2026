@@ -1,7 +1,7 @@
 <!--
   DRAFT for f5 (README and sources), written ahead of feature freeze (f1) so delivery
   isn't rushed at the last minute. Before submitting: add the demo video link, confirm
-  the hardware status line below still matches reality, and remove this notice.
+  the "real vs simulated" table below still matches reality, and remove this notice.
 -->
 
 # AstroPulse
@@ -22,14 +22,14 @@ On a long mission, an astronaut carries most of the responsibility for noticing 
 
 AstroPulse is a single web app with two views:
 
-- **Crew view** — a finger-sensor device (or its on-screen simulator) reports heart rate, SpO₂, and skin temperature live; blood pressure, blood sugar, sleep and mood are logged by hand. Every reading is colored green/yellow/red against sourced thresholds, shown on a dashboard, a clickable interactive body, and a decision screen that tells the astronaut what to do and how long a reply from Earth will take.
+- **Crew view** — your phone's camera reads your pulse live (a fingertip on the lens), or an on-screen simulator sends sample readings; blood pressure, blood sugar, sleep and mood are logged by hand. Every reading is colored green/yellow/red against sourced thresholds, shown on a dashboard, a clickable interactive body, and a decision screen that tells the astronaut what to do and how long a reply from Earth will take.
 - **Ground control view** — the flight surgeon's screen, showing reports as they arrive after that same communication delay.
 
 Underneath, a model learns each astronaut's own baseline from their first week of readings and flags a real, sustained drift days before the fixed color thresholds would — even while the screen still reads green. When it flags something, the app explains which of NASA's five spaceflight hazards is responsible, in plain language, and forecasts how many days until that metric would turn red if the trend continues.
 
 ### The three-moment demo
 
-1. **A finger on the sensor** — heart rate and SpO₂ appear live, the matching body part lights up by color.
+1. **A finger on the phone camera** — the pulse appears live, the matching body part lights up by color.
 2. **Day 143, en route to Mars** — a two-week mock scenario plays: sleep drops, resting heart rate creeps up, the color is still green, and the model says *this isn't your normal, and it's isolation* — with a forecast for when it'll turn red.
 3. **Status turns red** — the app shows how long Earth's reply will take, and the ground control screen receives the report after that delay.
 
@@ -49,8 +49,7 @@ Underneath, a model learns each astronaut's own baseline from their first week o
 
 Open the live link above — no install needed, works on a phone or laptop:
 
-1. On the **Status** tab, press **Simulate device** (top of the page) to start live readings — this stands in for the real finger-sensor hardware.
-   Or press **Measure pulse with phone camera** on a phone: cover the camera lens and flash with a fingertip for 25 seconds and the browser reads your real heart rate (and a rough HRV) from the light through your skin. It is an experiment with approximate accuracy, not a medical measurement, and it needs camera permission on https or localhost.
+1. On a phone, press **Measure my pulse with the phone camera** (top of the page): cover the camera lens and flash with a fingertip for 25 seconds and the browser reads your real heart rate (and a rough HRV) from the light through your skin, then press **Send as my heart rate**. It is an experiment with approximate accuracy, not a medical measurement, and it needs camera permission on https or localhost. On a laptop or without a camera, press **Simulate readings** to start live sample readings.
 2. Open **Body** to see the interactive body update live, by color.
 3. Open the **Log a check** tab to enter blood pressure, blood sugar, sleep, or mood.
 4. Click any metric card on the Status tab to expand its chart; when the model has flagged that metric, you'll also see why, what to do, and a forecast.
@@ -79,13 +78,13 @@ A mission's connection comes and goes, so the app is built to keep working: it i
 | Crew readings and the Day-143 story | **Synthetic**, generated data. |
 | Virtual crew trial, Crew tab | **Simulation** with assumed noise levels. Not validated on real astronauts. |
 | AstroPulse Index, "person or environment" rule | **Our own** methods, not published standards. |
-| Hardware finger sensor | Prototype code written, **not tested on a real board**. The in-app simulator and the camera replace it. |
+| SpO₂ and skin temperature | **Simulated only.** This version has no sensor hardware, and a phone camera can't measure them reliably. |
 
 AstroPulse is a prototype and is not a medical device.
 
-## Hardware
+## No hardware
 
-The current prototype is a small box the judge presses a finger against (MAX30102 for heart rate/SpO₂, plus a temperature sensor). **If the hardware isn't connected at demo time, the app falls back to the on-screen device simulator**, which sends the exact same data shape over the exact same path a real device would — this is a deliberate fallback built into the app, not a missing feature. The next version is planned as a wristband; see the slides for that concept.
+AstroPulse needs nothing but a phone or laptop. The one real, live measurement is the **pulse from the phone camera**; everything else is typed in (blood pressure, blood sugar, sleep, mood), taken as a quick check on screen (reaction test, near vision), read from public data (NOAA space weather), or simulated and labeled as such. An earlier plan for a finger-sensor device (ESP32 + MAX30102) was dropped; its code stays in `firmware/` for reference but is not part of this submission.
 
 ## Data
 
@@ -122,7 +121,7 @@ We used Claude Code throughout the build: scaffolding the API and the screens; i
 | Mohamed | AI |
 | Abdelrahman | Full-stack, task planning |
 | Shahd | Full-stack |
-| Ammar | Hardware |
+| Ammar | Video and delivery (the hardware track was dropped) |
 | Nada | Research |
 
 ## Repo map
@@ -132,7 +131,7 @@ We used Claude Code throughout the build: scaffolding the API and the screens; i
 | `api/` | ASP.NET Core server: readings, colors, live updates (SignalR), reports, AI result endpoints |
 | `web/` | React + Vite screens |
 | `ai/` | Baseline/anomaly model, cause explanations, trend forecast, and the FastAPI service wrapping them |
-| `firmware/` | ESP32 device code |
+| `firmware/` | Dropped hardware plan (reference only, not part of the submission) |
 | `tests/` | C# tests (xUnit), including live model vs Python parity |
 | `research/` | Sourced color thresholds and space-hazard explanations |
 | `data/` | The Day 143 mock scenario, precomputed AI fallback results, and the virtual crew trial results |

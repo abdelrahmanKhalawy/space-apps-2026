@@ -21,7 +21,7 @@ export const EVIDENCE = {
     link: { level: 'moderate', note: 'NASA cabin air quality; the link to your reading is our summary.' },
   },
   temperature: {
-    range: { level: 'approx', note: 'No medical range exists for fingertip skin temperature. Our range is an approximation.' },
+    range: { level: 'approx', note: 'No medical range exists for fingertip skin temperature. Our range is an approximation, and this version has no temperature sensor (simulated data only).' },
     link: { level: 'moderate', note: 'Cabin temperature is a NASA concern; skin temperature is only a rough signal.' },
   },
   bp_systolic: {

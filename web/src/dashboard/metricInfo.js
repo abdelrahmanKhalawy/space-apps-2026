@@ -14,7 +14,8 @@ export const METRIC_ORDER = [
 export const METRIC_NAMES = {
   heart_rate: 'Heart rate',
   spo2: 'Oxygen (SpO₂)',
-  // The device reads the fingertip, so this is skin temperature, not core body temperature.
+  // Skin temperature, not core body temperature. There is no temperature sensor in this version: values come from the
+  // simulator and sample data.
   temperature: 'Skin temperature',
   bp_systolic: 'Blood pressure (upper)',
   bp_diastolic: 'Blood pressure (lower)',

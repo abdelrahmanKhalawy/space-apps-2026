@@ -93,8 +93,8 @@ function CrewApp() {
       </header>
       <div className="app">
         <div className="tools">
-          <DeviceSimulator />
           <CameraPulse />
+          <DeviceSimulator />
         </div>
         {pending > 0 && (
           <p className="notice" role="status">
