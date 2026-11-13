@@ -285,6 +285,12 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 .callout-green circle { fill: var(--green); }
 .callout-yellow circle { fill: var(--yellow); }
 .callout-red circle { fill: var(--red); }
+.anatomy path { fill: none; stroke: #6ea8ff; stroke-opacity: 0.16; stroke-width: 1; vector-effect: non-scaling-stroke; pointer-events: none; }
+.part-skin { filter: drop-shadow(0 0 4px rgba(110, 168, 255, 0.45)); }
+.holo { pointer-events: none; }
+.scan { animation: scan 4.5s linear infinite; }
+@keyframes scan { from { transform: translateY(0); } to { transform: translateY(440px); } }
+.part-lungs, .part-heart, .part-brain, .part-metabolism { filter: drop-shadow(0 0 4px currentColor); }
 .callouts { transition: opacity 0.4s; pointer-events: none; }
 .body-svg.zoomed .callouts { opacity: 0; }
 
@@ -312,7 +318,7 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 .part-skin > g { transition: stroke 0.3s; }
 .pulse { transform-box: fill-box; transform-origin: center; animation: pulse 0.9s ease-out; }
 @keyframes pulse { 0% { transform: scale(1); } 30% { transform: scale(1.25); } 100% { transform: scale(1); } }
-@media (prefers-reduced-motion: reduce) { .body-zoom { transition: none; } .part-heart path, .part-lungs ellipse, .part-brain ellipse, .part-metabolism ellipse, .ring-dash, .ring-ping { animation: none; } .pulse { animation: none; filter: brightness(1.6); } .live-pill.on .live-dot, .decision-dot { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .body-zoom { transition: none; } .scan { animation: none; opacity: 0; } .part-heart path, .part-lungs ellipse, .part-brain ellipse, .part-metabolism ellipse, .ring-dash, .ring-ping { animation: none; } .pulse { animation: none; filter: brightness(1.6); } .live-pill.on .live-dot, .decision-dot { animation: none; } }
 
 .organ-chips { list-style: none; margin: 0; padding: 0; width: 100%; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
 .chip {
