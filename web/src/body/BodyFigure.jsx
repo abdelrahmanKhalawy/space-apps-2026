@@ -23,10 +23,18 @@ const FOCUS = {
   heart: { cx: 110, cy: 152, s: 3.1, r: 27 },
   metabolism: { cx: 110, cy: 198, s: 3.2, r: 31 },
 }
+// Labels beside the body: y is where the line meets the part, x the edge of the part it starts from.
+const CALLOUTS = [
+  { id: 'brain', n: '01', y: 38, x: 128 },
+  { id: 'lungs', n: '02', y: 118, x: 149 },
+  { id: 'heart', n: '03', y: 152, x: 124 },
+  { id: 'metabolism', n: '04', y: 198, x: 133 },
+  { id: 'skin', n: '05', y: 246, x: 150 },
+]
 const FULL = 'translate(0px, 0px) scale(1)'
 const cameraFor = id => {
   const f = FOCUS[id]
-  return f ? `translate(${110 - f.s * f.cx}px, ${200 - f.s * f.cy}px) scale(${f.s})` : FULL
+  return f ? `translate(${130 - f.s * f.cx}px, ${200 - f.s * f.cy}px) scale(${f.s})` : FULL
 }
 
 export default function BodyFigure({ organs, selected, pulsing, onSelect }) {
@@ -44,7 +52,7 @@ export default function BodyFigure({ organs, selected, pulsing, onSelect }) {
 
   return (
     <svg
-      viewBox="0 0 220 400"
+      viewBox="-40 0 340 400"
       className={`body-svg${FOCUS[selected] ? ' zoomed' : ''}`}
       role="group"
       aria-label="Body status. Pick a part for details."
@@ -102,6 +110,16 @@ export default function BodyFigure({ organs, selected, pulsing, onSelect }) {
           </g>
         )
       })}
+
+      <g className="callouts" aria-hidden="true">
+        {CALLOUTS.map(c => (
+          <g key={c.id} className={`callout callout-${byId[c.id].color ?? 'none'}`}>
+            <polyline points={`${c.x},${c.y} 196,${c.y} 204,${c.y}`} />
+            <circle cx="206" cy={c.y} r="3" />
+            <text x="214" y={c.y + 3.5}>{c.n} {byId[c.id].label.toUpperCase()}</text>
+          </g>
+        ))}
+      </g>
 
       {FOCUS[selected] && (
         <g className="focus-ring" aria-hidden="true" stroke={colorFor(byId[selected]?.color)}>
