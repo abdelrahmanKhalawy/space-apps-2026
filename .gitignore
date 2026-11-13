@@ -12,6 +12,7 @@ __pycache__/
 # Secrets
 .env
 appsettings.Development.json
+firmware/**/secrets.h
 # OS
 .DS_Store
 
