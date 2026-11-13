@@ -20,11 +20,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # so `import basel
 from baseline import analyze
 from colorize import attach_still_green
 from explain import explain_one, load_explanations
+from forecast import forecast_one, daily_means, load_thresholds
 
 app = FastAPI(title="AstroPulse AI — baseline model")
 
 THRESHOLDS_PATH = Path(__file__).resolve().parents[2] / "research" / "thresholds.json"
 EXPLANATIONS = load_explanations()  # research/explanations.json, loaded once at startup
+THRESHOLDS = load_thresholds(THRESHOLDS_PATH)
 
 
 class Reading(BaseModel):
@@ -67,4 +69,19 @@ def post_explain(body: Anomaly):
     result = explain_one(body.model_dump(), EXPLANATIONS)
     if result is None:
         raise HTTPException(404, f"No explanation text for metric '{body.metric}'.")
+    return result
+
+
+class ForecastRequest(BaseModel):
+    crewId: str
+    metric: str
+    readings: list[Reading]
+
+
+@app.post("/forecast")
+def post_forecast(body: ForecastRequest):
+    daily = daily_means([r.model_dump() for r in body.readings], body.metric)
+    result = forecast_one(body.metric, daily, THRESHOLDS)
+    if result is None:
+        raise HTTPException(404, f"'{body.metric}' isn't trending toward red — nothing to forecast.")
     return result

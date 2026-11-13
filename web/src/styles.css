@@ -291,3 +291,8 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 .card-why-related { color: var(--muted); font-size: 0.78rem; }
 .card-why-sources { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
 .card-why-sources a { font-size: 0.78rem; }
+
+/* i4: trend forecast line at the top of the "why" panel */
+.card-forecast { margin: 0 0 8px; font-size: 0.85rem; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.tag-forecast { background: #b45309; color: #fff; border-color: #b45309; }
+.card-forecast-confidence { color: var(--muted); font-size: 0.75rem; }

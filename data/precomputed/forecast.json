@@ -1,0 +1,22 @@
+[
+  {
+    "metric": "bp_systolic",
+    "daysToRed": 39.7,
+    "confidence": "low"
+  },
+  {
+    "metric": "glucose",
+    "daysToRed": 10.0,
+    "confidence": "medium"
+  },
+  {
+    "metric": "heart_rate",
+    "daysToRed": 13.5,
+    "confidence": "high"
+  },
+  {
+    "metric": "sleep_hours",
+    "daysToRed": 3.6,
+    "confidence": "high"
+  }
+]
