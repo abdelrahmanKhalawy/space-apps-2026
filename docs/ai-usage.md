@@ -24,3 +24,4 @@
 | الجمعة | عبدالرحمن | Claude Code | i2: خدمة FastAPI بمسار /analyze (مكتوبة مش مجرّبة، PyPI كان مقفول)، وملف data/precomputed/analyze.json شغال ومتأكد منه (مكان شهد أشرف) |
 | الجمعة | شهد | Claude Code | a6: مسارات /api/reports (إرسال وجلب بتأخير حسب مكان المهمة) وزرار تسريع الوقت للديمو، وشاشة طبيب الأرض على #ground |
 | الجمعة | عبدالرحمن | Claude Code | تصحيح: عنوان الصفحة وh1 من Space Monkeys لـ AstroPulse (اسم المشروع المتثبت في k2) |
+| الجمعة | شهد | Claude Code | h2: سكريبت الكابل firmware/serial-bridge (بيقرا الجهاز من السيريال ويبعت للسيرفر) وكود واي فاي للـESP32 (مش مجرّب) وخطوات التلات طرق في firmware/README.md |
