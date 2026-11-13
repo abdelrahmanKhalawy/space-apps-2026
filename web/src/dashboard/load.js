@@ -9,6 +9,15 @@ async function getJson(url) {
   return res.json()
 }
 
+/** Just the current status (what the live body polls). Returns null if the server cannot be reached. */
+export async function fetchStatus() {
+  try {
+    return await getJson(`/api/status?crewId=${CREW_ID}`)
+  } catch {
+    return null
+  }
+}
+
 /**
  * Live: GET /api/status and GET /api/readings, colors come from the server.
  * If the server is down, falls back to the sample file (data/mock/day143.json), loaded only when needed
