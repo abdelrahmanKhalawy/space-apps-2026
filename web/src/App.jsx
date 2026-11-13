@@ -1,15 +1,22 @@
 import { useEffect, useState } from 'react'
+import BodyView from './body/BodyView.jsx'
 import Dashboard from './dashboard/Dashboard.jsx'
 import EntryForm from './entry/EntryForm.jsx'
 
 const TABS = [
   { id: 'status', label: 'Status' },
+  { id: 'body', label: 'Body' },
   { id: 'log', label: 'Log a check' },
 ]
 
+const SCREENS = { status: <Dashboard />, body: <BodyView />, log: <EntryForm /> }
+
 export default function App() {
   const [health, setHealth] = useState('...')
-  const [tab, setTab] = useState(() => (location.hash === '#log' ? 'log' : 'status'))
+  const [tab, setTab] = useState(() => {
+    const fromHash = location.hash.slice(1)
+    return TABS.some(t => t.id === fromHash) ? fromHash : 'status'
+  })
 
   useEffect(() => {
     fetch('/api/health').then(r => r.text()).then(setHealth).catch(() => setHealth('down'))
@@ -17,7 +24,7 @@ export default function App() {
 
   const choose = id => {
     setTab(id)
-    history.replaceState(null, '', id === 'log' ? '#log' : location.pathname)
+    history.replaceState(null, '', id === 'status' ? location.pathname : `#${id}`)
   }
 
   return (
@@ -40,7 +47,7 @@ export default function App() {
           </button>
         ))}
       </nav>
-      <main>{tab === 'status' ? <Dashboard /> : <EntryForm />}</main>
+      <main>{SCREENS[tab]}</main>
       <footer>
         <small>API: {health}</small>
       </footer>
