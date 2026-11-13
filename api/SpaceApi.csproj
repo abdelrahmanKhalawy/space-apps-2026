@@ -6,4 +6,13 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Mock data ships with the app so the deployed server can seed itself. -->
+    <Content Include="..\data\mock\day143.json" Link="SeedData\day143.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Condition="Exists('..\data\mock\day143.json')" />
+  </ItemGroup>
+
 </Project>
