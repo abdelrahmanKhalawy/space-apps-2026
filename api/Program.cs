@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SpaceApi.Insights;
 using SpaceApi.Live;
 using SpaceApi.Readings;
 using SpaceApi.Reports;
@@ -34,6 +35,7 @@ using (var scope = app.Services.CreateScope())
 app.MapGet("/api/health", () => Results.Text("ok"));
 app.MapReadings();
 app.MapReports();
+app.MapExplain();
 app.MapHub<ReadingsHub>("/hubs/readings");
 
 // The React app is built into wwwroot, so the API serves it from the same link.
