@@ -85,7 +85,14 @@ export default function BodyView({ reloadKey = 0 }) {
 
       <div className="body-layout">
         <div className="body-figure">
-          <p className="panel-label">Body map · tap a part</p>
+          <div className="panel-bar">
+            <p className="panel-label">{current ? `Zoomed · ${current.label}` : 'Body map · tap a part'}</p>
+            {current && (
+              <button type="button" className="zoom-out" onClick={() => setSelected(null)}>
+                Zoom out
+              </button>
+            )}
+          </div>
           <BodyFigure organs={organs} selected={selected} pulsing={pulsing} onSelect={id => setSelected(s => (s === id ? null : id))} />
           <ul className="organ-chips" aria-label="Body parts">
             {organs.map(o => (

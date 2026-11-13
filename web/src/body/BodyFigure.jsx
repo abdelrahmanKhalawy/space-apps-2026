@@ -15,6 +15,20 @@ const SHAPES = {
   metabolism: [<ellipse key="m" cx="110" cy="198" rx="23" ry="12" />],
 }
 
+// Where the camera goes when a part is picked: the point to center on (in the 220x400 drawing) and how far to zoom.
+// Skin is the whole outline, so it stays at full size. r is the radius of the ring drawn around the part.
+const FOCUS = {
+  brain: { cx: 110, cy: 46, s: 2.9, r: 25 },
+  lungs: { cx: 110, cy: 128, s: 2.5, r: 42 },
+  heart: { cx: 110, cy: 152, s: 3.1, r: 27 },
+  metabolism: { cx: 110, cy: 198, s: 3.2, r: 31 },
+}
+const FULL = 'translate(0px, 0px) scale(1)'
+const cameraFor = id => {
+  const f = FOCUS[id]
+  return f ? `translate(${110 - f.s * f.cx}px, ${200 - f.s * f.cy}px) scale(${f.s})` : FULL
+}
+
 export default function BodyFigure({ organs, selected, pulsing, onSelect }) {
   const byId = Object.fromEntries(organs.map(o => [o.id, o]))
   const skin = byId.skin
@@ -29,10 +43,16 @@ export default function BodyFigure({ organs, selected, pulsing, onSelect }) {
   const label = o => `${o.label}: ${o.color ? o.color : 'no readings'}. Show details.`
 
   return (
-    <svg viewBox="0 0 220 400" className="body-svg" role="group" aria-label="Body status. Pick a part for details.">
+    <svg
+      viewBox="0 0 220 400"
+      className={`body-svg${FOCUS[selected] ? ' zoomed' : ''}`}
+      role="group"
+      aria-label="Body status. Pick a part for details."
+    >
+      <g className="body-zoom" style={{ transform: cameraFor(selected) }}>
       {/* Skin = the whole body outline */}
       <g
-        className={`part part-skin${selected === 'skin' ? ' sel' : ''}`}
+        className={`part part-skin${selected === 'skin' ? ' sel' : ''}${FOCUS[selected] ? ' dim' : ''}`}
         role="button"
         tabIndex={0}
         aria-label={label(skin)}
@@ -64,7 +84,7 @@ export default function BodyFigure({ organs, selected, pulsing, onSelect }) {
         return (
           <g
             key={id}
-            className={`part part-${id}${selected === id ? ' sel' : ''}${pulsing.has(id) ? ' pulse' : ''}`}
+            className={`part part-${id}${selected === id ? ' sel' : ''}${pulsing.has(id) ? ' pulse' : ''}${FOCUS[selected] && selected !== id ? ' dim' : ''}`}
             role="button"
             tabIndex={0}
             aria-label={label(o)}
@@ -82,6 +102,14 @@ export default function BodyFigure({ organs, selected, pulsing, onSelect }) {
           </g>
         )
       })}
+
+      {FOCUS[selected] && (
+        <g className="focus-ring" aria-hidden="true" stroke={colorFor(byId[selected]?.color)}>
+          <circle cx={FOCUS[selected].cx} cy={FOCUS[selected].cy} r={FOCUS[selected].r} className="ring-dash" />
+          <circle cx={FOCUS[selected].cx} cy={FOCUS[selected].cy} r={FOCUS[selected].r} className="ring-ping" />
+        </g>
+      )}
+      </g>
     </svg>
   )
 }
