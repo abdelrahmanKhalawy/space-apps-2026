@@ -4,17 +4,61 @@
 
 صاحبه: عبدالرحمن.
 
-> ⚠️ فاضي لحد الجمعة. أول سطر كود بيتكتب يوم الهاكاثون.
-
 ## اقرا قبل ما تبدأ
 
 ```
 contracts/api.md
-```
-
-```
 contracts/reading.md
 ```
+
+## تشغيل محلي
+
+محتاج .NET SDK 8 وNode.
+
+```bash
+cd web && npm install && npm run build   # بيبني الشاشات جوه api/wwwroot
+cd ../api && dotnet run --urls http://localhost:5080
+```
+
+افتح `http://localhost:5080` والصحة على `http://localhost:5080/api/health` (بترد `ok`).
+
+أثناء تطوير الشاشات: `cd web && npm run dev` وهيوصّل نفسه بالسيرفر على 5080.
+
+## النشر على Azure App Service
+
+المرة الأولى (في بوابة Azure، بحساب Azure for Students):
+
+1. Create a resource > Web App.
+2. Publish: Code. Runtime stack: .NET 8 (LTS). OS: Linux أو Windows (الاتنين تمام). Region: أقرب واحدة.
+3. Pricing plan: F1 Free أو B1.
+4. بعد ما يتعمل: Settings > Configuration > General settings > فعّل Web sockets (مطلوب للـ SignalR بعدين).
+
+كل مرة تنشر:
+
+```bash
+cd web && npm install && npm run build
+cd ../api && dotnet publish -c Release -o publish
+python -c "import zipfile,os;z=zipfile.ZipFile('publish.zip','w',zipfile.ZIP_DEFLATED);[z.write(os.path.join(r,f),os.path.relpath(os.path.join(r,f),'publish').replace(os.sep,'/')) for r,_,fs in os.walk('publish') for f in fs];z.close()"
+az login
+az webapp deploy --resource-group space-monkeys-rg --name space-monkeys-2026 --src-path publish.zip --type zip
+```
+
+> ⚠️ ماتستخدمش Compress-Archive بتاع PowerShell: بيحط `\` في المسارات ومجلد wwwroot مش بيظهر على Linux (الصفحة بترجع 404).
+
+بديل من غير az: في بوابة Azure افتح Advanced Tools (Kudu) > Tools > Zip Push Deploy، واسحب publish.zip.
+
+اللينك الحالي: https://space-monkeys-2026.azurewebsites.net (resource group `space-monkeys-rg`، منطقة uaenorth، لأن westeurope ممنوعة في الاشتراك).
+
+ملاحظة: Azure مبقاش بيعرض .NET 8 على Linux، فالتطبيق على runtime 10 ومعاه `DOTNET_ROLL_FORWARD=Major` في App settings. ماتشيلوش.
+
+بعد النشر جرّب:
+
+```
+https://<APP_NAME>.azurewebsites.net/
+https://<APP_NAME>.azurewebsites.net/api/health
+```
+
+> ملاحظة: قاعدة البيانات SQLite هتتحط بعدين (مهمة a1). على Azure لازم يكون مسارها في `/home` عشان تفضل بعد إعادة التشغيل.
 
 ## المهام اللي بتسلّم هنا
 

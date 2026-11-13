@@ -4,7 +4,7 @@
 
 صاحبه: شهد، وعبدالرحمن في شاشة طبيب الأرض والأوضاع.
 
-> ⚠️ فاضي لحد الجمعة. أول سطر كود بيتكتب يوم الهاكاثون.
+>
 
 ## اقرا قبل ما تبدأ
 
@@ -22,3 +22,13 @@ contracts/api.md
 - [شاشة القرار وعداد التأخير](../tasks/2-v2-space/a7-decision-screen.md) · شهد
 - [الجسم التفاعلي](../tasks/3-v3-wow/a8-interactive-body.md) · شهد
 - [أوضاع المهمة](../tasks/3-v3-wow/a9-mission-modes.md) · عبدالرحمن
+
+## تشغيل وبناء
+
+```bash
+npm install
+npm run dev     # تطوير، بيكلم السيرفر على 5080
+npm run build   # بيبني جوه api/wwwroot
+```
+
+React + Vite (JSX).
