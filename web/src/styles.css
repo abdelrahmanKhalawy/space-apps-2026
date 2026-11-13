@@ -391,7 +391,10 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 
 /* Camera pulse (phone camera PPG) */
 .cam { margin-top: 8px; display: flex; justify-content: center; }
-.cam-btn { margin-top: 10px; min-height: 44px; padding: 0 20px; border: 0; border-radius: 999px; background: var(--accent); color: #07122b; font-size: 0.95rem; font-weight: 700; cursor: pointer; }
+.cam-btn { margin-top: 10px; min-height: 36px; padding: 0 16px; border: 0; border-radius: 8px; background: var(--accent); color: #07122b; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
+.cam-btn:hover { filter: brightness(1.08); }
+.tools { align-items: center; }
+.tools .device-sim, .tools .cam-btn { margin-top: 0; }
 .cam-panel { width: 100%; max-width: 420px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; text-align: left; }
 .cam-video { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
 .cam-step { margin: 0 0 8px; font-size: 0.92rem; }
