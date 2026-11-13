@@ -251,14 +251,43 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 .panel-label { align-self: flex-start; margin: 0; font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 .body-svg { width: 100%; max-width: 250px; height: auto; display: block; }
 
-.part { cursor: pointer; outline: none; transition: filter 0.2s; }
+.part { cursor: pointer; outline: none; transition: filter 0.2s, opacity 0.5s; }
+.part.dim { opacity: 0.3; }
+
+/* Zoom: the whole drawing moves and scales as one, so picking a part feels like the camera flying in. */
+.body-svg { overflow: hidden; border-radius: 10px; }
+.body-zoom { transform-origin: 0 0; transition: transform 0.8s cubic-bezier(0.22, 0.8, 0.2, 1); will-change: transform; }
+.body-svg.zoomed { background: radial-gradient(circle at 50% 50%, rgba(110, 168, 255, 0.12), transparent 70%); }
+.part-skin g { vector-effect: non-scaling-stroke; }
+.part-skin g * { vector-effect: non-scaling-stroke; }
+
+/* Always-on life: the heart beats and the lungs breathe, slowly, so the figure never looks dead. */
+.part-heart path, .part-lungs ellipse, .part-brain ellipse, .part-metabolism ellipse { transform-box: fill-box; transform-origin: center; }
+.part-heart path { animation: heartbeat 1.1s ease-in-out infinite; }
+.part-lungs ellipse { animation: breathe 4s ease-in-out infinite; }
+.part-brain ellipse { animation: glow 3s ease-in-out infinite; }
+.part-metabolism ellipse { animation: breathe 6s ease-in-out infinite; }
+@keyframes heartbeat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.14); } 30% { transform: scale(1); } 45% { transform: scale(1.08); } }
+@keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.07); } }
+@keyframes glow { 0%, 100% { filter: brightness(1); } 50% { filter: brightness(1.35); } }
+
+/* The ring that locks onto the picked part */
+.focus-ring circle { fill: none; stroke-width: 1.6; vector-effect: non-scaling-stroke; transform-box: fill-box; transform-origin: center; }
+.ring-dash { stroke-dasharray: 5 6; animation: spin 9s linear infinite; }
+.ring-ping { animation: ping 1.8s ease-out infinite; opacity: 0; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes ping { 0% { transform: scale(1); opacity: 0.7; } 100% { transform: scale(1.35); opacity: 0; } }
+
+.panel-bar { align-self: stretch; display: flex; justify-content: space-between; align-items: center; gap: 8px; min-height: 28px; }
+.zoom-out { min-height: 28px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--text); font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
+.zoom-out:hover { border-color: var(--accent); }
 .part:hover, .part:focus-visible { filter: brightness(1.25); }
 .part:focus-visible { filter: drop-shadow(0 0 4px #fff) brightness(1.25); }
 .part.sel { filter: drop-shadow(0 0 5px #6ea8ff) brightness(1.2); }
 .part-skin > g { transition: stroke 0.3s; }
 .pulse { transform-box: fill-box; transform-origin: center; animation: pulse 0.9s ease-out; }
 @keyframes pulse { 0% { transform: scale(1); } 30% { transform: scale(1.25); } 100% { transform: scale(1); } }
-@media (prefers-reduced-motion: reduce) { .pulse { animation: none; filter: brightness(1.6); } .live-pill.on .live-dot, .decision-dot { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .body-zoom { transition: none; } .part-heart path, .part-lungs ellipse, .part-brain ellipse, .part-metabolism ellipse, .ring-dash, .ring-ping { animation: none; } .pulse { animation: none; filter: brightness(1.6); } .live-pill.on .live-dot, .decision-dot { animation: none; } }
 
 .organ-chips { list-style: none; margin: 0; padding: 0; width: 100%; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
 .chip {
