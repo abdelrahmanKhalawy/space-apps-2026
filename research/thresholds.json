@@ -1,0 +1,143 @@
+{
+  "_note": "مؤقت: أرقام مؤقتة من عبدالرحمن عشان a2 يشتغل. ندى تبدّل الملف ده بالحدود الحقيقية بمصادرها (n1). مفاتيح تبدأ بـ _ بيتجاهلها السيرفر.",
+
+  "heart_rate": {
+    "unit": "bpm",
+    "bands": [
+      { "color": "red", "max": 40 },
+      { "color": "yellow", "min": 40, "max": 50 },
+      { "color": "green", "min": 50, "max": 100 },
+      { "color": "yellow", "min": 100, "max": 120 },
+      { "color": "red", "min": 120 }
+    ],
+    "advice": {
+      "green": "مؤقت: نبضك في المعتاد. كمّل روتينك.",
+      "yellow": "مؤقت: نبضك خارج المعتاد شوية. ارتاح 10 دقايق واشرب مياه وقيس تاني.",
+      "red": "مؤقت: نبضك بعيد عن المعتاد. وقّف أي مجهود وبلّغ طبيب الأرض."
+    },
+    "hazard": "gravity",
+    "sources": [{ "title": "مؤقت: مصدر ندى هيتحط هنا", "url": "https://www.nasa.gov/hrp/hazards/" }]
+  },
+
+  "spo2": {
+    "unit": "%",
+    "bands": [
+      { "color": "red", "max": 90 },
+      { "color": "yellow", "min": 90, "max": 95 },
+      { "color": "green", "min": 95 }
+    ],
+    "advice": {
+      "green": "مؤقت: الأكسجين تمام.",
+      "yellow": "مؤقت: الأكسجين أقل من المعتاد. خد نفس عميق وافتح التهوية وقيس تاني.",
+      "red": "مؤقت: الأكسجين واطي. اتأكد من الهوا حواليك وبلّغ طبيب الأرض فورًا."
+    },
+    "hazard": "environment",
+    "sources": [{ "title": "مؤقت: مصدر ندى هيتحط هنا", "url": "https://www.nasa.gov/hrp/hazards/" }]
+  },
+
+  "temperature": {
+    "unit": "C",
+    "bands": [
+      { "color": "red", "max": 30 },
+      { "color": "yellow", "min": 30, "max": 32 },
+      { "color": "green", "min": 32, "max": 36 },
+      { "color": "yellow", "min": 36, "max": 38 },
+      { "color": "red", "min": 38 }
+    ],
+    "advice": {
+      "green": "مؤقت: حرارة الجلد في المعتاد.",
+      "yellow": "مؤقت: حرارة الجلد خارج المعتاد. تأكد من حرارة الكابينة وقيس تاني.",
+      "red": "مؤقت: حرارة الجلد بعيدة عن المعتاد. بلّغ طبيب الأرض."
+    },
+    "hazard": "environment",
+    "sources": [{ "title": "مؤقت: مصدر ندى هيتحط هنا", "url": "https://www.nasa.gov/hrp/hazards/" }]
+  },
+
+  "bp_systolic": {
+    "unit": "mmHg",
+    "bands": [
+      { "color": "red", "max": 80 },
+      { "color": "yellow", "min": 80, "max": 90 },
+      { "color": "green", "min": 90, "max": 140 },
+      { "color": "yellow", "min": 140, "max": 160 },
+      { "color": "red", "min": 160 }
+    ],
+    "advice": {
+      "green": "مؤقت: الضغط العالي في المعتاد.",
+      "yellow": "مؤقت: الضغط العالي خارج المعتاد. ارتاح وقلّل الملح وقيس بعد ربع ساعة.",
+      "red": "مؤقت: الضغط العالي بعيد عن المعتاد. وقّف المجهود وبلّغ طبيب الأرض."
+    },
+    "hazard": "gravity",
+    "sources": [{ "title": "مؤقت: مصدر ندى هيتحط هنا", "url": "https://www.nasa.gov/hrp/hazards/" }]
+  },
+
+  "bp_diastolic": {
+    "unit": "mmHg",
+    "bands": [
+      { "color": "red", "max": 50 },
+      { "color": "yellow", "min": 50, "max": 60 },
+      { "color": "green", "min": 60, "max": 90 },
+      { "color": "yellow", "min": 90, "max": 100 },
+      { "color": "red", "min": 100 }
+    ],
+    "advice": {
+      "green": "مؤقت: الضغط الواطي في المعتاد.",
+      "yellow": "مؤقت: الضغط الواطي خارج المعتاد. ارتاح وقيس تاني بعد ربع ساعة.",
+      "red": "مؤقت: الضغط الواطي بعيد عن المعتاد. بلّغ طبيب الأرض."
+    },
+    "hazard": "gravity",
+    "sources": [{ "title": "مؤقت: مصدر ندى هيتحط هنا", "url": "https://www.nasa.gov/hrp/hazards/" }]
+  },
+
+  "glucose": {
+    "unit": "mg/dL",
+    "bands": [
+      { "color": "red", "max": 54 },
+      { "color": "yellow", "min": 54, "max": 70 },
+      { "color": "green", "min": 70, "max": 126 },
+      { "color": "yellow", "min": 126, "max": 200 },
+      { "color": "red", "min": 200 }
+    ],
+    "advice": {
+      "green": "مؤقت: السكر في المعتاد.",
+      "yellow": "مؤقت: السكر خارج المعتاد. راجع آخر وجبة واشرب مياه وقيس تاني.",
+      "red": "مؤقت: السكر بعيد عن المعتاد. بلّغ طبيب الأرض فورًا."
+    },
+    "hazard": "isolation",
+    "sources": [{ "title": "مؤقت: مصدر ندى هيتحط هنا", "url": "https://www.nasa.gov/hrp/hazards/" }]
+  },
+
+  "sleep_hours": {
+    "unit": "h",
+    "bands": [
+      { "color": "red", "max": 5 },
+      { "color": "yellow", "min": 5, "max": 6 },
+      { "color": "green", "min": 6, "max": 10 },
+      { "color": "yellow", "min": 10, "max": 12 },
+      { "color": "red", "min": 12 }
+    ],
+    "advice": {
+      "green": "مؤقت: نومك كويس.",
+      "yellow": "مؤقت: نومك أقل من المعتاد. نظّم موعد نومك وقلّل الإضاءة قبل النوم.",
+      "red": "مؤقت: نومك قليل جدًا. ده بيأثر على تركيزك. بلّغ طبيب الأرض."
+    },
+    "hazard": "isolation",
+    "sources": [{ "title": "مؤقت: مصدر ندى هيتحط هنا", "url": "https://www.nasa.gov/hrp/hazards/" }]
+  },
+
+  "mood": {
+    "unit": "score",
+    "bands": [
+      { "color": "red", "max": 2 },
+      { "color": "yellow", "min": 2, "max": 3 },
+      { "color": "green", "min": 3 }
+    ],
+    "advice": {
+      "green": "مؤقت: مزاجك كويس. كمّل.",
+      "yellow": "مؤقت: مزاجك نازل شوية. كلّم حد من الطاقم أو من الأرض.",
+      "red": "مؤقت: مزاجك واطي. كلّم طبيب الأرض النهارده."
+    },
+    "hazard": "isolation",
+    "sources": [{ "title": "مؤقت: مصدر ندى هيتحط هنا", "url": "https://www.nasa.gov/hrp/hazards/" }]
+  }
+}
