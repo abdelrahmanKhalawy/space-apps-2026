@@ -2,8 +2,9 @@ import { HAZARD_NAMES, METRIC_NAMES } from './metricInfo.js'
 
 // i4: "if this keeps up, it'll be red in N days" — the line the demo script calls out
 // as its strongest moment. Only present for metrics actually trending toward red.
-function ForecastLine({ forecast }) {
-  if (!forecast) return null
+// Exported so a metric card can show it on its face, not only when opened. Never shown once the metric is red.
+export function ForecastLine({ forecast, color }) {
+  if (!forecast || color === 'red') return null
   const days = forecast.daysToRed
   const when = days < 1 ? 'less than a day' : days === 1 ? '1 day' : `${days} days`
   return (

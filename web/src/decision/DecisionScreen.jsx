@@ -93,32 +93,40 @@ export default function DecisionScreen({ status, units }) {
 
   return (
     <section className="decision" role="alert" aria-labelledby="decision-title" data-testid="decision">
-      <h2 id="decision-title">Decision needed now</h2>
+      <h2 id="decision-title">
+        <span className="decision-dot" aria-hidden="true" />
+        Decision needed now
+      </h2>
 
-      <div className={canWait ? 'delay delay-ok' : 'delay delay-act'} data-testid="delay">
-        <div className="delay-top">
-          <span className="delay-label">Earth can answer in about</span>
-          <strong className="delay-time">{formatDuration(roundTrip)}</strong>
-          <span className="delay-label">round trip from {MISSIONS[mission].label}</span>
+      <div className={canWait ? 'delay-grid delay-ok' : 'delay-grid delay-act'} data-testid="delay">
+        <div className="delay-box">
+          <span className="delay-label">One-way message delay applies. Earth can answer in about</span>
+          <div className="delay-top">
+            <strong className="delay-time">{formatDuration(roundTrip)}</strong>
+            <span className="delay-label">round trip from {MISSIONS[mission].label}</span>
+          </div>
+          <div className="missions" role="radiogroup" aria-label="Mission location">
+            {Object.entries(MISSIONS).map(([id, m]) => (
+              <button
+                key={id}
+                type="button"
+                role="radio"
+                aria-checked={mission === id}
+                className={mission === id ? 'mission on' : 'mission'}
+                onClick={() => chooseMission(id)}
+              >
+                {m.short}
+              </button>
+            ))}
+          </div>
         </div>
-        <p className="delay-verdict">
-          {canWait
-            ? 'Earth can reply quickly. Report now and wait for their answer.'
-            : "Don't wait for Earth. Act now with the steps below, then report."}
-        </p>
-        <div className="missions" role="radiogroup" aria-label="Mission location">
-          {Object.entries(MISSIONS).map(([id, m]) => (
-            <button
-              key={id}
-              type="button"
-              role="radio"
-              aria-checked={mission === id}
-              className={mission === id ? 'mission on' : 'mission'}
-              onClick={() => chooseMission(id)}
-            >
-              {m.short}
-            </button>
-          ))}
+        <div className="verdict">
+          <span className="verdict-label">{canWait ? 'Reply window' : 'Act on your own'}</span>
+          <p className="delay-verdict">
+            {canWait
+              ? 'Earth can reply quickly. Report now and wait for their answer.'
+              : "Don't wait for Earth. Act now with the steps below, then report."}
+          </p>
         </div>
       </div>
 

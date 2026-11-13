@@ -77,7 +77,7 @@ export default function EntryForm() {
 
   return (
     <form className="entry" onSubmit={onSubmit} noValidate>
-      <h2>Log your health check</h2>
+      <h2>Log a check</h2>
       <p className="hint">Fill in what you measured. Skip what you did not. It takes under a minute.</p>
 
       {status === 'saved' && (
@@ -144,6 +144,7 @@ export default function EntryForm() {
         </div>
         <FieldError id="err-systolic" message={errors.systolic} />
         <FieldError id="err-diastolic" message={errors.diastolic} />
+        <p className="field-hint">Sit still for 5 minutes, then measure.</p>
       </fieldset>
 
       <fieldset>
@@ -162,6 +163,7 @@ export default function EntryForm() {
           <span className="unit">{GLUCOSE.unit}</span>
         </label>
         <FieldError id="err-glucose" message={errors.glucose} />
+        <p className="field-hint">Note when you last ate.</p>
       </fieldset>
 
       <fieldset>
@@ -178,6 +180,7 @@ export default function EntryForm() {
           </button>
         </div>
         <FieldError id="err-sleep" message={errors.sleep} />
+        <p className="field-hint">Hours you actually slept.</p>
       </fieldset>
 
       <fieldset>
