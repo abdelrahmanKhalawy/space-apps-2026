@@ -38,6 +38,7 @@ Underneath, a model learns each astronaut's own baseline from their first week o
 Open the live link above — no install needed, works on a phone or laptop:
 
 1. On the **Status** tab, press **Simulate device** (top of the page) to start live readings — this stands in for the real finger-sensor hardware.
+   Or press **Measure pulse with phone camera** on a phone: cover the camera lens and flash with a fingertip for 25 seconds and the browser reads your real heart rate (and a rough HRV) from the light through your skin. It is an experiment with approximate accuracy, not a medical measurement, and it needs camera permission on https or localhost.
 2. Open **Body** to see the interactive body update live, by color.
 3. Open the **Log a check** tab to enter blood pressure, blood sugar, sleep, or mood.
 4. Click any metric card on the Status tab to expand its chart; when the model has flagged that metric, you'll also see why, what to do, and a forecast.

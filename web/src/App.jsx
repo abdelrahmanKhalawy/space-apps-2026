@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useState } from 'react'
 import BodyView from './body/BodyView.jsx'
 import Dashboard from './dashboard/Dashboard.jsx'
 import DeviceSimulator from './live/DeviceSimulator.jsx'
+import CameraPulse from './live/CameraPulse.jsx'
 import useLive from './live/useLive.js'
 import EntryForm from './entry/EntryForm.jsx'
 import GroundScreen from './ground/GroundScreen.jsx'
@@ -47,6 +48,7 @@ function CrewApp() {
         <h1>AstroPulse</h1>
         <p>Astronaut health monitoring · NASA Space Apps Cairo 2026</p>
         <DeviceSimulator />
+        <CameraPulse />
       </header>
       <nav className="tabs" role="tablist" aria-label="Screens">
         {TABS.map(t => (
