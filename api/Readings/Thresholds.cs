@@ -42,7 +42,9 @@ public class Thresholds
             return new Thresholds(map);
         }
 
-        using var doc = JsonDocument.Parse(File.ReadAllText(path));
+        // Bytes, not a string: avoids relying on File.ReadAllText's encoding guess for a
+        // BOM-less file (seen to mangle non-ASCII text in Explanations.cs on this host).
+        using var doc = JsonDocument.Parse(File.ReadAllBytes(path));
         foreach (var prop in doc.RootElement.EnumerateObject())
         {
             if (prop.Name.StartsWith('_')) continue; // notes, not metrics

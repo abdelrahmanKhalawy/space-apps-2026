@@ -15,8 +15,10 @@
     <Content Include="..\data\mock\day143.json" Link="SeedData\day143.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Condition="Exists('..\data\mock\day143.json')" />
     <!-- Color rules (research/thresholds.json) ship with the app too. -->
     <Content Include="..\research\thresholds.json" Link="SeedData\thresholds.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
-    <!-- Precomputed anomaly explanations (i3): the demo-safe fallback for POST /explain. -->
+    <!-- Precomputed anomaly explanations (i3): the demo-safe fallback for GET /api/explain. -->
     <Content Include="..\data\precomputed\explain.json" Link="SeedData\explain.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Condition="Exists('..\data\precomputed\explain.json')" />
+    <!-- Space-hazard explanation text (n2): what live GET /api/explain actually reads from. -->
+    <Content Include="..\research\explanations.json" Link="SeedData\explanations.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Condition="Exists('..\research\explanations.json')" />
     <!-- Precomputed trend forecast (i4): the demo-safe fallback for POST /forecast. -->
     <Content Include="..\data\precomputed\forecast.json" Link="SeedData\forecast.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Condition="Exists('..\data\precomputed\forecast.json')" />
   </ItemGroup>
