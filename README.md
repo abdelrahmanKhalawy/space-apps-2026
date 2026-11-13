@@ -1,8 +1,4 @@
-<!--
-  DRAFT for f5 (README and sources), written ahead of feature freeze (f1) so delivery
-  isn't rushed at the last minute. Before submitting: add the demo video link, confirm
-  the "real vs simulated" table below still matches reality, and remove this notice.
--->
+<!-- TODO before submitting: add the demo video link under "Live app" (f3). -->
 
 # AstroPulse
 
@@ -55,6 +51,10 @@ Open the live link above — no install needed, works on a phone or laptop:
 4. Click any metric card on the Status tab to expand its chart; when the model has flagged that metric, you'll also see why, what to do, and a forecast.
 5. Open `#ground` (linked in the footer) in a second tab for the ground-control (flight surgeon) view.
 
+### Advice language and resetting the demo
+
+Color advice is in English by default (`GET /api/status`); add `&lang=ar` for the original Arabic. Because the public link has one shared crew member, **Restore demo data** (Ground control view, `#ground`, or `POST /api/demo/restore`) removes anything added during the demo (camera/simulated/manual readings, reports, replies) and keeps the Day-143 sample data.
+
 ### Run it locally
 
 ```bash
@@ -88,13 +88,14 @@ AstroPulse needs nothing but a phone or laptop. The one real, live measurement i
 
 ## Data
 
-The two-week "Day 143" scenario (`data/mock/day143.json`) is **synthetic, generated data**, not from a real person — see `data/README.md` and `data/mock/generate.py`. Precomputed AI results (`data/precomputed/`) let the demo run in full even if the AI service itself is unreachable.
+The two-week "Day 143" scenario (`data/mock/day143.json`) is **synthetic, generated data**, not from a real person — see `data/README.md` and `data/mock/generate.py`. The live app computes the anomaly model, explanations and forecast in C# (`api/Insights/`), from whatever has actually been logged. The Python version in `ai/` is the original reference implementation, kept in step by a parity test (`dotnet test`); the FastAPI wrapper in `ai/service/` is optional and is not deployed. Precomputed results (`data/precomputed/`) are the fallback if the live computation ever throws.
 
 ## Tests
 
 ```bash
+# CI (.github/workflows/ci.yml) runs all of this on every pull request
 cd web && npm test                      # 9 Node suites: detectors parity, PPG, Index, crew rule, checks, offline, privacy...
-cd tests/SpaceApi.Tests && dotnet test  # 10 C# tests, including live model vs the Python model on the same data
+cd tests/SpaceApi.Tests && dotnet test  # 16 C# tests: live model vs the Python model, and the whole API run in memory
 python ai/trial.py                      # re-runs the virtual crew trial (writes data/trial/results.json)
 ```
 
@@ -105,13 +106,12 @@ Full detail, with every link and an honest note on which ones are stronger than 
 - **Color thresholds** — American Heart Association (heart rate, blood pressure), MedlinePlus/NIH (oxygen saturation), CDC (blood sugar, sleep). Skin temperature has no precise clinical source and is an approximation; mood is a self-reported 1–5 scale with no clinical standard, included because NASA's Human Research Program tracks it as a leading indicator of isolation.
 - **Space-hazard explanations** — NASA (cardiovascular health in microgravity, cabin air quality, sleep in orbit, behavioral health and isolation). The blood-sugar/isolation link is our own inference from NASA's nutrition research, not a direct NASA statement — flagged as our weakest source.
 - **Space weather (radiation)** — live from NOAA's Space Weather Prediction Center (`services.swpc.noaa.gov`: NOAA scales, GOES proton flux, Kp, solar wind), read by `GET /api/space-weather`. If NOAA can't be reached the app serves a recorded real reading and labels it. The "simulated solar storm" preview is labeled as simulated.
-- **Radiation environment** — NOAA Space Weather Prediction Center (services.swpc.noaa.gov), live.
 - **Method inspiration** — NASA's Integrated Medical Model (a Monte Carlo risk simulation), NASA HRP's open question on meaningful thresholds and crew self-monitoring, Mars-500 findings that individuals respond very differently to isolation, and NASA's CO₂ technical brief. Full list in [`docs/winning-plan.md`](docs/winning-plan.md).
 - **Challenge background** — NASA's own [challenge page](https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/) and its Resources tab (five hazards of human spaceflight, risks of human spaceflight).
 
 ## AI usage
 
-We used Claude Code throughout the build: scaffolding the API and the screens; implementing readings storage, validation, SignalR live updates, and the ground-control report flow; researching and sourcing the color thresholds and space-hazard explanations from NASA, CDC, AHA, and MedlinePlus when the team member who owned that research was unavailable; building the baseline/anomaly-detection model, its FastAPI wrapper, and the trend-forecast model; and generating the synthetic two-week mock dataset. Every use is logged, with who requested it and what it covered, in [`docs/ai-usage.md`](docs/ai-usage.md).
+We used Claude Code throughout the build: scaffolding the API and the screens; implementing readings storage, validation, SignalR live updates, and the ground-control report flow; researching and sourcing the color thresholds and space-hazard explanations from NASA, CDC, AHA, and MedlinePlus when the team member who owned that research was unavailable; building the baseline/anomaly-detection model, its FastAPI wrapper, and the trend-forecast model; generating the synthetic two-week mock dataset; and, in the final stretch, the virtual crew trial, the phone-camera pulse, the space-weather feed, the AstroPulse Index, the crew and checks screens, the offline support, the English advice texts, the integration tests and CI. Every use is logged, with who requested it and what it covered, in [`docs/ai-usage.md`](docs/ai-usage.md).
 
 ## Team
 

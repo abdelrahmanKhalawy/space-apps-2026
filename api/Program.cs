@@ -39,13 +39,14 @@ using (var scope = app.Services.CreateScope())
     db.Database.EnsureCreated();
     ReportEndpoints.EnsureTable(db); // older databases do not have the reports table yet
     ReplyEndpoints.EnsureTable(db);  // ...or the replies table
-    await SeedMockData.RunAsync(db, app.Configuration, app.Logger);
+    await SeedMockData.RunAsync(db, app.Configuration, app.Logger, dataDir);
 }
 
 app.MapGet("/api/health", () => Results.Text("ok"));
 app.MapReadings();
 app.MapReports();
 app.MapReplies();
+app.MapDemoRestore();
 app.MapAnalyze();
 app.MapSpaceWeather();
 app.MapExplain();
@@ -58,3 +59,6 @@ app.UseStaticFiles();
 app.MapFallbackToFile("index.html");
 
 app.Run();
+
+// Lets the integration tests (tests/SpaceApi.Tests) start the whole app in memory.
+public partial class Program { }

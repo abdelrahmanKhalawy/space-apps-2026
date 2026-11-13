@@ -13,6 +13,11 @@
       "yellow": "نبضك خارج المعتاد شوية. ارتاح 10 دقايق واشرب مياه وقيس تاني.",
       "red": "نبضك بعيد عن المعتاد. وقّف أي مجهود وبلّغ طبيب الأرض."
     },
+    "advice_en": {
+      "green":  "Your heart rate is in your usual range. Carry on with your routine.",
+      "yellow": "Your heart rate is a little outside the usual range. Rest for 10 minutes, drink some water, then measure again.",
+      "red":    "Your heart rate is far from the usual range. Stop any effort and tell the flight surgeon."
+    },
     "hazard": "gravity",
     "sources": [{ "title": "American Heart Association, All About Heart Rate (Pulse)", "url": "https://www.heart.org/en/health-topics/high-blood-pressure/the-facts-about-high-blood-pressure/all-about-heart-rate-pulse" }]
   },
@@ -28,6 +33,11 @@
       "green": "الأكسجين تمام.",
       "yellow": "الأكسجين أقل من المعتاد. خد نفس عميق وافتح التهوية وقيس تاني.",
       "red": "الأكسجين واطي. اتأكد من الهوا حواليك وبلّغ طبيب الأرض فورًا."
+    },
+    "advice_en": {
+      "green":  "Your oxygen level is fine.",
+      "yellow": "Your oxygen level is lower than usual. Take a deep breath, open the ventilation and measure again.",
+      "red":    "Your oxygen level is low. Check the air around you and tell the flight surgeon right away."
     },
     "hazard": "environment",
     "sources": [{ "title": "MedlinePlus (NIH), Pulse Oximetry", "url": "https://medlineplus.gov/lab-tests/pulse-oximetry" }]
@@ -47,6 +57,11 @@
       "yellow": "حرارة الجلد خارج المعتاد. تأكد من حرارة الكابينة وقيس تاني.",
       "red": "حرارة الجلد بعيدة عن المعتاد. بلّغ طبيب الأرض."
     },
+    "advice_en": {
+      "green":  "Your skin temperature is in the usual range.",
+      "yellow": "Your skin temperature is outside the usual range. Check the cabin temperature and measure again.",
+      "red":    "Your skin temperature is far from the usual range. Tell the flight surgeon."
+    },
     "hazard": "environment",
     "sources": [{ "title": "Wikipedia, Skin temperature (تقريبي لحرارة الصباع، مفيش مصدر طبي دقيق — راجع research/sources.md)", "url": "https://en.wikipedia.org/wiki/Skin_temperature" }]
   },
@@ -63,6 +78,11 @@
       "green": "الضغط العالي في المعتاد.",
       "yellow": "الضغط العالي خارج المعتاد. ارتاح وقلّل الملح وقيس بعد ربع ساعة.",
       "red": "الضغط العالي بعيد عن المعتاد. وقّف المجهود وبلّغ طبيب الأرض."
+    },
+    "advice_en": {
+      "green":  "Your upper blood pressure (systolic) is in the usual range.",
+      "yellow": "Your upper blood pressure is outside the usual range. Rest, cut down on salt and measure again in 15 minutes.",
+      "red":    "Your upper blood pressure is far from the usual range. Stop any effort and tell the flight surgeon."
     },
     "hazard": "gravity",
     "sources": [{ "title": "American Heart Association, Understanding Blood Pressure Readings", "url": "https://www.heart.org/en/health-topics/high-blood-pressure/understanding-blood-pressure-readings" }]
@@ -81,6 +101,11 @@
       "yellow": "الضغط الواطي خارج المعتاد. ارتاح وقيس تاني بعد ربع ساعة.",
       "red": "الضغط الواطي بعيد عن المعتاد. بلّغ طبيب الأرض."
     },
+    "advice_en": {
+      "green":  "Your lower blood pressure (diastolic) is in the usual range.",
+      "yellow": "Your lower blood pressure is outside the usual range. Rest and measure again in 15 minutes.",
+      "red":    "Your lower blood pressure is far from the usual range. Tell the flight surgeon."
+    },
     "hazard": "gravity",
     "sources": [{ "title": "American Heart Association, Understanding Blood Pressure Readings", "url": "https://www.heart.org/en/health-topics/high-blood-pressure/understanding-blood-pressure-readings" }]
   },
@@ -98,6 +123,11 @@
       "green": "السكر في المعتاد.",
       "yellow": "السكر خارج المعتاد. راجع آخر وجبة واشرب مياه وقيس تاني.",
       "red": "السكر بعيد عن المعتاد. بلّغ طبيب الأرض فورًا."
+    },
+    "advice_en": {
+      "green":  "Your blood sugar is in the usual range.",
+      "yellow": "Your blood sugar is outside the usual range. Think about your last meal, drink some water and measure again.",
+      "red":    "Your blood sugar is far from the usual range. Tell the flight surgeon right away."
     },
     "hazard": "isolation",
     "sources": [
@@ -120,6 +150,11 @@
       "yellow": "نومك أقل من المعتاد. نظّم موعد نومك وقلّل الإضاءة قبل النوم.",
       "red": "نومك قليل جدًا. ده بيأثر على تركيزك. بلّغ طبيب الأرض."
     },
+    "advice_en": {
+      "green":  "You are sleeping well.",
+      "yellow": "You are sleeping less than usual. Keep a regular sleep schedule and dim the lights before bed.",
+      "red":    "You are sleeping far too little. This affects your concentration. Tell the flight surgeon."
+    },
     "hazard": "isolation",
     "sources": [{ "title": "CDC, FastStats: Sleep in Adults (7 ساعات على الأقل؛ الحد الأعلى من National Sleep Foundation 2015)", "url": "https://www.cdc.gov/sleep/data-and-statistics/adults.html" }]
   },
@@ -135,6 +170,11 @@
       "green": "مزاجك كويس. كمّل.",
       "yellow": "مزاجك نازل شوية. كلّم حد من الطاقم أو من الأرض.",
       "red": "مزاجك واطي. كلّم طبيب الأرض النهارده."
+    },
+    "advice_en": {
+      "green":  "Your mood is good. Keep it up.",
+      "yellow": "Your mood is a little low. Talk to someone in the crew or on the ground.",
+      "red":    "Your mood is low. Talk to the flight surgeon today."
     },
     "hazard": "isolation",
     "sources": [{ "title": "NASA HRP, Isolation Standard Measures (سياق، مش رقم — المقياس من تصميمنا)", "url": "https://ntrs.nasa.gov/api/citations/20230010798/downloads/071622%20CSP_Space%20Psychology.pdf" }]

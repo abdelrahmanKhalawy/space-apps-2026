@@ -1,5 +1,5 @@
 """The simplest thing that works: mean + standard deviation from week 1, per metric,
-then flag week 2 days that drift away from it. Matches contracts/ai.md's /analyze shape.
+then flag later days that drift away from it (settings calibrated by ai/trial.py). Matches contracts/ai.md's /analyze shape.
 
 Usage:
     python ai/baseline.py                              # reads data/mock/day143.json
@@ -18,10 +18,20 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
 
-# Z-score past this, for two days running, counts as a real deviation (not one noisy reading).
-Z_THRESHOLD = 1.3
-SUSTAINED_DAYS = 2
+# Z-score past this, for several days running, counts as a real deviation (not one noisy reading).
+# These are the settings calibrated by the virtual crew trial (ai/trial.py, shown on the app's Evidence tab):
+# the first version (z >= 1.3 for 2 days) cried wolf on ~94% of healthy simulated crews under realistic
+# day-to-day noise; z >= 2 for 4 days keeps false alarms under 5% and still catches the drift in time.
+Z_THRESHOLD = 2.0
+SUSTAINED_DAYS = 4
 BASELINE_DAYS = 7
+# The least spread we trust per metric, so a very quiet baseline week can't turn a tiny wobble into a huge z-score.
+# (Same numbers as the app's AstroPulse Index and the trial.) Mirrors api/Insights/AnomalyModel.cs.
+STD_FLOOR = {
+    "heart_rate": 1.0, "spo2": 0.5, "temperature": 0.2, "bp_systolic": 2.0,
+    "bp_diastolic": 1.5, "glucose": 3.0, "sleep_hours": 0.25, "mood": 0.35,
+}
+DEFAULT_STD_FLOOR = 0.05
 
 
 def _parse(t: str) -> datetime:
@@ -59,7 +69,7 @@ def analyze(readings: list[dict], crew_id: str) -> dict:
         base_days = days[:BASELINE_DAYS]
         base_values = [daily[d] for d in base_days]
         mean = statistics.fmean(base_values)
-        std = statistics.pstdev(base_values) or 0.05  # a silent metric still gets a tiny, non-zero std
+        std = max(statistics.pstdev(base_values), STD_FLOOR.get(metric, DEFAULT_STD_FLOOR))
 
         baseline[metric] = {"mean": round(mean, 2), "std": round(std, 2)}
 

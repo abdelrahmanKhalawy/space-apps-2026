@@ -25,9 +25,9 @@ START = LAST_DAY - timedelta(days=DAYS - 1)
 rng = random.Random(143)
 
 # Per-day values for the 14 days (index 0 = first day). Week 2 = index 7..13.
-SLEEP_HOURS = [7.2, 7.3, 7.1, 7.2, 7.4, 7.2, 7.3, 7.2, 7.1, 7.05, 6.9, 6.6, 5.8, 4.9]
-MOOD = [4, 4, 4, 5, 4, 4, 4, 4, 4, 4, 4, 3, 3, 2]
-HR_DRIFT = [0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 5, 7, 12, 18]  # added to resting bpm
+SLEEP_HOURS = [7.2, 7.3, 7.1, 7.2, 7.4, 7.2, 7.3, 7.15, 7.0, 6.9, 6.7, 6.2, 5.6, 4.9]
+MOOD = [4, 4, 4, 5, 4, 4, 4, 4, 4, 3, 3, 3, 3, 2]
+HR_DRIFT = [0, 0, 0, 0, 0, 0, 0, 2.5, 3, 3.6, 4.6, 7, 12, 18]  # added to resting bpm
 BP_DRIFT = [0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 5, 7, 9]  # added to systolic
 GLUCOSE_DRIFT = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 2, 3, 5, 8]
 

@@ -12,9 +12,20 @@ public record Anomaly(string Metric, DateTime Since, string Direction, double Sc
 
 public static class AnomalyModel
 {
-    const double ZThreshold = 1.3;
-    const int SustainedDays = 2;
+    // Calibrated by the virtual crew trial (ai/trial.py, the app's Evidence tab): the first version (z >= 1.3 for
+    // 2 days) cried wolf on ~94% of healthy simulated crews under realistic noise; this keeps false alarms under 5%.
+    // Mirrors ai/baseline.py.
+    const double ZThreshold = 2.0;
+    const int SustainedDays = 4;
     const int BaselineDays = 7;
+
+    // The least spread we trust per metric: a very quiet baseline week can't turn a tiny wobble into a huge z-score.
+    static readonly Dictionary<string, double> StdFloor = new()
+    {
+        ["heart_rate"] = 1.0, ["spo2"] = 0.5, ["temperature"] = 0.2, ["bp_systolic"] = 2.0,
+        ["bp_diastolic"] = 1.5, ["glucose"] = 3.0, ["sleep_hours"] = 0.25, ["mood"] = 0.35,
+    };
+    const double DefaultStdFloor = 0.05;
 
     public static Dictionary<string, List<(DateTime Day, double Value)>> DailyMeansByMetric(IEnumerable<Reading> readings)
     {
@@ -45,7 +56,7 @@ public static class AnomalyModel
             var mean = baseValues.Average();
             var variance = baseValues.Sum(v => (v - mean) * (v - mean)) / baseValues.Count;
             var std = Math.Sqrt(variance);
-            if (std == 0) std = 0.05; // a silent metric still gets a tiny, non-zero std
+            std = Math.Max(std, StdFloor.GetValueOrDefault(metric, DefaultStdFloor));
 
             baseline[metric] = new BaselineStat(Math.Round(mean, 2), Math.Round(std, 2));
 
