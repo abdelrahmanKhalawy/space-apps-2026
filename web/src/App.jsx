@@ -63,8 +63,8 @@ function CrewApp() {
       <header>
         <h1>AstroPulse</h1>
         <p>Astronaut health monitoring · NASA Space Apps Cairo 2026</p>
-        <DeviceSimulator />
         <CameraPulse />
+        <DeviceSimulator />
       </header>
       {pending > 0 && (
         <p className="notice" role="status">

@@ -110,7 +110,8 @@ export function analyze(samples, fs = FS) {
   return { bpm: Math.round(60 / mean(keep)), rmssd: rmssd == null ? null : Math.round(rmssd), beats: keep.length, quality }
 }
 
-/** Is a fingertip covering the lens? With the torch on the red channel is high and green is low. */
+/** Is a fingertip covering the lens? Skin lit from behind is strongly red (high red, low green and blue). With the torch
+ * the red is very high; in plain room light it is lower, so the floor is modest and the red-dominance ratio does the work. */
 export function fingerOnLens({ r, g, b }) {
-  return r > 90 && r > 1.5 * g && r > 1.5 * b
+  return r > 55 && r > 1.4 * g && r > 1.4 * b
 }
