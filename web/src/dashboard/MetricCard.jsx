@@ -2,6 +2,7 @@ import { Suspense, lazy } from 'react'
 import { COLOR_NAMES, HAZARD_NAMES, METRIC_NAMES, unitLabel } from './metricInfo.js'
 import { formatTime, formatValue } from './status.js'
 import WhyThisMatters from './WhyThisMatters.jsx'
+import EvidenceBadges from './EvidenceBadges.jsx'
 
 // The chart library is loaded the first time someone opens a card, so the cards appear fast.
 const MetricChart = lazy(() => import('./MetricChart.jsx'))
@@ -39,6 +40,7 @@ export default function MetricCard({ item, unit, readings, threshold, explain, f
             <MetricChart metric={item.metric} readings={readings} threshold={threshold} />
           </Suspense>
           <WhyThisMatters explain={explain} forecast={forecast} color={color} />
+          <EvidenceBadges metric={item.metric} />
         </div>
       )}
     </article>

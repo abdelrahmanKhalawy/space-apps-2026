@@ -384,3 +384,13 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 .crew-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 0.8rem; color: var(--muted); }
 .crew-spark { width: 150px; height: 44px; }
 .crew-cabin { grid-column: 1 / -1; }
+
+/* "How sure are we?" evidence badges */
+.ebadges { margin-top: 10px; padding: 10px 12px; border: 1px dashed var(--line); border-radius: 8px; font-size: 0.82rem; line-height: 1.45; }
+.ebadges-head { margin: 0 0 6px; font-weight: 700; }
+.ebadge-row { display: flex; gap: 8px; align-items: flex-start; margin: 4px 0; }
+.ebadge { flex: none; padding: 1px 8px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; border: 1px solid; white-space: nowrap; }
+.ebadge-strong { color: var(--green); border-color: var(--green); }
+.ebadge-moderate { color: var(--yellow); border-color: var(--yellow); }
+.ebadge-approx, .ebadge-disputed { color: #ff9f43; border-color: #ff9f43; }
+.ebadge-ours { color: #c084fc; border-color: #c084fc; }

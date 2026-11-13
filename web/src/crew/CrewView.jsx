@@ -72,6 +72,10 @@ export default function CrewView() {
         <div className="crew-card crew-cabin">
           <div className="crew-name"><strong>Shared cabin</strong><span>{cause.co2Now.toFixed(1)} mmHg CO₂ now</span></div>
           <div className="crew-row"><span>CO₂</span><Spark values={scn.cabin.co2} limit={CABIN_CO2_LIMIT} color={cause.co2High ? 'var(--red)' : 'var(--green)'} label="Cabin CO2 over 14 days with the NASA limit line" /></div>
+          <p className="ebadge-row">
+            <span className="ebadge ebadge-disputed" title="Studies disagree">Disputed</span>
+            <span>Does CO₂ at station levels affect thinking? NASA's own brief says several studies found no effect at current levels, while an older chamber study found effects below the headache threshold. Headaches on the ISS are better documented.</span>
+          </p>
           <p className="idx-fine">Dashed red line: about {CABIN_CO2_LIMIT} mmHg, the limit in NASA's CO₂ technical brief. Dotted vertical line: end of the baseline week.</p>
         </div>
       </div>
