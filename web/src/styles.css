@@ -343,3 +343,18 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 .cam-error { color: var(--red); margin: 0 0 8px; font-size: 0.9rem; }
 .cam-ok { color: var(--green); margin: 0 0 8px; }
 .cam-link { background: none; border: 0; color: var(--accent); text-decoration: underline; cursor: pointer; font-size: 0.88rem; padding: 8px 4px; min-height: 40px; }
+
+/* Space weather card (NOAA SWPC) */
+.spw { margin-top: 12px; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); border-left-width: 5px; border-radius: 12px; }
+.spw-calm { border-left-color: var(--green); }
+.spw-elevated { border-left-color: var(--yellow); }
+.spw-storm { border-left-color: var(--red); background: #2a1216; }
+.spw-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; justify-content: space-between; }
+.spw-detail { margin: 6px 0 8px; font-size: 0.9rem; line-height: 1.5; }
+.spw-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 8px; margin: 0 0 6px; }
+.spw-stats div { background: var(--bg); border-radius: 8px; padding: 6px 10px; }
+.spw-stats dt { color: var(--muted); font-size: 0.72rem; }
+.spw-stats dd { margin: 2px 0 0; font-size: 1.15rem; font-weight: 700; }
+.spw-stats small { color: var(--muted); font-weight: 500; font-size: 0.75rem; }
+.tag-live { color: var(--green); border-color: var(--green); }
+.tag-sim { background: var(--yellow); color: #2a2000; border-color: var(--yellow); font-weight: 700; }

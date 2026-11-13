@@ -3,6 +3,7 @@ using SpaceApi.Insights;
 using SpaceApi.Live;
 using SpaceApi.Readings;
 using SpaceApi.Reports;
+using SpaceApi.SpaceWeather;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,8 @@ builder.Services.AddSingleton(sp => Explanations.Load(explanationsPath, sp.GetRe
 
 builder.Services.AddSingleton<DemoClock>(); // the clock report delays run on (the demo can skip ahead)
 builder.Services.AddSignalR();
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient("noaa");
 
 var app = builder.Build();
 app.Services.GetRequiredService<Thresholds>(); // load now, so a bad file is logged at startup
@@ -42,6 +45,7 @@ app.MapGet("/api/health", () => Results.Text("ok"));
 app.MapReadings();
 app.MapReports();
 app.MapAnalyze();
+app.MapSpaceWeather();
 app.MapExplain();
 app.MapForecast();
 app.MapHub<ReadingsHub>("/hubs/readings");

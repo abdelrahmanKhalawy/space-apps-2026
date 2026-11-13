@@ -67,6 +67,7 @@ Full detail, with every link and an honest note on which ones are stronger than 
 
 - **Color thresholds** — American Heart Association (heart rate, blood pressure), MedlinePlus/NIH (oxygen saturation), CDC (blood sugar, sleep). Skin temperature has no precise clinical source and is an approximation; mood is a self-reported 1–5 scale with no clinical standard, included because NASA's Human Research Program tracks it as a leading indicator of isolation.
 - **Space-hazard explanations** — NASA (cardiovascular health in microgravity, cabin air quality, sleep in orbit, behavioral health and isolation). The blood-sugar/isolation link is our own inference from NASA's nutrition research, not a direct NASA statement — flagged as our weakest source.
+- **Space weather (radiation)** — live from NOAA's Space Weather Prediction Center (`services.swpc.noaa.gov`: NOAA scales, GOES proton flux, Kp, solar wind), read by `GET /api/space-weather`. If NOAA can't be reached the app serves a recorded real reading and labels it. The "simulated solar storm" preview is labeled as simulated.
 - **Challenge background** — NASA's own [challenge page](https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/) and its Resources tab (five hazards of human spaceflight, risks of human spaceflight).
 
 ## AI usage

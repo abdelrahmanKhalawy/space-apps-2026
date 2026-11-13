@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import DecisionScreen from '../decision/DecisionScreen.jsx'
 import MetricCard from './MetricCard.jsx'
+import SpaceWeather from '../environment/SpaceWeather.jsx'
 import { loadDashboard } from './load.js'
 import thresholds from './thresholds.js'
 import { COLOR_NAMES, METRIC_ORDER } from './metricInfo.js'
@@ -46,6 +47,7 @@ export default function Dashboard({ reloadKey = 0 }) {
         <strong>Overall: {COLOR_NAMES[status.overall] ?? 'No data'}</strong>
         <span>{summarize(status)}</span>
       </div>
+      <SpaceWeather />
       {mode === 'sample' && (
         <p className="notice" role="note">
           The server could not be reached, so this is sample data from the mission simulation.
