@@ -47,7 +47,8 @@ export function localStatus(readings, thresholds, crewId = 'crew-1') {
       value: latest.value,
       color,
       takenAt: latest.takenAt,
-      advice: color && t ? t.advice?.[color] ?? null : null,
+      // English by default, like GET /api/status; the Arabic original is in `advice` (?lang=ar on the server).
+      advice: color && t ? t.advice_en?.[color] ?? t.advice?.[color] ?? null : null,
       hazard: t?.hazard ?? null,
     })
   }

@@ -46,6 +46,7 @@ app.MapGet("/api/health", () => Results.Text("ok"));
 app.MapReadings();
 app.MapReports();
 app.MapReplies();
+app.MapDemoRestore();
 app.MapAnalyze();
 app.MapSpaceWeather();
 app.MapExplain();
@@ -58,3 +59,6 @@ app.UseStaticFiles();
 app.MapFallbackToFile("index.html");
 
 app.Run();
+
+// Lets the integration tests (tests/SpaceApi.Tests) start the whole app in memory.
+public partial class Program { }

@@ -55,6 +55,10 @@ Open the live link above — no install needed, works on a phone or laptop:
 4. Click any metric card on the Status tab to expand its chart; when the model has flagged that metric, you'll also see why, what to do, and a forecast.
 5. Open `#ground` (linked in the footer) in a second tab for the ground-control (flight surgeon) view.
 
+### Advice language and resetting the demo
+
+Color advice is in English by default (`GET /api/status`); add `&lang=ar` for the original Arabic. Because the public link has one shared crew member, **Restore demo data** (Ground control view, `#ground`, or `POST /api/demo/restore`) removes anything added during the demo (camera/simulated/manual readings, reports, replies) and keeps the Day-143 sample data.
+
 ### Run it locally
 
 ```bash
@@ -93,8 +97,9 @@ The two-week "Day 143" scenario (`data/mock/day143.json`) is **synthetic, genera
 ## Tests
 
 ```bash
+# CI (.github/workflows/ci.yml) runs all of this on every pull request
 cd web && npm test                      # 9 Node suites: detectors parity, PPG, Index, crew rule, checks, offline, privacy...
-cd tests/SpaceApi.Tests && dotnet test  # 10 C# tests, including live model vs the Python model on the same data
+cd tests/SpaceApi.Tests && dotnet test  # 16 C# tests: live model vs the Python model, and the whole API run in memory
 python ai/trial.py                      # re-runs the virtual crew trial (writes data/trial/results.json)
 ```
 

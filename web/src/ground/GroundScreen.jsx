@@ -213,6 +213,10 @@ export default function GroundScreen() {
             <button type="button" className="gr-secondary" disabled={busy} onClick={() => demo('/api/demo/reset')}>
               Reset demo clock
             </button>
+            <button type="button" className="gr-secondary" disabled={busy} onClick={() => demo('/api/demo/restore')}
+              title="Removes readings, reports and replies added during the demo. Keeps the Day-143 sample data.">
+              Restore demo data
+            </button>
           </div>
         </section>
       </main>
