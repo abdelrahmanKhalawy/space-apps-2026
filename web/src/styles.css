@@ -285,6 +285,8 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 .callout-green circle { fill: var(--green); }
 .callout-yellow circle { fill: var(--yellow); }
 .callout-red circle { fill: var(--red); }
+.anatomy path { fill: none; stroke: #6ea8ff; stroke-opacity: 0.16; stroke-width: 1; vector-effect: non-scaling-stroke; pointer-events: none; }
+.part-skin { filter: drop-shadow(0 0 5px rgba(110, 168, 255, 0.25)); }
 .callouts { transition: opacity 0.4s; pointer-events: none; }
 .body-svg.zoomed .callouts { opacity: 0; }
 

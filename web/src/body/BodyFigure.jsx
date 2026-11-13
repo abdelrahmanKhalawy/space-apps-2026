@@ -29,7 +29,7 @@ const CALLOUTS = [
   { id: 'lungs', n: '02', y: 118, x: 149 },
   { id: 'heart', n: '03', y: 152, x: 124 },
   { id: 'metabolism', n: '04', y: 198, x: 133 },
-  { id: 'skin', n: '05', y: 246, x: 150 },
+  { id: 'skin', n: '05', y: 246, x: 154 },
 ]
 const FULL = 'translate(0px, 0px) scale(1)'
 const cameraFor = id => {
@@ -57,6 +57,12 @@ export default function BodyFigure({ organs, selected, pulsing, onSelect }) {
       role="group"
       aria-label="Body status. Pick a part for details."
     >
+      <defs>
+        <linearGradient id="body-fill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#223070" />
+          <stop offset="1" stopColor="#111a3c" />
+        </linearGradient>
+      </defs>
       <g className="body-zoom" style={{ transform: cameraFor(selected) }}>
       {/* Skin = the whole body outline */}
       <g
@@ -77,14 +83,16 @@ export default function BodyFigure({ organs, selected, pulsing, onSelect }) {
           strokeLinejoin="round"
           className={pulsing.has('skin') ? 'pulse' : undefined}
         >
-          <circle cx="110" cy="42" r="27" />
-          <rect x="100" y="66" width="20" height="16" rx="4" />
-          <path d="M68 84 Q110 72 152 84 L158 214 Q110 230 62 214 Z" />
-          <path d="M68 88 C52 92 44 106 42 126 L34 196 C33 205 47 208 50 199 L63 130 L68 122 Z" />
-          <path d="M152 88 C168 92 176 106 178 126 L186 196 C187 205 173 208 170 199 L157 130 L152 122 Z" />
-          <path d="M66 214 L108 220 L104 372 Q104 388 90 388 Q77 388 77 372 Z" />
-          <path d="M154 214 L112 220 L116 372 Q116 388 130 388 Q143 388 143 372 Z" />
+          <path d="M100 64 L98 80 C88 81 74 84 64 92 C54 98 50 108 48 124 C45 148 40 172 37 192 C35 202 33 208 36 213 C40 218 48 214 49 206 C53 186 58 160 62 140 C64 134 66 130 67 126 C66 150 68 180 70 205 C66 218 64 232 66 250 C67 290 70 325 73 355 L74 372 C74 382 70 388 72 392 L98 392 C101 392 103 386 103 378 C103 340 107 290 110 242 C113 290 117 340 117 378 C117 386 119 392 122 392 L148 392 C150 388 146 382 146 372 L147 355 C150 325 153 290 154 250 C156 232 154 218 150 205 C152 180 154 150 153 126 C154 130 156 134 158 140 C162 160 167 186 171 206 C172 214 180 218 184 213 C187 208 185 202 183 192 C180 172 175 148 172 124 C170 108 166 98 156 92 C146 84 132 81 122 80 L120 64 Z" fill="url(#body-fill)" />
+          <ellipse cx="110" cy="42" rx="23" ry="27" fill="url(#body-fill)" />
         </g>
+      </g>
+
+      {/* Faint anatomy hints (collarbones, spine, ribs) so the figure reads as a body, not a toy */}
+      <g className="anatomy" aria-hidden="true">
+        <path d="M84 92 Q98 98 108 94 M136 92 Q122 98 112 94" />
+        <path d="M110 96 V216" strokeDasharray="2 4" />
+        <path d="M82 108 Q110 120 138 108 M80 122 Q110 136 140 122 M82 136 Q110 148 138 136 M86 150 Q110 160 134 150" />
       </g>
 
       {Object.entries(SHAPES).map(([id, shapes]) => {
