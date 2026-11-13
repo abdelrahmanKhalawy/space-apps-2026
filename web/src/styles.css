@@ -300,3 +300,31 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 /* Decision screen: a failed report gets its own look + a retry button, not the success green */
 .sent-failed { border-color: var(--red); }
 .sent-failed .report { margin-top: 4px; align-self: flex-start; }
+
+/* Evidence tab: the virtual crew trial */
+.evidence { margin-top: 16px; }
+.evidence h2 { margin: 18px 0 4px; font-size: 1.3rem; }
+.ev-banner { background: #2a2210; border: 1px solid var(--yellow); border-radius: 12px; padding: 10px 14px; font-size: 0.9rem; line-height: 1.5; }
+.ev-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 14px 0; }
+.ev-stat { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; }
+.ev-big { font-size: 1.7rem; font-weight: 700; color: var(--accent); }
+.ev-label { margin-top: 2px; font-size: 0.95rem; }
+.ev-note { margin-top: 6px; color: var(--muted); font-size: 0.8rem; line-height: 1.45; }
+.ev-block { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-top: 14px; }
+.ev-block h3 { margin: 0 0 4px; font-size: 1.05rem; }
+.ev-svg { width: 100%; height: auto; display: block; }
+.ev-legend { font-size: 0.85rem; margin: 6px 0 0; display: flex; gap: 14px; flex-wrap: wrap; }
+.ev-table-wrap { overflow-x: auto; }
+.ev-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+.ev-table th, .ev-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+.ev-table th { color: var(--muted); font-weight: 600; }
+.ev-hyp, .ev-limits { margin: 8px 0; padding-left: 18px; line-height: 1.55; font-size: 0.9rem; }
+.ev-pass { color: var(--green); }
+.ev-fail { color: var(--red); }
+.ev-controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 8px 0; }
+.ev-btn, .ev-controls select { min-height: 44px; padding: 8px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--text); font-size: 0.95rem; cursor: pointer; }
+.ev-btn { background: var(--accent); border-color: var(--accent); color: #07122b; font-weight: 600; }
+.ev-check { display: flex; align-items: center; gap: 8px; color: var(--text); }
+.ev-check input { width: 20px; height: 20px; min-height: 0; margin: 0; padding: 0; }
+.ev-sentence { margin: 8px 0 0; font-size: 0.92rem; }
+.evidence code { background: var(--bg); padding: 1px 6px; border-radius: 6px; }

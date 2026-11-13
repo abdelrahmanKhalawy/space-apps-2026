@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import BodyView from './body/BodyView.jsx'
 import Dashboard from './dashboard/Dashboard.jsx'
 import DeviceSimulator from './live/DeviceSimulator.jsx'
@@ -6,10 +6,13 @@ import useLive from './live/useLive.js'
 import EntryForm from './entry/EntryForm.jsx'
 import GroundScreen from './ground/GroundScreen.jsx'
 
+const Evidence = lazy(() => import('./evidence/Evidence.jsx'))
+
 const TABS = [
   { id: 'status', label: 'Status' },
   { id: 'body', label: 'Body' },
   { id: 'log', label: 'Log a check' },
+  { id: 'evidence', label: 'Evidence' },
 ]
 
 function CrewApp() {
@@ -21,7 +24,13 @@ function CrewApp() {
   // a5: readings arrive live over SignalR (polling if the hub can't connect).
   // Both the Status and Body screens re-fetch whenever `tick` changes.
   const { tick } = useLive()
-  const SCREENS = { status: <Dashboard reloadKey={tick} />, body: <BodyView reloadKey={tick} />, log: <EntryForm /> }
+  const SCREENS = { status: <Dashboard reloadKey={tick} />, body: <BodyView reloadKey={tick} />, log: <EntryForm />,
+    evidence: (
+      <Suspense fallback={<p className="hint">Loading…</p>}>
+        <Evidence />
+      </Suspense>
+    ),
+  }
 
   useEffect(() => {
     fetch('/api/health').then(r => r.text()).then(setHealth).catch(() => setHealth('down'))

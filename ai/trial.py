@@ -127,6 +127,14 @@ def fixed_color_change(series: dict, bands: dict) -> int | None:
     return None
 
 
+def fixed_red(series: dict, bands: dict) -> int | None:
+    """First day any metric is RED: the point where the app tells the crew to act."""
+    for d in range(BASELINE_DAYS, DAYS):
+        if any(color_of(bands[m], series[m][d]) == "red" for m in METRICS):
+            return d
+    return None
+
+
 def fixed_non_green_days(series: dict, bands: dict) -> float:
     """Share of crew-days where any metric is not green: the 'alert fatigue' number."""
     bad = sum(1 for d in range(DAYS) if any(color_of(bands[m], series[m][d]) != "green" for m in METRICS))
@@ -234,6 +242,86 @@ def evaluate(detect, drift, healthy, bands, boot_seed: int = 7) -> dict:
     }
 
 
+def onset_aligned(detect, drift, bands) -> dict:
+    """POST-HOC (added after H1 failed as pre-registered; reported separately).
+
+    On a drifting crew, a first alarm BEFORE the drift starts is a false alarm, not an
+    early catch. Counting it as a catch flatters whichever detector is noisier. Here
+    every detector is judged the same way: first alarm before onset = false alarm;
+    first alarm on/after onset = a true detection with a delay. Lead is measured
+    against both the fixed color change and the fixed RED, among crews where both
+    detectors made a true detection."""
+    n = len(drift)
+    true_det = early_fa = 0
+    delays, lead_change, lead_red = [], [], []
+    for c in drift:
+        s, on = c["series"], c["onset"]
+        a = detect(s)
+        if a is None:
+            continue
+        if a < on:
+            early_fa += 1
+            continue
+        true_det += 1
+        delays.append(a - on)
+        f = fixed_color_change(s, bands)
+        if f is not None and f >= on:
+            lead_change.append(f - a)
+        r = fixed_red(s, bands)
+        if r is not None:
+            lead_red.append(r - a)
+    rng = random.Random(11)
+    return {
+        "true_detection_rate": true_det / n,
+        "true_detection_ci": wilson(true_det, n),
+        "alarm_before_onset_rate": early_fa / n,
+        "median_days_after_onset": statistics.median(delays) if delays else None,
+        "lead_vs_color_change": {"n": len(lead_change),
+                                 "median": statistics.median(lead_change) if lead_change else None,
+                                 "ci": bootstrap_median_ci(lead_change, rng),
+                                 "share_earlier": (sum(1 for x in lead_change if x > 0) / len(lead_change)) if lead_change else None},
+        "lead_vs_red": {"n": len(lead_red),
+                        "median": statistics.median(lead_red) if lead_red else None,
+                        "ci": bootstrap_median_ci(lead_red, rng),
+                        "share_earlier": (sum(1 for x in lead_red if x > 0) / len(lead_red)) if lead_red else None},
+    }
+
+
+def tradeoff(drift, healthy, bands) -> dict:
+    """POST-HOC operating curve: for every (z, days) and CUSUM setting, the healthy
+    false-alarm rate against how fast and how reliably a real drift is caught.
+    The fixed colors are a single point on this plot, because their cut-offs are not
+    tunable. Matched comparison: the best personal setting whose false-alarm rate is no
+    higher than the fixed colors'."""
+    pts = []
+
+    def point(label, family, det):
+        o = onset_aligned(det, drift, bands)
+        fa = sum(1 for c in healthy if det(c["series"]) is not None) / len(healthy)
+        pts.append({"label": label, "family": family, "false_alarm_rate": fa,
+                    "median_days_after_onset": o["median_days_after_onset"],
+                    "true_detection_rate": o["true_detection_rate"]})
+
+    for sus in (1, 2, 3, 4):
+        for z in (1.5, 2.0, 2.5, 3.0, 4.0, 5.0):
+            point(f"z>={z} for {sus}d", "zscore", lambda s, z=z, sus=sus: zscore(s, z, sus, True))
+    for k in (0.5, 1.0):
+        for h in (3, 4, 6, 8, 12):
+            point(f"CUSUM k={k} h={h}", "cusum", lambda s, k=k, h=h: cusum(s, k, h))
+
+    fixed_det = lambda s: fixed_color_change(s, bands)
+    fo = onset_aligned(fixed_det, drift, bands)
+    fixed_pt = {"label": "Fixed colors (color change)", "family": "fixed",
+                "false_alarm_rate": sum(1 for c in healthy if fixed_det(c["series"]) is not None) / len(healthy),
+                "median_days_after_onset": fo["median_days_after_onset"],
+                "true_detection_rate": fo["true_detection_rate"]}
+    ok = [p for p in pts if p["false_alarm_rate"] <= fixed_pt["false_alarm_rate"] and p["median_days_after_onset"] is not None]
+    best = min(ok, key=lambda p: (p["median_days_after_onset"], -p["true_detection_rate"])) if ok else None
+    low = [p for p in pts if p["false_alarm_rate"] <= 0.05 and p["median_days_after_onset"] is not None]
+    best_low = min(low, key=lambda p: (p["median_days_after_onset"], -p["true_detection_rate"])) if low else None
+    return {"points": pts, "fixed": fixed_pt, "matched_false_alarm": best, "at_5pct_false_alarm": best_low}
+
+
 def histogram(leads: list[float]) -> dict:
     out: dict[str, int] = {}
     for x in leads:
@@ -314,7 +402,15 @@ def run(n: int, noise_scale: float = 1.0, cal=None) -> dict:
     for key, (label, det) in detectors.items():
         r = evaluate(det, test_drift, test_healthy, bands)
         r["label"] = label
+        r["onset_aligned"] = onset_aligned(det, test_drift, bands)
         out["detectors"][key] = r
+    out["fixed"]["onset_aligned"] = onset_aligned(lambda s: fixed_color_change(s, bands), test_drift, bands)
+    out["tradeoff"] = tradeoff(test_drift, test_healthy, bands)
+    out["fixed_red"] = {
+        "detected": sum(1 for c in test_drift if fixed_red(c["series"], bands) is not None),
+        "false_alarm_rate": sum(1 for c in test_healthy if fixed_red(c["series"], bands) is not None) / len(test_healthy),
+        "onset_aligned": onset_aligned(lambda s: fixed_red(s, bands), test_drift, bands),
+    }
     return out, (test_drift, test_healthy, detectors)
 
 
@@ -349,11 +445,13 @@ def main():
     z = cal["zscore"]
     fixtures = []
     for c in test_drift[:6] + test_healthy[:2]:
-        s = c["series"]
+        # Alarms are computed on the ROUNDED series that gets published, so the JS port can
+        # be checked against them exactly (web/src/evidence/parity.mjs).
+        s = {m: [round(v, 3) for v in c["series"][m]] for m in METRICS}
         fixtures.append({
             "drifting": c["drifting"], "onset": c["onset"],
-            "series": {m: [round(v, 3) for v in s[m]] for m in METRICS},
-            "alarms": {"fixed": fixed_color_change(s, bands),
+            "series": s,
+            "alarms": {"fixed": fixed_color_change(s, bands), "fixed_red": fixed_red(s, bands),
                        "production": zscore(s, 1.3, 2, False),
                        "zscore": zscore(s, z["z"], z["sustained"], True),
                        "cusum": cusum(s, cal["cusum"]["k"], cal["cusum"]["h"])},
@@ -373,6 +471,22 @@ def main():
     f = main_res["fixed"]
     print(f"fixed       detected {f['detection_rate']:.1%}  false alarms {f['false_alarm_rate']:.1%}  "
           f"healthy days not green {f['healthy_days_not_green']:.1%}")
+    tr = main_res["tradeoff"]
+    print("-- post-hoc, matched false alarm --")
+    print("fixed", {k: tr["fixed"][k] for k in ("false_alarm_rate", "median_days_after_onset", "true_detection_rate")})
+    print("matched", tr["matched_false_alarm"])
+    print("at 5%", tr["at_5pct_false_alarm"])
+    print("-- post-hoc, onset-aligned --")
+    for k, v in main_res["detectors"].items():
+        o = v["onset_aligned"]
+        print(f"{k:11s} true det {o['true_detection_rate']:.1%}  before-onset {o['alarm_before_onset_rate']:.1%}  "
+              f"+{o['median_days_after_onset']}d after onset  lead vs change {o['lead_vs_color_change']['median']} "
+              f"{o['lead_vs_color_change']['ci']} (n={o['lead_vs_color_change']['n']})  vs red {o['lead_vs_red']['median']} "
+              f"{o['lead_vs_red']['ci']} (n={o['lead_vs_red']['n']})")
+    o = main_res["fixed"]["onset_aligned"]
+    print(f"fixed       true det {o['true_detection_rate']:.1%}  before-onset {o['alarm_before_onset_rate']:.1%}  +{o['median_days_after_onset']}d")
+    o = main_res["fixed_red"]["onset_aligned"]
+    print(f"fixed red   true det {o['true_detection_rate']:.1%}  before-onset {o['alarm_before_onset_rate']:.1%}  +{o['median_days_after_onset']}d  fa {main_res['fixed_red']['false_alarm_rate']:.1%}")
     for k, v in main_res["hypotheses"].items():
         print(k, "PASS" if v["passed"] else "FAIL", v["value"])
 
