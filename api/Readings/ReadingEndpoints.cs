@@ -62,7 +62,7 @@ public static class ReadingEndpoints
         });
 
         // Latest reading per metric, with its color, advice and hazard. overall = the worst color.
-        app.MapGet("/api/status", async (string? crewId, AppDb db, Thresholds th) =>
+        app.MapGet("/api/status", async (string? crewId, string? lang, AppDb db, Thresholds th) =>
         {
             if (string.IsNullOrWhiteSpace(crewId))
                 return Results.BadRequest(new { error = "'crewId' is required, e.g. /api/status?crewId=crew-1." });
@@ -86,7 +86,7 @@ public static class ReadingEndpoints
                     r.Value,
                     color,
                     TakenAt = Time(r.TakenAt),
-                    Advice = color is not null && t is not null ? t.Advice.GetValueOrDefault(color) : null,
+                    Advice = color is not null && t is not null ? t.AdviceFor(color, lang) : null,
                     Hazard = t?.Hazard,
                 });
             }

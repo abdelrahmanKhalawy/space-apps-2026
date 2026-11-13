@@ -6,7 +6,16 @@ public record Band(string Color, double? Min, double? Max);
 
 public record MetricThreshold(
     string Metric, string Unit, List<Band> Bands,
-    Dictionary<string, string> Advice, string Hazard);
+    Dictionary<string, string> Advice, string Hazard, Dictionary<string, string>? AdviceEn = null)
+{
+    /// <summary>The advice for a color, in English ("en", the default) or the original Arabic ("ar"). Falls back to the other language if one is missing.</summary>
+    public string? AdviceFor(string color, string? lang)
+    {
+        var ar = Advice.GetValueOrDefault(color);
+        var en = AdviceEn?.GetValueOrDefault(color);
+        return string.Equals(lang, "ar", StringComparison.OrdinalIgnoreCase) ? ar ?? en : en ?? ar;
+    }
+}
 
 // Reads research/thresholds.json (shape: contracts/thresholds.md) and turns a value into a color.
 // Change a number in the file and the color changes; no code involved.
@@ -75,8 +84,11 @@ public class Thresholds
             b.TryGetProperty("max", out var mx) ? mx.GetDouble() : null)).ToList();
 
         var advice = el.GetProperty("advice").EnumerateObject().ToDictionary(a => a.Name, a => a.Value.GetString() ?? "");
+        var adviceEn = el.TryGetProperty("advice_en", out var en)
+            ? en.EnumerateObject().ToDictionary(a => a.Name, a => a.Value.GetString() ?? "")
+            : null;
         return new MetricThreshold(metric, el.GetProperty("unit").GetString()!, bands, advice,
-            el.GetProperty("hazard").GetString()!);
+            el.GetProperty("hazard").GetString()!, adviceEn);
     }
 
     // Rules from contracts/thresholds.md. Problems are logged, not fatal: a typo shouldn't take the site down.
@@ -89,6 +101,8 @@ public class Thresholds
         if (!Hazards.Contains(t.Hazard)) Warn($"hazard '{t.Hazard}' is not one of the five.");
         foreach (var c in new[] { "green", "yellow", "red" })
             if (!t.Advice.ContainsKey(c)) Warn($"no advice for {c}.");
+        foreach (var c in new[] { "green", "yellow", "red" })
+            if (t.AdviceEn is null || !t.AdviceEn.ContainsKey(c)) Warn($"no English advice (advice_en) for {c}.");
         if (!el.TryGetProperty("sources", out var s) || s.GetArrayLength() == 0) Warn("no source.");
         foreach (var b in t.Bands)
             if (!Rank.ContainsKey(b.Color)) Warn($"unknown color '{b.Color}'.");
