@@ -241,15 +241,16 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 /* Body */
 .body-view { margin-top: 8px; }
 .live-note { margin: 0 0 10px; text-align: right; color: var(--green); font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; }
-.body-layout { display: grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: 14px; align-items: start; }
+.body-layout { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 14px; align-items: start; }
 .body-figure {
   display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 14px;
   background-color: var(--card); border: 1px solid var(--line); border-radius: 12px;
   background-image: linear-gradient(rgba(110, 168, 255, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(110, 168, 255, 0.06) 1px, transparent 1px);
   background-size: 20px 20px;
 }
+.body-figure { position: sticky; top: 64px; }
 .panel-label { align-self: flex-start; margin: 0; font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
-.body-svg { width: 100%; max-width: 250px; height: auto; display: block; }
+.body-svg { width: 100%; max-width: 320px; height: auto; display: block; }
 
 .part { cursor: pointer; outline: none; transition: filter 0.2s, opacity 0.5s; }
 .part.dim { opacity: 0.3; }
@@ -278,6 +279,36 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes ping { 0% { transform: scale(1); opacity: 0.7; } 100% { transform: scale(1.35); opacity: 0; } }
 
+.callout polyline { fill: none; stroke: var(--muted); stroke-width: 0.8; opacity: 0.7; }
+.callout circle { fill: var(--muted); }
+.callout text { fill: var(--muted); font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; }
+.callout-green circle { fill: var(--green); }
+.callout-yellow circle { fill: var(--yellow); }
+.callout-red circle { fill: var(--red); }
+.anatomy path { fill: none; stroke: #6ea8ff; stroke-opacity: 0.16; stroke-width: 1; vector-effect: non-scaling-stroke; pointer-events: none; }
+.part-skin { filter: drop-shadow(0 0 4px rgba(110, 168, 255, 0.45)); }
+.holo { pointer-events: none; }
+.scan { animation: scan 4.5s linear infinite; }
+@keyframes scan { from { transform: translateY(0); } to { transform: translateY(440px); } }
+.part-lungs, .part-heart, .part-brain, .part-metabolism { filter: drop-shadow(0 0 4px currentColor); }
+.callouts { transition: opacity 0.4s; pointer-events: none; }
+.body-svg.zoomed .callouts { opacity: 0; }
+
+.overview { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.overview-row {
+  width: 100%; display: grid; grid-template-columns: 1fr auto; grid-template-areas: 'name pill' 'values values'; gap: 4px 10px; align-items: center;
+  padding: 12px 14px; text-align: left; cursor: pointer; color: var(--text); font: inherit;
+  background: var(--bg); border: 1px solid var(--line); border-left: 3px solid var(--line); border-radius: 10px;
+}
+.overview-row:hover { background: var(--card-2); }
+.overview-row:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.overview-row.card-green { border-left-color: var(--green); }
+.overview-row.card-yellow { border-left-color: var(--yellow); }
+.overview-row.card-red { border-left-color: var(--red); background: #1a1022; }
+.overview-name { grid-area: name; font-weight: 700; font-size: 1rem; }
+.overview-values { grid-area: values; color: var(--muted); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+.overview-row .pill { grid-area: pill; }
+
 .panel-bar { align-self: stretch; display: flex; justify-content: space-between; align-items: center; gap: 8px; min-height: 28px; }
 .zoom-out { min-height: 28px; padding: 0 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--text); font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer; }
 .zoom-out:hover { border-color: var(--accent); }
@@ -287,7 +318,7 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 .part-skin > g { transition: stroke 0.3s; }
 .pulse { transform-box: fill-box; transform-origin: center; animation: pulse 0.9s ease-out; }
 @keyframes pulse { 0% { transform: scale(1); } 30% { transform: scale(1.25); } 100% { transform: scale(1); } }
-@media (prefers-reduced-motion: reduce) { .body-zoom { transition: none; } .part-heart path, .part-lungs ellipse, .part-brain ellipse, .part-metabolism ellipse, .ring-dash, .ring-ping { animation: none; } .pulse { animation: none; filter: brightness(1.6); } .live-pill.on .live-dot, .decision-dot { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .body-zoom { transition: none; } .scan { animation: none; opacity: 0; } .part-heart path, .part-lungs ellipse, .part-brain ellipse, .part-metabolism ellipse, .ring-dash, .ring-ping { animation: none; } .pulse { animation: none; filter: brightness(1.6); } .live-pill.on .live-dot, .decision-dot { animation: none; } }
 
 .organ-chips { list-style: none; margin: 0; padding: 0; width: 100%; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
 .chip {
@@ -317,7 +348,7 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 
 @media (max-width: 640px) {
   .body-layout { grid-template-columns: 1fr; }
-  .body-svg { max-width: 210px; }
+  .body-figure { position: static; }
   .delay-grid { grid-template-columns: 1fr; }
   .topbar-in { padding-top: 10px; }
   .tools { justify-content: center; }

@@ -110,7 +110,7 @@ export default function BodyView({ reloadKey = 0 }) {
             ))}
           </ul>
         </div>
-        <OrganPanel organ={current} explainByMetric={explain} forecastByMetric={forecast} />
+        <OrganPanel organ={current} organs={organs} onSelect={setSelected} explainByMetric={explain} forecastByMetric={forecast} />
       </div>
     </section>
   )

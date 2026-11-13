@@ -7,11 +7,29 @@ import WhyThisMatters from '../dashboard/WhyThisMatters.jsx'
 // explainByMetric/forecastByMetric: same live model data the dashboard cards show (i3/i4) — tapping an organ
 // is "the dose on the organ opens its explanation" (a8's brief), and that explanation is the model's, not
 // just the short threshold advice every reading already carries.
-export default function OrganPanel({ organ, explainByMetric = {}, forecastByMetric = {} }) {
+export default function OrganPanel({ organ, organs = [], onSelect = () => {}, explainByMetric = {}, forecastByMetric = {} }) {
   if (!organ) {
+    // Nothing picked yet: a quick overview of every part, worst first, so the panel is never an empty box.
+    const rank = { red: 0, yellow: 1, green: 2 }
+    const sorted = [...organs].sort((a, b) => (rank[a.color] ?? 3) - (rank[b.color] ?? 3))
     return (
-      <div className="organ-panel organ-empty" data-testid="organ-panel">
-        <p className="hint">Tap a part of the body to see its indicators.</p>
+      <div className="organ-panel" data-testid="organ-panel">
+        <p className="panel-label">Overview · tap a part to zoom in</p>
+        <ul className="overview">
+          {sorted.map(o => (
+            <li key={o.id}>
+              <button type="button" className={`overview-row card-${o.color ?? 'none'}`} onClick={() => onSelect(o.id)}>
+                <span className="overview-name">{o.label}</span>
+                <span className="overview-values">
+                  {o.items.length === 0
+                    ? 'No readings yet'
+                    : o.items.map(m => `${formatValue(m.metric, m.value)} ${unitLabel(thresholds[m.metric]?.unit ?? '')}`.trim()).join(' · ')}
+                </span>
+                <span className={`pill pill-${o.color ?? 'none'}`}>{STATUS_WORDS[o.color] ?? 'No range'}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     )
   }

@@ -23,10 +23,20 @@ const FOCUS = {
   heart: { cx: 110, cy: 152, s: 3.1, r: 27 },
   metabolism: { cx: 110, cy: 198, s: 3.2, r: 31 },
 }
+// Labels beside the body: y is where the line meets the part, x the edge of the part it starts from.
+const CALLOUTS = [
+  { id: 'brain', n: '01', y: 38, x: 128 },
+  { id: 'lungs', n: '02', y: 118, x: 149 },
+  { id: 'heart', n: '03', y: 152, x: 124 },
+  { id: 'metabolism', n: '04', y: 198, x: 133 },
+  { id: 'skin', n: '05', y: 246, x: 154 },
+]
+const BODY_PATH =
+  'M100 64 L98 80 C88 81 74 84 64 92 C54 98 50 108 48 124 C45 148 40 172 37 192 C35 202 33 208 36 213 C40 218 48 214 49 206 C53 186 58 160 62 140 C64 134 66 130 67 126 C66 150 68 180 70 205 C66 218 64 232 66 250 C67 290 70 325 73 355 L74 372 C74 382 70 388 72 392 L98 392 C101 392 103 386 103 378 C103 340 107 290 110 242 C113 290 117 340 117 378 C117 386 119 392 122 392 L148 392 C150 388 146 382 146 372 L147 355 C150 325 153 290 154 250 C156 232 154 218 150 205 C152 180 154 150 153 126 C154 130 156 134 158 140 C162 160 167 186 171 206 C172 214 180 218 184 213 C187 208 185 202 183 192 C180 172 175 148 172 124 C170 108 166 98 156 92 C146 84 132 81 122 80 L120 64 Z'
 const FULL = 'translate(0px, 0px) scale(1)'
 const cameraFor = id => {
   const f = FOCUS[id]
-  return f ? `translate(${110 - f.s * f.cx}px, ${200 - f.s * f.cy}px) scale(${f.s})` : FULL
+  return f ? `translate(${130 - f.s * f.cx}px, ${200 - f.s * f.cy}px) scale(${f.s})` : FULL
 }
 
 export default function BodyFigure({ organs, selected, pulsing, onSelect }) {
@@ -44,11 +54,24 @@ export default function BodyFigure({ organs, selected, pulsing, onSelect }) {
 
   return (
     <svg
-      viewBox="0 0 220 400"
+      viewBox="-40 0 340 400"
       className={`body-svg${FOCUS[selected] ? ' zoomed' : ''}`}
       role="group"
       aria-label="Body status. Pick a part for details."
     >
+      <defs>
+        <pattern id="body-mesh" width="8" height="8" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.7" fill="#6ea8ff" />
+        </pattern>
+        <clipPath id="body-clip">
+          <path d={BODY_PATH} />
+          <ellipse cx="110" cy="42" rx="23" ry="27" />
+        </clipPath>
+        <linearGradient id="body-scan" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#6ea8ff" stopOpacity="0" />
+          <stop offset="1" stopColor="#6ea8ff" stopOpacity="0.45" />
+        </linearGradient>
+      </defs>
       <g className="body-zoom" style={{ transform: cameraFor(selected) }}>
       {/* Skin = the whole body outline */}
       <g
@@ -63,20 +86,27 @@ export default function BodyFigure({ organs, selected, pulsing, onSelect }) {
         onKeyDown={onKey('skin')}
       >
         <g
-          fill="#1a2450"
+          fill="rgba(110,168,255,0.07)"
           stroke={colorFor(skin.color)}
-          strokeWidth="4"
+          strokeWidth="1.8"
           strokeLinejoin="round"
           className={pulsing.has('skin') ? 'pulse' : undefined}
         >
-          <circle cx="110" cy="42" r="27" />
-          <rect x="100" y="66" width="20" height="16" rx="4" />
-          <path d="M68 84 Q110 72 152 84 L158 214 Q110 230 62 214 Z" />
-          <path d="M68 88 C52 92 44 106 42 126 L34 196 C33 205 47 208 50 199 L63 130 L68 122 Z" />
-          <path d="M152 88 C168 92 176 106 178 126 L186 196 C187 205 173 208 170 199 L157 130 L152 122 Z" />
-          <path d="M66 214 L108 220 L104 372 Q104 388 90 388 Q77 388 77 372 Z" />
-          <path d="M154 214 L112 220 L116 372 Q116 388 130 388 Q143 388 143 372 Z" />
+          <path d={BODY_PATH} />
+          <ellipse cx="110" cy="42" rx="23" ry="27" />
         </g>
+      </g>
+
+      <g clipPath="url(#body-clip)" className="holo" aria-hidden="true">
+        <rect x="0" y="0" width="220" height="400" fill="url(#body-mesh)" opacity="0.35" />
+        <rect x="0" y="-40" width="220" height="40" fill="url(#body-scan)" className="scan" />
+      </g>
+
+      {/* Faint anatomy hints (collarbones, spine, ribs) so the figure reads as a body, not a toy */}
+      <g className="anatomy" aria-hidden="true">
+        <path d="M84 92 Q98 98 108 94 M136 92 Q122 98 112 94" />
+        <path d="M110 96 V216" strokeDasharray="2 4" />
+        <path d="M82 108 Q110 120 138 108 M80 122 Q110 136 140 122 M82 136 Q110 148 138 136 M86 150 Q110 160 134 150" />
       </g>
 
       {Object.entries(SHAPES).map(([id, shapes]) => {
@@ -92,9 +122,10 @@ export default function BodyFigure({ organs, selected, pulsing, onSelect }) {
             data-testid={`organ-${id}`}
             data-color={o.color ?? 'none'}
             fill={colorFor(o.color)}
-            fillOpacity="0.85"
-            stroke="#0b1020"
-            strokeWidth="2"
+            fillOpacity="0.4"
+            stroke={colorFor(o.color)}
+            strokeWidth="1.6"
+            style={{ color: colorFor(o.color) }}
             onClick={pick(id)}
             onKeyDown={onKey(id)}
           >
@@ -102,6 +133,16 @@ export default function BodyFigure({ organs, selected, pulsing, onSelect }) {
           </g>
         )
       })}
+
+      <g className="callouts" aria-hidden="true">
+        {CALLOUTS.map(c => (
+          <g key={c.id} className={`callout callout-${byId[c.id].color ?? 'none'}`}>
+            <polyline points={`${c.x},${c.y} 196,${c.y} 204,${c.y}`} />
+            <circle cx="206" cy={c.y} r="3" />
+            <text x="214" y={c.y + 3.5}>{c.n} {byId[c.id].label.toUpperCase()}</text>
+          </g>
+        ))}
+      </g>
 
       {FOCUS[selected] && (
         <g className="focus-ring" aria-hidden="true" stroke={colorFor(byId[selected]?.color)}>
