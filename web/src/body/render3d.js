@@ -2,7 +2,7 @@
 // What you see: a see-through hologram made of scan rings and dots, glowing organs that beat and breathe, a scan
 // plane sweeping up the body, a floor disc in the skin's status color, floating dust, and a camera that flies to the
 // part you pick (an arc with a sideways swing, a pull-back and a tilt), then keeps a slow handheld drift.
-import { buildBody, ORGAN_ORDER, ORGANS3D, ORGAN_LABELS, ORGAN_NUMBERS, SKIN_ANCHOR } from './model.js'
+import { buildBody, ORGAN_ORDER, ORGANS3D, ORGAN_LABELS, ORGAN_NUMBERS, SKIN_ANCHOR, VESSELS } from './model.js'
 import { OVERVIEW, makeView, project, poseFor, startFlight, poseAt } from './camera3d.js'
 
 const COLORS = { green: [61, 220, 132], yellow: [255, 204, 77], red: [255, 93, 93], none: [120, 132, 175] }
@@ -80,13 +80,34 @@ function neurons(count = 30) {
 }
 const NEURONS = neurons()
 
-// Bends the unit ellipsoid into the organ's shape: the heart tapers to a point with a notch on top
-function shape(id, p) {
-  if (id !== 'heart') return p
+// Bends the unit ellipsoid into the organ's shape (p is a point on the unit sphere, o the organ lobe)
+function shape(id, p, o) {
   const [x, y, z] = p
-  const taper = y < 0 ? 1 + y * 0.6 : 1
-  const notch = y > 0 ? 0.34 * y * Math.exp(-Math.pow(x / 0.28, 2)) : 0
-  return [x * taper, y - notch, z * (y < 0 ? 1 + y * 0.35 : 1)]
+  if (id === 'heart') {
+    // tapers to a point at the bottom, with a notch on top
+    const taper = y < 0 ? 1 + y * 0.6 : 1
+    const notch = y > 0 ? 0.34 * y * Math.exp(-Math.pow(x / 0.28, 2)) : 0
+    return [x * taper, y - notch, z * (y < 0 ? 1 + y * 0.35 : 1)]
+  }
+  if (id === 'brain') {
+    // two hemispheres: a groove down the middle of the top, flatter underneath, a little wrinkled
+    const groove = y > 0 ? 0.22 * Math.exp(-Math.pow(x / 0.14, 2)) * y : 0
+    const fold = 1 + 0.045 * Math.sin(9 * x + 5 * z) * Math.cos(7 * y)
+    return [x * fold, (y < 0 ? y * 0.85 : y) - groove, z * fold]
+  }
+  if (id === 'lungs') {
+    // narrow at the top, wide at the base, flatter on the side that faces the heart
+    const s = Math.sign(o.c[0]) || 1
+    const inner = x * s < 0 ? 0.78 : 1
+    const top = y > 0 ? 1 - 0.35 * y : 1
+    const base = y < -0.5 ? 1 + 0.12 * (-y - 0.5) : 1
+    return [x * inner * top * base, y, z * (y > 0 ? 1 - 0.15 * y : 1)]
+  }
+  if (id === 'metabolism') {
+    // a bean: bent a little, fuller at one end
+    return [x, y + 0.35 * x * x - 0.12, z * (1 + 0.15 * x)]
+  }
+  return p
 }
 
 const heartbeat = t => {
@@ -107,6 +128,7 @@ export function createBodyRenderer(canvas, { onSelect }) {
   let SX = null
   let SY = null
   let SZ = null
+  let RIM = null
   let raf = 0
   let visible = true
   let destroyed = false
@@ -144,6 +166,7 @@ export function createBodyRenderer(canvas, { onSelect }) {
     SX = new Float32Array(n)
     SY = new Float32Array(n)
     SZ = new Float32Array(n)
+    RIM = new Float32Array(n)
   }
 
   function update(next) {
@@ -188,41 +211,83 @@ export function createBodyRenderer(canvas, { onSelect }) {
   const bucket = a => Math.min(LEVELS - 1, Math.floor(a * LEVELS))
 
   function drawBody(view, t) {
-    const V = body.V
+    const { V, N, rings, links } = body
     const n = V.length / 3
     for (let i = 0; i < n; i++) {
-      project(view, V[i * 3], V[i * 3 + 1], V[i * 3 + 2], out)
+      const x = V[i * 3]
+      const y = V[i * 3 + 1]
+      const z = V[i * 3 + 2]
+      project(view, x, y, z, out)
       SX[i] = out.x
       SY[i] = out.y
       SZ[i] = out.z
+      // rim light: surfaces seen edge-on glow, surfaces facing you stay faint, so the body reads as a solid shape
+      const dx = view.px - x
+      const dy = view.py - y
+      const dz = view.pz - z
+      const d = (N[i * 3] * dx + N[i * 3 + 1] * dy + N[i * 3 + 2] * dz) / (Math.hypot(dx, dy, dz) || 1)
+      RIM[i] = Math.pow(1 - Math.abs(d), 1.5) * (d > -0.15 ? 1 : 0.55)
     }
-    const lines = newPaths()
+    const shade = (i, j) => {
+      if (SZ[i] < 4 || SZ[j] < 4) return -1
+      return clamp(depthAlpha((SZ[i] + SZ[j]) / 2) * (0.16 + 1.05 * ((RIM[i] + RIM[j]) / 2)), 0, 1)
+    }
+    const rings_ = newPaths()
+    const meridians = newPaths()
     const dots = newPaths()
     const hot = new Path2D()
+    const outline = new Path2D()
     const scanY = reduced ? -100 : ((t * 0.2) % 1.15) * 195 - 8
-    for (const ring of body.rings) {
+    let prev = null
+    for (const ring of rings) {
       const { start, count } = ring
       const isHot = Math.abs(ring.y - scanY) < 2.4
+      let lo = start
+      let hi = start
       for (let k = 0; k < count; k++) {
         const i = start + k
         const j = start + ((k + 1) % count)
-        if (SZ[i] < 4 || SZ[j] < 4) continue
-        const a = depthAlpha((SZ[i] + SZ[j]) / 2)
-        const p = lines[bucket(a)]
+        if (SX[i] < SX[lo]) lo = i
+        if (SX[i] > SX[hi]) hi = i
+        const a = shade(i, j)
+        if (a < 0) continue
+        const p = rings_[bucket(a)]
         p.moveTo(SX[i], SY[i])
         p.lineTo(SX[j], SY[j])
         if (isHot) {
           hot.moveTo(SX[i], SY[i])
           hot.lineTo(SX[j], SY[j])
         }
-        if ((k & 1) === 0) dots[bucket(depthAlpha(SZ[i]))].rect(SX[i] - 0.8, SY[i] - 0.8, 1.6, 1.6)
+        if ((k & 1) === 0) dots[bucket(clamp(a * 1.1, 0, 1))].rect(SX[i] - 0.8, SY[i] - 0.8, 1.6, 1.6)
       }
+      // the body's outline: join the left-most and right-most points of neighbouring rings
+      if (prev && prev.chain === ring.chain && SZ[lo] > 4 && SZ[hi] > 4) {
+        outline.moveTo(SX[prev.lo], SY[prev.lo])
+        outline.lineTo(SX[lo], SY[lo])
+        outline.moveTo(SX[prev.hi], SY[prev.hi])
+        outline.lineTo(SX[hi], SY[hi])
+      }
+      prev = { chain: ring.chain, lo, hi }
+    }
+    for (let q = 0; q < links.length; q += 2) {
+      const a = shade(links[q], links[q + 1])
+      if (a < 0) continue
+      const p = meridians[bucket(a * 0.8)]
+      p.moveTo(SX[links[q]], SY[links[q]])
+      p.lineTo(SX[links[q + 1]], SY[links[q + 1]])
     }
     ctx.globalCompositeOperation = 'lighter'
-    strokeBuckets(lines, BODY, 3.2, 0.12)
-    strokeBuckets(lines, BODY, 1, 0.55)
+    strokeBuckets(rings_, BODY, 3.2, 0.1)
+    strokeBuckets(rings_, BODY, 0.9, 0.5)
+    strokeBuckets(meridians, BODY, 0.8, 0.4)
+    ctx.strokeStyle = 'rgba(150,205,255,0.16)'
+    ctx.lineWidth = 4
+    ctx.stroke(outline)
+    ctx.strokeStyle = 'rgba(190,225,255,0.55)'
+    ctx.lineWidth = 1.1
+    ctx.stroke(outline)
     for (let b = 0; b < LEVELS; b++) {
-      ctx.fillStyle = `rgba(190,222,255,${((b + 1) / LEVELS) * 0.75})`
+      ctx.fillStyle = `rgba(200,228,255,${((b + 1) / LEVELS) * 0.8})`
       ctx.fill(dots[b])
     }
     if (!reduced) {
@@ -233,6 +298,42 @@ export function createBodyRenderer(canvas, { onSelect }) {
       ctx.lineWidth = 1.2
       ctx.stroke(hot)
     }
+  }
+
+  // Blood streaming from the heart along the main vessels, faster on every beat
+  function drawVessels(view, t) {
+    const heart = COLORS[statusOf('heart')]
+    const beat = reduced ? 0 : heartbeat(t)
+    const dim = state.selected ? 0.35 : 1
+    ctx.globalCompositeOperation = 'lighter'
+    VESSELS.forEach((path, vi) => {
+      const pts = path.map(p => {
+        project(view, p[0], p[1], p[2], out)
+        return { x: out.x, y: out.y, z: out.z }
+      })
+      if (pts.some(p => p.z < 4)) return
+      const lens = [0]
+      for (let k = 1; k < pts.length; k++) lens.push(lens[k - 1] + Math.hypot(pts[k].x - pts[k - 1].x, pts[k].y - pts[k - 1].y))
+      const total = lens[lens.length - 1] || 1
+      ctx.beginPath()
+      pts.forEach((p, k) => (k ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)))
+      ctx.strokeStyle = rgba(heart, 0.14 * dim)
+      ctx.lineWidth = 1.4
+      ctx.stroke()
+      const flow = reduced ? 0 : t * (0.16 + 0.12 * beat) + vi * 0.13
+      for (let q = 0; q < 6; q++) {
+        const f = ((flow + q / 6) % 1) * total
+        let k = 1
+        while (k < lens.length - 1 && lens[k] < f) k++
+        const u = (f - lens[k - 1]) / ((lens[k] - lens[k - 1]) || 1)
+        const x = pts[k - 1].x + (pts[k].x - pts[k - 1].x) * u
+        const y = pts[k - 1].y + (pts[k].y - pts[k - 1].y) * u
+        ctx.fillStyle = rgba(heart, (0.4 + 0.35 * beat) * dim)
+        ctx.beginPath()
+        ctx.arc(x, y, 1.1 + beat * 0.7, 0, TAU)
+        ctx.fill()
+      }
+    })
   }
 
   function drawFloor(view, t) {
@@ -319,14 +420,14 @@ export function createBodyRenderer(canvas, { onSelect }) {
         for (const ring of ELLIPSOID) {
           let first = true
           for (const p of ring) {
-            const q = shape(id, p)
+            const q = shape(id, p, o)
             project(view, o.c[0] + q[0] * rx, o.c[1] + q[1] * ry, o.c[2] + q[2] * rz, out)
             const path = paths[out.z > pose.dist ? 1 : 0]
             if (first) path.moveTo(out.x, out.y)
             else path.lineTo(out.x, out.y)
             first = false
           }
-          const q0 = shape(id, ring[0])
+          const q0 = shape(id, ring[0], o)
           project(view, o.c[0] + q0[0] * rx, o.c[1] + q0[1] * ry, o.c[2] + q0[2] * rz, out)
           paths[0].lineTo(out.x, out.y)
         }
@@ -429,7 +530,7 @@ export function createBodyRenderer(canvas, { onSelect }) {
     sorted.forEach((it, i) => {
       it.ly = i === 0 ? it.y : Math.max(it.y, sorted[i - 1].ly + gap)
     })
-    ctx.font = `600 ${Math.round(9 + H / 150)}px ${MONO}`
+    ctx.font = `600 ${Math.round(8 + H / 170)}px ${MONO}`
     ctx.textAlign = 'right'
     for (const it of items) {
       const col = COLORS[statusOf(it.id)]
@@ -478,7 +579,7 @@ export function createBodyRenderer(canvas, { onSelect }) {
     if (!flight) {
       if (!reduced) {
         const overview = !state.selected
-        cam.yaw += Math.sin(t * 0.23) * (overview ? 0.42 : 0.09)
+        cam.yaw += Math.sin(t * 0.23) * (overview ? 0.3 : 0.09)
         cam.pitch += Math.sin(t * 0.17) * (overview ? 0.025 : 0.02)
         cam.dist += Math.sin(t * 0.31) * (overview ? 3 : 1.6)
       }
@@ -505,6 +606,7 @@ export function createBodyRenderer(canvas, { onSelect }) {
     drawFloor(view, t)
     drawDust(view, t, dt)
     drawBody(view, t)
+    drawVessels(view, t)
     drawScanPlane(view, t)
     drawOrgans(view, t)
     drawFocus(t)
