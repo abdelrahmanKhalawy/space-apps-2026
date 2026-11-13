@@ -408,3 +408,16 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 .earth-in { border-left-color: var(--green); }
 .earth-wait { border-left-color: var(--accent); }
 .earth small { color: var(--muted); }
+
+/* Quick checks: reaction test + near vision */
+.checks { margin-top: 16px; }
+.checks h2 { margin: 18px 0 4px; font-size: 1.3rem; }
+.chk-pad { width: 100%; min-height: 200px; border: 0; border-radius: 16px; font-size: 1.6rem; font-weight: 800; color: #fff; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; touch-action: manipulation; user-select: none; }
+.chk-pad small { font-size: 0.8rem; font-weight: 500; opacity: 0.8; }
+.chk-wait { background: #8b2332; }
+.chk-go { background: #1f9d55; }
+.chk-last { margin: 10px 0 4px; font-size: 0.92rem; }
+.chk-ok { color: var(--green); font-size: 0.9rem; }
+.chk-flag { color: var(--yellow); font-size: 0.9rem; }
+.chk-chart { display: grid; gap: 6px; justify-items: center; }
+.chk-line { width: 100%; padding: 6px 0; background: #fff; color: #000; border: 1px solid var(--line); border-radius: 8px; font-family: Georgia, serif; font-weight: 700; cursor: pointer; letter-spacing: 0.1em; }
