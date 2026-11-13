@@ -139,8 +139,10 @@ public static class ReportEndpoints
             if (seconds is not null) advance = Math.Max(0, seconds.Value);
             else
             {
+                // The next thing to arrive: a report on its way to Earth, or a doctor's reply on its way back.
                 var pending = await db.Reports.AsNoTracking().Where(r => r.DeliverAt > now).Select(r => r.DeliverAt).ToListAsync();
-                advance = pending.Count == 0 ? 0 : (pending.Max() - now).TotalSeconds + 0.5;
+                pending.AddRange(await db.Replies.AsNoTracking().Where(r => r.DeliverAt > now).Select(r => r.DeliverAt).ToListAsync());
+                advance = pending.Count == 0 ? 0 : (pending.Min() - now).TotalSeconds + 0.5;
             }
 
             clock.Advance(TimeSpan.FromSeconds(advance));

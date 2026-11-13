@@ -36,4 +36,15 @@ export const HAZARD_NAMES = {
 
 export const COLOR_NAMES = { green: 'Green', yellow: 'Yellow', red: 'Red' }
 
+// The word on an indicator's status pill. The color is never the only signal.
+export const STATUS_WORDS = { green: 'Healthy', yellow: 'Watch', red: 'Act now' }
+
+// Where a reading came from, as the astronaut reads it (contracts/reading.md: device, manual, camera, mock).
+export const SOURCE_LABELS = {
+  device: 'Finger device',
+  manual: 'Entered by crew',
+  camera: 'Phone camera',
+  mock: 'Sample data',
+}
+
 export const unitLabel = unit => UNIT_LABELS[unit] ?? unit

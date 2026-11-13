@@ -21,6 +21,8 @@
     <Content Include="..\research\explanations.json" Link="SeedData\explanations.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Condition="Exists('..\research\explanations.json')" />
     <!-- Precomputed trend forecast (i4): the demo-safe fallback for POST /forecast. -->
     <Content Include="..\data\precomputed\forecast.json" Link="SeedData\forecast.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Condition="Exists('..\data\precomputed\forecast.json')" />
+    <!-- A real NOAA space-weather reading: the fallback for GET /api/space-weather when NOAA is unreachable. -->
+    <Content Include="..\data\precomputed\space-weather.json" Link="SeedData\space-weather.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Condition="Exists('..\data\precomputed\space-weather.json')" />
   </ItemGroup>
 
 </Project>

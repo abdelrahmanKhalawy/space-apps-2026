@@ -1,4 +1,4 @@
-import { COLOR_NAMES, HAZARD_NAMES, METRIC_NAMES, unitLabel } from '../dashboard/metricInfo.js'
+import { COLOR_NAMES, HAZARD_NAMES, METRIC_NAMES, STATUS_WORDS, unitLabel } from '../dashboard/metricInfo.js'
 import { formatTime, formatValue } from '../dashboard/status.js'
 import thresholds from '../dashboard/thresholds.js'
 import WhyThisMatters from '../dashboard/WhyThisMatters.jsx'
@@ -31,7 +31,7 @@ export default function OrganPanel({ organ, explainByMetric = {}, forecastByMetr
             <li key={m.metric} className={`organ-metric card-${m.color ?? 'none'}`} data-testid={`organ-metric-${m.metric}`}>
               <div className="organ-metric-head">
                 <span className="card-name">{METRIC_NAMES[m.metric] ?? m.metric}</span>
-                <span className={`pill pill-${m.color ?? 'none'}`}>{COLOR_NAMES[m.color] ?? 'No range'}</span>
+                <span className={`pill pill-${m.color ?? 'none'}`}>{STATUS_WORDS[m.color] ?? 'No range'}</span>
               </div>
               <div className="card-value">
                 {formatValue(m.metric, m.value)} <small>{unitLabel(thresholds[m.metric]?.unit ?? '')}</small>

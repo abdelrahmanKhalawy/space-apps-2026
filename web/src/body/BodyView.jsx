@@ -85,6 +85,7 @@ export default function BodyView({ reloadKey = 0 }) {
 
       <div className="body-layout">
         <div className="body-figure">
+          <p className="panel-label">Body map · tap a part</p>
           <BodyFigure organs={organs} selected={selected} pulsing={pulsing} onSelect={id => setSelected(s => (s === id ? null : id))} />
           <ul className="organ-chips" aria-label="Body parts">
             {organs.map(o => (

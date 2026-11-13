@@ -18,7 +18,7 @@ public static class ReadingRules
         ["mood"] = "score",
     };
 
-    public static readonly HashSet<string> Sources = ["device", "manual", "mock"];
+    public static readonly HashSet<string> Sources = ["device", "camera", "manual", "mock"];
 
     public record Problem(int Index, string Field, string Message);
 

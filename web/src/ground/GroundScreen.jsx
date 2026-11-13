@@ -13,6 +13,61 @@ async function post(url) {
   if (!res.ok) throw new Error(`${url} answered ${res.status}`)
 }
 
+const QUICK_REPLIES = [
+  'Rest 30 minutes, drink water, measure again and report back.',
+  'Stop heavy work. Measure again in 1 hour. If it is still red, call us.',
+  'Noted. Keep logging every 2 hours.',
+]
+
+/** The doctor's answer to one arrived report. It crosses the same delay back to the crew. */
+function ReplyBox({ report, replies, fetchedAt, now, onSent }) {
+  const [text, setText] = useState('')
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState('')
+  const mine = replies.filter(r => r.reportId === report.id)
+
+  async function send() {
+    if (!text.trim() || sending) return
+    setSending(true)
+    setError('')
+    try {
+      const res = await fetch(`/api/reports/${report.id}/reply`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text }),
+      })
+      if (!res.ok) throw new Error((await res.json().catch(() => ({}))).error ?? `answered ${res.status}`)
+      setText('')
+      await onSent()
+    } catch (e) {
+      setError(e.message)
+    } finally {
+      setSending(false)
+    }
+  }
+
+  return (
+    <div className="gr-reply">
+      {mine.map(r => (
+        <p key={r.id} className="gr-note" data-testid={`reply-${r.id}`}>
+          {r.status === 'arrived'
+            ? `Your reply reached the crew: “${r.text}”`
+            : `Your reply is on its way to the crew. It arrives in ${formatCountdown(Math.max(0, r.secondsToDeliver - (now - fetchedAt) / 1000))}.`}
+        </p>
+      ))}
+      <label className="gr-reply-label" htmlFor={`reply-${report.id}`}>Reply to the crew</label>
+      <textarea id={`reply-${report.id}`} value={text} maxLength={1000} rows={2} onChange={e => setText(e.target.value)} placeholder="Type advice for the crew member…" />
+      <div className="gr-quick">
+        {QUICK_REPLIES.map(q => (
+          <button key={q} type="button" className="gr-secondary" onClick={() => setText(q)}>{q}</button>
+        ))}
+      </div>
+      {error && <p className="gr-error" role="alert">{error}</p>}
+      <button type="button" disabled={!text.trim() || sending} onClick={send}>{sending ? 'Sending…' : 'Send reply'}</button>
+    </div>
+  )
+}
+
 /**
  * The flight surgeon's screen, at #ground. Reports from the crew appear here only after their signal delay:
  * until then each one is a countdown with no content. Looks different from the crew screen on purpose.
@@ -31,7 +86,8 @@ export default function GroundScreen() {
     try {
       const res = await fetch(`/api/reports?crewId=${CREW_ID}`)
       if (!res.ok) throw new Error(`answered ${res.status}`)
-      const next = { reports: await res.json(), fetchedAt: Date.now() }
+      const rep = await fetch(`/api/replies?crewId=${CREW_ID}`).then(r => (r.ok ? r.json() : [])).catch(() => [])
+      const next = { reports: await res.json(), replies: rep, fetchedAt: Date.now() }
       latest.current = next
       setData(next)
       setFailed(false)
@@ -142,6 +198,7 @@ export default function GroundScreen() {
                 Received {clockTime(r.deliverAt)} · sent {clockTime(r.sentAt)} · delay {formatDuration(oneWaySeconds(r))} one way ·
                 earliest reply from the crew's view {clockTime(r.replyEarliestAt)}
               </p>
+              <ReplyBox report={r} replies={data.replies ?? []} fetchedAt={data.fetchedAt} now={now} onSent={load} />
             </li>
           ))}
         </ul>
@@ -150,7 +207,7 @@ export default function GroundScreen() {
           <h2>Demo controls</h2>
           <p>Only for presenting. They move the report clock forward so a long delay does not stall the demo.</p>
           <div className="gr-demo-buttons">
-            <button type="button" disabled={busy || inTransit.length === 0} onClick={() => demo('/api/demo/fast-forward')}>
+            <button type="button" disabled={busy || (inTransit.length === 0 && !(data?.replies ?? []).some(r => r.status === 'in_transit'))} onClick={() => demo('/api/demo/fast-forward')}>
               Skip to next arrival
             </button>
             <button type="button" className="gr-secondary" disabled={busy} onClick={() => demo('/api/demo/reset')}>
