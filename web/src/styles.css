@@ -282,3 +282,12 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 .device-sim { margin-top: 10px; min-height: 40px; padding: 0 16px; border: 1px solid #1d4ed8; border-radius: 999px; background: #fff; color: #1d4ed8; font-size: 0.85rem; font-weight: 700; cursor: pointer; }
 .device-sim.on { background: #1d4ed8; color: #fff; }
 .device-sim small { display: block; font-weight: 400; color: #c0392b; }
+
+/* i3: "why this matters" panel inside an open metric card */
+.card-why { margin-top: 10px; padding: 10px 12px; border: 1px dashed var(--line); border-radius: 8px; font-size: 0.85rem; line-height: 1.5; }
+.card-why-head { display: flex; align-items: center; gap: 8px; font-weight: 700; margin: 0 0 6px; }
+.tag-model { background: #1d4ed8; color: #fff; border-color: #1d4ed8; }
+.card-why ul { margin: 6px 0; padding-left: 18px; }
+.card-why-related { color: var(--muted); font-size: 0.78rem; }
+.card-why-sources { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.card-why-sources a { font-size: 0.78rem; }

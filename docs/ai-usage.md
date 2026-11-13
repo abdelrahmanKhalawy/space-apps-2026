@@ -25,3 +25,4 @@
 | الجمعة | شهد | Claude Code | a6: مسارات /api/reports (إرسال وجلب بتأخير حسب مكان المهمة) وزرار تسريع الوقت للديمو، وشاشة طبيب الأرض على #ground |
 | الجمعة | عبدالرحمن | Claude Code | تصحيح: عنوان الصفحة وh1 من Space Monkeys لـ AstroPulse (اسم المشروع المتثبت في k2) |
 | الجمعة | عبدالرحمن | Claude Code | a5: SignalR hub /hubs/readings، بث كل قراءة بلونها لحظيًا، زرار محاكاة الجهاز، وbody/dashboard بيستقبلوا لايف من غير تحديث للصفحة |
+| الجمعة | عبدالرحمن | Claude Code | i3: شرح السبب لكل انحراف من نصوص ندى، GET /api/explain، POST /explain في الخدمة، وملف data/precomputed/explain.json، وظاهر في الداشبورد |
