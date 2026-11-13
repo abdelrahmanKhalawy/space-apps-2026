@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import BodyView from './body/BodyView.jsx'
 import Dashboard from './dashboard/Dashboard.jsx'
 import EntryForm from './entry/EntryForm.jsx'
+import GroundScreen from './ground/GroundScreen.jsx'
 
 const TABS = [
   { id: 'status', label: 'Status' },
@@ -11,7 +12,7 @@ const TABS = [
 
 const SCREENS = { status: <Dashboard />, body: <BodyView />, log: <EntryForm /> }
 
-export default function App() {
+function CrewApp() {
   const [health, setHealth] = useState('...')
   const [tab, setTab] = useState(() => {
     const fromHash = location.hash.slice(1)
@@ -49,8 +50,24 @@ export default function App() {
       </nav>
       <main>{SCREENS[tab]}</main>
       <footer>
-        <small>API: {health}</small>
+        <small>
+          API: {health} ·{' '}
+          <a className="footer-link" href="#ground" target="_blank" rel="noreferrer">
+            Ground control view
+          </a>
+        </small>
       </footer>
     </div>
   )
+}
+
+// #ground is the flight surgeon's screen: a separate page in the same site, with its own look.
+export default function App() {
+  const [ground, setGround] = useState(() => location.hash === '#ground')
+  useEffect(() => {
+    const onHash = () => setGround(location.hash === '#ground')
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+  return ground ? <GroundScreen /> : <CrewApp />
 }

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SpaceApi.Readings;
+using SpaceApi.Reports;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,7 @@ builder.Services.AddDbContext<AppDb>(o => o.UseSqlite($"Data Source={Path.Combin
 var thresholdsPath = builder.Configuration["Thresholds:Path"]
     ?? Path.Combine(AppContext.BaseDirectory, "SeedData", "thresholds.json");
 builder.Services.AddSingleton(sp => Thresholds.Load(thresholdsPath, sp.GetRequiredService<ILoggerFactory>().CreateLogger("Thresholds")));
+builder.Services.AddSingleton<DemoClock>(); // the clock report delays run on (the demo can skip ahead)
 
 var app = builder.Build();
 app.Services.GetRequiredService<Thresholds>(); // load now, so a bad file is logged at startup
@@ -23,11 +25,13 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDb>();
     db.Database.EnsureCreated();
+    ReportEndpoints.EnsureTable(db); // older databases do not have the reports table yet
     await SeedMockData.RunAsync(db, app.Configuration, app.Logger);
 }
 
 app.MapGet("/api/health", () => Results.Text("ok"));
 app.MapReadings();
+app.MapReports();
 
 // The React app is built into wwwroot, so the API serves it from the same link.
 app.UseDefaultFiles();

@@ -233,3 +233,48 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
   .body-layout { grid-template-columns: 1fr; }
   .body-svg { max-width: 200px; }
 }
+
+.footer-link { color: var(--accent); }
+
+/* Ground control screen: light, with its own header, so nobody mixes it up with the crew screen. */
+.ground { min-height: 100vh; background: #eef2f9; color: #14213d; font-family: Georgia, 'Times New Roman', serif; }
+.ground * { box-sizing: border-box; }
+.gr-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 16px 20px; background: #0f2a52; color: #fff; border-bottom: 4px solid #1d4ed8; }
+.gr-brand { margin: 0; font-family: system-ui, sans-serif; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: #9db9ee; }
+.gr-top h1 { margin: 2px 0 0; font-size: 1.4rem; }
+.gr-link { color: #fff; font-family: system-ui, sans-serif; font-size: 0.9rem; border: 1px solid #5f84c9; border-radius: 8px; padding: 8px 12px; text-decoration: none; min-height: 40px; display: inline-flex; align-items: center; }
+.gr-link:focus-visible, .ground button:focus-visible { outline: 3px solid #1d4ed8; outline-offset: 2px; }
+.gr-main { max-width: 820px; margin: 0 auto; padding: 18px 16px 48px; }
+.gr-sub { margin: 0 0 14px; font-family: system-ui, sans-serif; color: #44527a; }
+.gr-error { margin: 0 0 12px; padding: 10px 12px; border: 1px solid #b42318; border-radius: 8px; background: #fde8e6; color: #7a1a12; font-family: system-ui, sans-serif; }
+.gr-empty { margin: 24px 0; padding: 24px; text-align: center; border: 1px dashed #9aa8c7; border-radius: 12px; color: #44527a; font-family: system-ui, sans-serif; background: #fff; }
+
+.gr-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.gr-card { background: #fff; border: 1px solid #c9d3ea; border-left: 8px solid #9aa8c7; border-radius: 10px; padding: 14px 16px; box-shadow: 0 1px 2px rgba(15, 42, 82, 0.08); }
+.gr-red { border-left-color: #c62828; }
+.gr-yellow { border-left-color: #d98a00; }
+.gr-green { border-left-color: #2e7d32; }
+.gr-transit { border-left-color: #1d4ed8; border-style: dashed; border-left-style: solid; background: #f6f9ff; }
+.gr-card-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.gr-card-head h2 { margin: 0; font-size: 1.1rem; }
+.gr-chip { font-family: system-ui, sans-serif; font-size: 0.75rem; font-weight: 800; padding: 3px 10px; border-radius: 4px; letter-spacing: 0.05em; color: #fff; }
+.gr-chip-red { background: #c62828; }
+.gr-chip-yellow { background: #d98a00; }
+.gr-chip-green { background: #2e7d32; }
+.gr-chip-wait { background: #1d4ed8; }
+.gr-summary { margin: 10px 0 8px; font-size: 1.1rem; line-height: 1.5; }
+.gr-tags { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; font-family: system-ui, sans-serif; }
+.gr-tags li { background: #e8eefc; border: 1px solid #c1d0f2; border-radius: 999px; padding: 2px 10px; font-size: 0.8rem; }
+.gr-note { margin: 6px 0 0; font-family: system-ui, sans-serif; font-size: 0.8rem; color: #5a6890; line-height: 1.5; }
+.gr-count { margin: 10px 0 8px; font-family: system-ui, sans-serif; font-size: 1.05rem; }
+.gr-count strong { font-size: 1.9rem; font-variant-numeric: tabular-nums; color: #0f2a52; }
+.gr-bar { height: 8px; border-radius: 999px; background: #dbe4f7; overflow: hidden; }
+.gr-bar span { display: block; height: 100%; background: #1d4ed8; transition: width 1s linear; }
+
+.gr-demo { margin-top: 32px; padding: 14px 16px; border: 1px solid #c9d3ea; border-radius: 10px; background: #fff; font-family: system-ui, sans-serif; }
+.gr-demo h2 { margin: 0 0 4px; font-size: 0.95rem; }
+.gr-demo p { margin: 0 0 10px; font-size: 0.85rem; color: #5a6890; }
+.gr-demo-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.gr-demo button { min-height: 44px; padding: 0 16px; border: 0; border-radius: 8px; background: #1d4ed8; color: #fff; font-size: 0.95rem; font-weight: 700; cursor: pointer; }
+.gr-demo button.gr-secondary { background: #fff; color: #1d4ed8; border: 1px solid #1d4ed8; }
+.gr-demo button:disabled { opacity: 0.5; cursor: not-allowed; }
