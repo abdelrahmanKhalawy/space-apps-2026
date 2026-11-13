@@ -2,15 +2,31 @@
 
 الموديل اللي بيتعلم الطبيعي، وخدمته، وشرح السبب، والتوقع، والمساعد.
 
-صاحبه: شهد أشرف ومحمد.
-
-> ⚠️ فاضي لحد الجمعة. أول سطر كود بيتكتب يوم الهاكاثون.
+صاحبه: شهد أشرف ومحمد. (موديل i1 اتعمل مكان شهد أشرف يوم الجمعة، لازم تراجعه لما ترجع.)
 
 ## اقرا قبل ما تبدأ
 
 ```
 contracts/ai.md
 ```
+
+## تشغيل محلي
+
+```bash
+pip install matplotlib
+python ai/baseline.py                 # يطبع نتيجة /analyze على data/mock/day143.json
+python ai/plot_baseline.py            # يرسم ai/notebooks/baseline.png
+```
+
+النوت بوك `ai/notebooks/baseline.ipynb` بينادي نفس الكود.
+
+```bash
+python ai/precompute.py               # بيحدّث data/precomputed/analyze.json (البديل لو الخدمة وقعت)
+pip install -r ai/service/requirements.txt
+uvicorn main:app --app-dir ai/service --port 8001   # الخدمة: POST /analyze
+```
+
+> ⚠️ `ai/service/` مكتوبة بس ما اتجرّبتش: PyPI نفسه كان مقفول من شبكة النت وقت ما اتكتبت (نفس مشكلة فتح `task-tree`)، فماقدرتش أنزّل fastapi ولا أشغّلها. لازم حد يجرّبها قبل الاعتماد عليها. `ai/precompute.py` و`ai/colorize.py` شغالين ومتأكد منهم (stdlib بس).
 
 ## المهام اللي بتسلّم هنا
 
