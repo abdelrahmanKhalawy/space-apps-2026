@@ -137,10 +137,17 @@ export default function DecisionScreen({ status, units }) {
         ))}
       </ul>
 
-      {sent ? (
+      {sent && sent.queued ? (
+        <div className="sent sent-failed" role="alert" aria-live="assertive" data-testid="sent">
+          <strong>Report not sent</strong>
+          <span className="queued-note">Could not reach the server, so nothing reached Earth. Nothing was retried automatically.</span>
+          <button type="button" className="report" onClick={report} disabled={sending}>
+            {sending ? 'Sending…' : 'Try again'}
+          </button>
+        </div>
+      ) : sent ? (
         <div className="sent" role="status" aria-live="polite" data-testid="sent">
-          <strong>{sent.queued ? 'Report saved on this device' : 'Report sent to Earth'}</strong>
-          {sent.queued && <span className="queued-note">The ground station link is not connected in this build yet, so nothing reached Earth.</span>}
+          <strong>Report sent to Earth</strong>
           <span>
             Reply possible in <b>{formatCountdown(replyIn)}</b>
           </span>

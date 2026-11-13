@@ -296,3 +296,7 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 .card-forecast { margin: 0 0 8px; font-size: 0.85rem; display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
 .tag-forecast { background: #b45309; color: #fff; border-color: #b45309; }
 .card-forecast-confidence { color: var(--muted); font-size: 0.75rem; }
+
+/* Decision screen: a failed report gets its own look + a retry button, not the success green */
+.sent-failed { border-color: var(--red); }
+.sent-failed .report { margin-top: 4px; align-self: flex-start; }
