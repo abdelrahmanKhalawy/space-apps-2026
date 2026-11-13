@@ -1,6 +1,8 @@
 using System.Globalization;
 using System.Text.Json;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using SpaceApi.Live;
 
 namespace SpaceApi.Readings;
 
@@ -9,7 +11,7 @@ public static class ReadingEndpoints
     public static void MapReadings(this WebApplication app)
     {
         // Accepts one reading or an array. All-or-nothing: if any is bad, nothing is saved.
-        app.MapPost("/api/readings", async (JsonElement body, AppDb db, Thresholds th) =>
+        app.MapPost("/api/readings", async (JsonElement body, AppDb db, Thresholds th, IHubContext<ReadingsHub> hub) =>
         {
             var items = body.ValueKind == JsonValueKind.Array
                 ? body.EnumerateArray().ToList()
@@ -31,7 +33,13 @@ public static class ReadingEndpoints
 
             db.Readings.AddRange(readings);
             await db.SaveChangesAsync();
-            return Results.Created("/api/readings", readings.Select(r => Shape(r, th)));
+
+            var shaped = readings.Select(r => Shape(r, th)).ToList();
+            // contracts/api.md: every saved reading goes out live, same shape as the add response.
+            foreach (var r in shaped)
+                await hub.Clients.All.SendAsync("reading", r);
+
+            return Results.Created("/api/readings", shaped);
         });
 
         app.MapGet("/api/readings", async (string? crewId, string? metric, string? from, string? to, AppDb db, Thresholds th) =>

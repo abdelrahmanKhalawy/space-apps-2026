@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
 import BodyView from './body/BodyView.jsx'
 import Dashboard from './dashboard/Dashboard.jsx'
+import DeviceSimulator from './live/DeviceSimulator.jsx'
+import useLive from './live/useLive.js'
 import EntryForm from './entry/EntryForm.jsx'
 import GroundScreen from './ground/GroundScreen.jsx'
 
@@ -10,14 +12,16 @@ const TABS = [
   { id: 'log', label: 'Log a check' },
 ]
 
-const SCREENS = { status: <Dashboard />, body: <BodyView />, log: <EntryForm /> }
-
 function CrewApp() {
   const [health, setHealth] = useState('...')
   const [tab, setTab] = useState(() => {
     const fromHash = location.hash.slice(1)
     return TABS.some(t => t.id === fromHash) ? fromHash : 'status'
   })
+  // a5: readings arrive live over SignalR (polling if the hub can't connect).
+  // Both the Status and Body screens re-fetch whenever `tick` changes.
+  const { tick } = useLive()
+  const SCREENS = { status: <Dashboard reloadKey={tick} />, body: <BodyView reloadKey={tick} />, log: <EntryForm /> }
 
   useEffect(() => {
     fetch('/api/health').then(r => r.text()).then(setHealth).catch(() => setHealth('down'))
@@ -33,6 +37,7 @@ function CrewApp() {
       <header>
         <h1>AstroPulse</h1>
         <p>Astronaut health monitoring · NASA Space Apps Cairo 2026</p>
+        <DeviceSimulator />
       </header>
       <nav className="tabs" role="tablist" aria-label="Screens">
         {TABS.map(t => (

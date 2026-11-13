@@ -5,10 +5,11 @@ import { allOrganStatuses, changedOrgans } from './organs.js'
 import { fetchStatus, loadDashboard } from '../dashboard/load.js'
 import { COLOR_NAMES } from '../dashboard/metricInfo.js'
 
-const POLL_MS = 3000 // until live push (a5) exists, ask the server every few seconds
 const PULSE_MS = 1000
 
-export default function BodyView() {
+// reloadKey: bumped by useLive() (a5) on every live reading, or every 2s if the
+// SignalR hub couldn't connect — either way, this component doesn't poll on its own.
+export default function BodyView({ reloadKey = 0 }) {
   const [status, setStatus] = useState(null)
   const [mode, setMode] = useState('live')
   const [failed, setFailed] = useState(false)
@@ -16,21 +17,30 @@ export default function BodyView() {
   const [pulsing, setPulsing] = useState(() => new Set())
   const previous = useRef(null)
   const pulseTimer = useRef(null)
+  const first = useRef(true)
 
   useEffect(() => {
     let cancelled = false
-    loadDashboard()
-      .then(d => {
-        if (cancelled) return
-        previous.current = d.status
-        setStatus(d.status)
-        setMode(d.mode)
-      })
-      .catch(() => !cancelled && setFailed(true))
 
-    const timer = setInterval(async () => {
-      if (document.hidden) return
-      const next = await fetchStatus()
+    const load = reloadKey === 0 || first.current ? loadDashboard().then(d => ({ ...d, status: d.status })) : null
+
+    if (load) {
+      first.current = false
+      load
+        .then(d => {
+          if (cancelled) return
+          previous.current = d.status
+          setStatus(d.status)
+          setMode(d.mode)
+        })
+        .catch(() => !cancelled && setFailed(true))
+      return () => {
+        cancelled = true
+      }
+    }
+
+    // Live tick: just the status, so a fast run of readings stays cheap.
+    fetchStatus().then(next => {
       if (cancelled || !next) return
       const hit = changedOrgans(previous.current, next)
       previous.current = next
@@ -39,16 +49,16 @@ export default function BodyView() {
       if (hit.length > 0) {
         setPulsing(new Set(hit))
         clearTimeout(pulseTimer.current)
-        pulseTimer.current = setTimeout(() => setPulsing(new Set()), PULSE_MS)
+        pulseTimer.current = setTimeout(() => !cancelled && setPulsing(new Set()), PULSE_MS)
       }
-    }, POLL_MS)
+    })
 
     return () => {
       cancelled = true
-      clearInterval(timer)
-      clearTimeout(pulseTimer.current)
     }
-  }, [])
+  }, [reloadKey])
+
+  useEffect(() => () => clearTimeout(pulseTimer.current), [])
 
   const organs = useMemo(() => (status ? allOrganStatuses(status) : []), [status])
 
@@ -66,9 +76,7 @@ export default function BodyView() {
   return (
     <section className="body-view" data-testid="body-view">
       <p className={mode === 'live' ? 'live-note' : 'notice'} role="status">
-        {mode === 'live'
-          ? `Live · refreshes every ${POLL_MS / 1000} s`
-          : 'The server could not be reached, so this is sample data from the mission simulation.'}
+        {mode === 'live' ? 'Live' : 'The server could not be reached, so this is sample data from the mission simulation.'}
       </p>
 
       <div className="body-layout">

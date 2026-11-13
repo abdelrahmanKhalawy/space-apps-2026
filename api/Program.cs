@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SpaceApi.Live;
 using SpaceApi.Readings;
 using SpaceApi.Reports;
 
@@ -17,6 +18,7 @@ var thresholdsPath = builder.Configuration["Thresholds:Path"]
     ?? Path.Combine(AppContext.BaseDirectory, "SeedData", "thresholds.json");
 builder.Services.AddSingleton(sp => Thresholds.Load(thresholdsPath, sp.GetRequiredService<ILoggerFactory>().CreateLogger("Thresholds")));
 builder.Services.AddSingleton<DemoClock>(); // the clock report delays run on (the demo can skip ahead)
+builder.Services.AddSignalR();
 
 var app = builder.Build();
 app.Services.GetRequiredService<Thresholds>(); // load now, so a bad file is logged at startup
@@ -32,6 +34,7 @@ using (var scope = app.Services.CreateScope())
 app.MapGet("/api/health", () => Results.Text("ok"));
 app.MapReadings();
 app.MapReports();
+app.MapHub<ReadingsHub>("/hubs/readings");
 
 // The React app is built into wwwroot, so the API serves it from the same link.
 app.UseDefaultFiles();
