@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import DecisionScreen from '../decision/DecisionScreen.jsx'
 import MetricCard from './MetricCard.jsx'
+import IndexCard from './IndexCard.jsx'
 import SpaceWeather from '../environment/SpaceWeather.jsx'
 import { loadDashboard } from './load.js'
 import thresholds from './thresholds.js'
@@ -47,6 +48,7 @@ export default function Dashboard({ reloadKey = 0 }) {
         <strong>Overall: {COLOR_NAMES[status.overall] ?? 'No data'}</strong>
         <span>{summarize(status)}</span>
       </div>
+      <IndexCard readings={data.readings} thresholds={thresholds} />
       <SpaceWeather />
       {mode === 'sample' && (
         <p className="notice" role="note">
