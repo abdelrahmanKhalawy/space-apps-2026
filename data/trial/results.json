@@ -94,7 +94,7 @@
         "9": 38,
         "10": 270
       },
-      "label": "Production model as shipped (z >= 1.3, 2 days, 7-day baseline)",
+      "label": "Our first model (z >= 1.3, 2 days, 7-day baseline), before calibration",
       "onset_aligned": {
         "true_detection_rate": 0.517,
         "true_detection_ci": [
@@ -164,7 +164,7 @@
         "9": 22,
         "10": 54
       },
-      "label": "Personal baseline, z-score calibrated (z >= 2.0, 4 days)",
+      "label": "Personal baseline, z-score calibrated (z >= 2.0, 4 days): the live model",
       "onset_aligned": {
         "true_detection_rate": 0.973,
         "true_detection_ci": [
@@ -655,7 +655,7 @@
             "9": 51,
             "10": 305
           },
-          "label": "Production model as shipped (z >= 1.3, 2 days, 7-day baseline)",
+          "label": "Our first model (z >= 1.3, 2 days, 7-day baseline), before calibration",
           "onset_aligned": {
             "true_detection_rate": 0.518,
             "true_detection_ci": [
@@ -725,7 +725,7 @@
             "9": 23,
             "10": 74
           },
-          "label": "Personal baseline, z-score calibrated (z >= 2.0, 4 days)",
+          "label": "Personal baseline, z-score calibrated (z >= 2.0, 4 days): the live model",
           "onset_aligned": {
             "true_detection_rate": 0.997,
             "true_detection_ci": [
@@ -1216,7 +1216,7 @@
             "9": 38,
             "10": 224
           },
-          "label": "Production model as shipped (z >= 1.3, 2 days, 7-day baseline)",
+          "label": "Our first model (z >= 1.3, 2 days, 7-day baseline), before calibration",
           "onset_aligned": {
             "true_detection_rate": 0.516,
             "true_detection_ci": [
@@ -1286,7 +1286,7 @@
             "9": 6,
             "10": 29
           },
-          "label": "Personal baseline, z-score calibrated (z >= 2.0, 4 days)",
+          "label": "Personal baseline, z-score calibrated (z >= 2.0, 4 days): the live model",
           "onset_aligned": {
             "true_detection_rate": 0.926,
             "true_detection_ci": [

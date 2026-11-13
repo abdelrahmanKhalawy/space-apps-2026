@@ -39,7 +39,7 @@ using (var scope = app.Services.CreateScope())
     db.Database.EnsureCreated();
     ReportEndpoints.EnsureTable(db); // older databases do not have the reports table yet
     ReplyEndpoints.EnsureTable(db);  // ...or the replies table
-    await SeedMockData.RunAsync(db, app.Configuration, app.Logger);
+    await SeedMockData.RunAsync(db, app.Configuration, app.Logger, dataDir);
 }
 
 app.MapGet("/api/health", () => Results.Text("ok"));
