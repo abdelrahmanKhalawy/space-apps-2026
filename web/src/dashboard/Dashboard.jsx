@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import DecisionScreen from '../decision/DecisionScreen.jsx'
+import EarthReply from '../decision/EarthReply.jsx'
 import MetricCard from './MetricCard.jsx'
 import IndexCard from './IndexCard.jsx'
 import SpaceWeather from '../environment/SpaceWeather.jsx'
@@ -44,6 +45,7 @@ export default function Dashboard({ reloadKey = 0 }) {
   return (
     <section className="dashboard">
       <DecisionScreen status={status} units={units} />
+      <EarthReply />
       <div className={`banner banner-${status.overall ?? 'none'}`} role="status" data-testid="overall">
         <strong>Overall: {COLOR_NAMES[status.overall] ?? 'No data'}</strong>
         <span>{summarize(status)}</span>

@@ -38,12 +38,14 @@ using (var scope = app.Services.CreateScope())
     var db = scope.ServiceProvider.GetRequiredService<AppDb>();
     db.Database.EnsureCreated();
     ReportEndpoints.EnsureTable(db); // older databases do not have the reports table yet
+    ReplyEndpoints.EnsureTable(db);  // ...or the replies table
     await SeedMockData.RunAsync(db, app.Configuration, app.Logger);
 }
 
 app.MapGet("/api/health", () => Results.Text("ok"));
 app.MapReadings();
 app.MapReports();
+app.MapReplies();
 app.MapAnalyze();
 app.MapSpaceWeather();
 app.MapExplain();

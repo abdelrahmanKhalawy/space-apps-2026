@@ -394,3 +394,17 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 .ebadge-moderate { color: var(--yellow); border-color: var(--yellow); }
 .ebadge-approx, .ebadge-disputed { color: #ff9f43; border-color: #ff9f43; }
 .ebadge-ours { color: #c084fc; border-color: #c084fc; }
+
+/* Doctor's reply: ground screen form + crew-side card */
+.gr-reply { margin-top: 10px; padding-top: 10px; border-top: 1px solid #d6dcf0; display: grid; gap: 8px; }
+.gr-reply-label { font-weight: 700; font-size: 0.9rem; color: #1b2559; }
+.gr-reply textarea { width: 100%; padding: 8px 10px; border: 1px solid #aab4d9; border-radius: 8px; font: inherit; color: #1b2559; background: #fff; }
+.gr-quick { display: flex; flex-wrap: wrap; gap: 6px; }
+.gr-quick button { padding: 6px 10px; border: 1px solid #1d4ed8; border-radius: 999px; background: #fff; color: #1d4ed8; font-size: 0.78rem; cursor: pointer; text-align: left; }
+.gr-reply > button { justify-self: start; min-height: 40px; padding: 0 18px; border: 0; border-radius: 8px; background: #1d4ed8; color: #fff; font-weight: 700; cursor: pointer; }
+.gr-reply > button:disabled { opacity: 0.5; cursor: default; }
+.earth { margin-top: 12px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); border-left-width: 5px; background: var(--card); line-height: 1.5; }
+.earth p { margin: 4px 0; }
+.earth-in { border-left-color: var(--green); }
+.earth-wait { border-left-color: var(--accent); }
+.earth small { color: var(--muted); }
