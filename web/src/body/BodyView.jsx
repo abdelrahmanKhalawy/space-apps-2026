@@ -11,6 +11,8 @@ const PULSE_MS = 1000
 // SignalR hub couldn't connect — either way, this component doesn't poll on its own.
 export default function BodyView({ reloadKey = 0 }) {
   const [status, setStatus] = useState(null)
+  const [explain, setExplain] = useState({})
+  const [forecast, setForecast] = useState({})
   const [mode, setMode] = useState('live')
   const [failed, setFailed] = useState(false)
   const [selected, setSelected] = useState(null)
@@ -22,7 +24,7 @@ export default function BodyView({ reloadKey = 0 }) {
   useEffect(() => {
     let cancelled = false
 
-    const load = reloadKey === 0 || first.current ? loadDashboard().then(d => ({ ...d, status: d.status })) : null
+    const load = reloadKey === 0 || first.current ? loadDashboard() : null
 
     if (load) {
       first.current = false
@@ -31,6 +33,8 @@ export default function BodyView({ reloadKey = 0 }) {
           if (cancelled) return
           previous.current = d.status
           setStatus(d.status)
+          setExplain(d.explain ?? {})
+          setForecast(d.forecast ?? {})
           setMode(d.mode)
         })
         .catch(() => !cancelled && setFailed(true))
@@ -98,7 +102,7 @@ export default function BodyView({ reloadKey = 0 }) {
             ))}
           </ul>
         </div>
-        <OrganPanel organ={current} />
+        <OrganPanel organ={current} explainByMetric={explain} forecastByMetric={forecast} />
       </div>
     </section>
   )
