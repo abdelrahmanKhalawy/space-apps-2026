@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import DecisionScreen from '../decision/DecisionScreen.jsx'
 import MetricCard from './MetricCard.jsx'
 import { loadDashboard } from './load.js'
 import thresholds from './thresholds.js'
@@ -34,9 +35,13 @@ export default function Dashboard({ reloadKey = 0 }) {
 
   const { status, mode } = data
   const items = [...status.metrics].sort((a, b) => METRIC_ORDER.indexOf(a.metric) - METRIC_ORDER.indexOf(b.metric))
+  const units = Object.fromEntries(
+    items.map(i => [i.metric, byMetric[i.metric]?.[0]?.unit ?? thresholds[i.metric]?.unit ?? '']),
+  )
 
   return (
     <section className="dashboard">
+      <DecisionScreen status={status} units={units} />
       <div className={`banner banner-${status.overall ?? 'none'}`} role="status" data-testid="overall">
         <strong>Overall: {COLOR_NAMES[status.overall] ?? 'No data'}</strong>
         <span>{summarize(status)}</span>
