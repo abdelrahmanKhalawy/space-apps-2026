@@ -38,12 +38,18 @@ cd ../api && dotnet run --urls http://localhost:5080
 ```bash
 cd web && npm install && npm run build
 cd ../api && dotnet publish -c Release -o publish
-cd publish && zip -r ../publish.zip .      # أو Compress-Archive في PowerShell
+python -c "import zipfile,os;z=zipfile.ZipFile('publish.zip','w',zipfile.ZIP_DEFLATED);[z.write(os.path.join(r,f),os.path.relpath(os.path.join(r,f),'publish').replace(os.sep,'/')) for r,_,fs in os.walk('publish') for f in fs];z.close()"
 az login
-az webapp deploy --resource-group <RG> --name <APP_NAME> --src-path ../publish.zip --type zip
+az webapp deploy --resource-group space-monkeys-rg --name space-monkeys-2026 --src-path publish.zip --type zip
 ```
 
+> ⚠️ ماتستخدمش Compress-Archive بتاع PowerShell: بيحط `\` في المسارات ومجلد wwwroot مش بيظهر على Linux (الصفحة بترجع 404).
+
 بديل من غير az: في بوابة Azure افتح Advanced Tools (Kudu) > Tools > Zip Push Deploy، واسحب publish.zip.
+
+اللينك الحالي: https://space-monkeys-2026.azurewebsites.net (resource group `space-monkeys-rg`، منطقة uaenorth، لأن westeurope ممنوعة في الاشتراك).
+
+ملاحظة: Azure مبقاش بيعرض .NET 8 على Linux، فالتطبيق على runtime 10 ومعاه `DOTNET_ROLL_FORWARD=Major` في App settings. ماتشيلوش.
 
 بعد النشر جرّب:
 
