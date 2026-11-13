@@ -390,9 +390,9 @@ def run(n: int, noise_scale: float = 1.0, cal=None) -> dict:
     z = cal["zscore"]
     cu = cal["cusum"]
     detectors = {
-        "production": ("Production model as shipped (z >= 1.3, 2 days, 7-day baseline)",
+        "production": ("Our first model (z >= 1.3, 2 days, 7-day baseline), before calibration",
                        lambda s: zscore(s, 1.3, 2, False)),
-        "zscore": (f"Personal baseline, z-score calibrated (z >= {z['z']}, {z['sustained']} days)",
+        "zscore": (f"Personal baseline, z-score calibrated (z >= {z['z']}, {z['sustained']} days): the live model",
                    lambda s: zscore(s, z["z"], z["sustained"], True)),
         "cusum": (f"Personal baseline, CUSUM calibrated (k={cu['k']}, h={cu['h']})",
                   lambda s: cusum(s, cu["k"], cu["h"])),

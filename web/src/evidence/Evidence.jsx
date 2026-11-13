@@ -182,7 +182,7 @@ export default function Evidence() {
           note={`Median ${low.median_days_after_onset} days after the drift starts (fixed colors: ${fixed.onset_aligned.median_days_after_onset}, with ${pct(fixed.false_alarm_rate)} false alarms).`} />
         <Stat big={pct(prod.false_alarm_rate)}
           label="false alarms from our first model, under realistic noise"
-          note={`The first model (z ≥ 1.3, 2 days) is tuned to the Day-143 story. With realistic day-to-day noise it cries wolf on nearly every healthy crew. The trial's calibrated setting is z ≥ ${z.z} for ${z.sustained} days.`} />
+          note={`This trial showed that our first model (z ≥ 1.3, 2 days) cried wolf on nearly every healthy crew. So we recalibrated it: the live app now uses z ≥ ${z.z} for ${z.sustained} days (${pct(detectors.zscore.false_alarm_rate)} false alarms here).`} />
       </div>
 
       <section className="ev-block">

@@ -5,18 +5,13 @@
     "confidence": "low"
   },
   {
-    "metric": "glucose",
-    "daysToRed": 10.0,
-    "confidence": "medium"
-  },
-  {
     "metric": "heart_rate",
-    "daysToRed": 13.5,
+    "daysToRed": 14.8,
     "confidence": "high"
   },
   {
     "metric": "sleep_hours",
-    "daysToRed": 3.6,
+    "daysToRed": 2.2,
     "confidence": "high"
   }
 ]

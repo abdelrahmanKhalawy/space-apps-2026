@@ -1,24 +1,5 @@
 [
   {
-    "metric": "bp_diastolic",
-    "hazard": "gravity",
-    "explanation": "Same mechanism as your systolic number: fluid shifted toward your head, lower total blood volume, and a heart and vessels that have weakened from not working against gravity.",
-    "steps": [
-      "Stay on your exercise and fluid-loading routine — it's your main defense.",
-      "A sustained change, not just one odd reading, is worth reporting."
-    ],
-    "sources": [
-      {
-        "title": "NASA, Cardiovascular Health in Microgravity",
-        "url": "https://www.nasa.gov/missions/station/cardiovascular-health-in-microgravity"
-      }
-    ],
-    "relatedMetrics": [
-      "bp_systolic",
-      "heart_rate"
-    ]
-  },
-  {
     "metric": "bp_systolic",
     "hazard": "gravity",
     "explanation": "The same headward fluid shift that affects your heart rate also confuses your body's blood-pressure control. Your body senses 'too much fluid up top' and reduces your total blood volume to compensate, which can make it harder to keep blood pressure steady.",
@@ -33,27 +14,7 @@
       }
     ],
     "relatedMetrics": [
-      "bp_diastolic",
       "heart_rate"
-    ]
-  },
-  {
-    "metric": "glucose",
-    "hazard": "isolation",
-    "explanation": "⚠️ Nada should double-check this one — it's our weakest link. NASA's enhanced-diet research is about immune health and the gut microbiome, not blood sugar directly; we're inferring that changed food, lower activity, and mission stress during isolation can affect how your body handles sugar.",
-    "steps": [
-      "Note what and when you last ate before a reading — it matters more here than for other metrics.",
-      "A sustained drift over days, not a single reading, is the signal worth reporting."
-    ],
-    "sources": [
-      {
-        "title": "NASA, Enhanced Diet May Help Astronauts Adapt to Spaceflight",
-        "url": "https://www.nasa.gov/humans-in-space/enhanced-diet-may-help-astronauts-adapt-to-spaceflight/"
-      }
-    ],
-    "relatedMetrics": [
-      "mood",
-      "sleep_hours"
     ]
   },
   {
@@ -71,7 +32,6 @@
       }
     ],
     "relatedMetrics": [
-      "bp_diastolic",
       "bp_systolic"
     ]
   },
@@ -90,7 +50,6 @@
       }
     ],
     "relatedMetrics": [
-      "glucose",
       "sleep_hours"
     ]
   },
@@ -109,7 +68,6 @@
       }
     ],
     "relatedMetrics": [
-      "glucose",
       "mood"
     ]
   }
