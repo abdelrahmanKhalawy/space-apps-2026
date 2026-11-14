@@ -6,6 +6,7 @@ import CameraPulse from './live/CameraPulse.jsx'
 import useLive from './live/useLive.js'
 import useOutbox from './offline/useOutbox.js'
 import Tour from './tour/Tour.jsx'
+import BrandMark from './brand/BrandMark.jsx'
 import { getLang, setLang, useLang } from './i18n/lang.js'
 import EntryForm from './entry/EntryForm.jsx'
 import GroundScreen from './ground/GroundScreen.jsx'
@@ -19,11 +20,11 @@ const ChecksView = lazy(() => import('./checks/ChecksView.jsx'))
 const TABS = [
   { id: 'status', label: 'Status' },
   { id: 'body', label: 'Body' },
-  { id: 'log', label: 'Log a check' },
-  { id: 'checks', label: 'Checks' },
+  { id: 'log', label: 'Log vitals' },
+  { id: 'checks', label: 'Quick tests' },
   { id: 'replay', label: 'Replay' },
   { id: 'yourdata', label: 'Your data' },
-  { id: 'crew', label: 'Crew' },
+  { id: 'crew', label: 'Whole crew' },
   { id: 'evidence', label: 'Evidence' },
 ]
 
@@ -97,11 +98,9 @@ function CrewApp() {
       <header className="topbar">
         <div className="topbar-in">
           <div className="brand">
-            <svg className="brand-mark" viewBox="0 0 32 32" aria-hidden="true">
-              <path d="M2 17h6l3-9 5 17 4-11 2 3h8" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
+            <BrandMark className="brand-mark" />
             <div>
-              <h1>AstroPulse</h1>
+              <h1>Astro<span>Pulse</span></h1>
               <p>Telemetry console</p>
             </div>
             <span className={connected ? 'live-pill on' : 'live-pill'} role="status" data-testid="live-pill">

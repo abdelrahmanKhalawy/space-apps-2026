@@ -35,6 +35,7 @@ export default function CameraPulse({ onUse = null, buttonLabel = 'Measure my pu
   const [phase, setPhase] = useState('idle') // idle | starting | measuring | done | error
   const [msg, setMsg] = useState('')
   const [progress, setProgress] = useState(0)
+  const [getReady, setGetReady] = useState(false) // the short "how to" shown before the camera starts
   const [finger, setFinger] = useState(false)
   const [torchOn, setTorchOn] = useState(false)
   const [rgb, setRgb] = useState(null)
@@ -153,7 +154,22 @@ export default function CameraPulse({ onUse = null, buttonLabel = 'Measure my pu
   return (
     <div className="cam">
       {phase === 'idle' && (
-        <button type="button" className="cam-btn" onClick={start}>{buttonLabel}</button>
+        getReady ? (
+          <div className="cam-panel cam-ready" role="region" aria-label="How to measure your pulse">
+            <p className="cam-ready-title"><strong>Before you start</strong></p>
+            <ol className="cam-ready-steps">
+              <li><strong>Find bright light</strong> (a window or a lamp) and sit still.</li>
+              <li><strong>Rest the pad of your finger</strong> on the back camera <strong>and the flash</strong> so they are covered.</li>
+              <li><strong>Touch gently, don't press.</strong> Pressing hard squeezes the blood out and the pulse disappears.</li>
+              <li>You'll see a small picture of what the camera sees. <strong>When it turns solid red</strong>, hold still for 25 seconds.</li>
+            </ol>
+            <p className="hint">Your phone has no extra sensor: the camera reads your pulse from the light that passes through your fingertip.</p>
+            <button type="button" className="ev-btn" onClick={() => { setGetReady(false); start() }}>Start measuring</button>{' '}
+            <button type="button" className="cam-link" onClick={() => setGetReady(false)}>Cancel</button>
+          </div>
+        ) : (
+          <button type="button" className="cam-btn" onClick={() => setGetReady(true)}>{buttonLabel}</button>
+        )
       )}
       {phase !== 'idle' && (
         <div className="cam-panel" role="region" aria-label="Camera pulse measurement">

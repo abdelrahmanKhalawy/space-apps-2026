@@ -1,5 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <rect width="128" height="128" rx="28" fill="#0b1020"/>
-  <circle cx="64" cy="64" r="44" fill="none" stroke="#2a3563" stroke-width="6"/>
-  <path d="M14 66h28l10-26 18 52 12-34 8 8h24" fill="none" stroke="#6ea8ff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="AstroPulse">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#101a3a"/><stop offset="1" stop-color="#070c1d"/></linearGradient></defs>
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <g transform="translate(64 64) scale(0.82) translate(-64 -66)">
+  <defs>
+    <linearGradient id="ringa" x1="0" y1="1" x2="1" y2="0"><stop offset="0" stop-color="#2f7df6"/><stop offset="1" stop-color="#6ea8ff"/></linearGradient>
+    <linearGradient id="suna" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffd76a"/><stop offset="1" stop-color="#ff9f2e"/></linearGradient>
+  </defs>
+  <path d="M21.86 87.30 A47.0 33.5 -20.0 1 0 94.21 36.07" fill="none" stroke="url(#ringa)" stroke-width="6.4" stroke-linecap="round"/>
+  <path d="M30.88 48.82 A47.0 33.5 -20.0 0 1 91.75 34.95" fill="none" stroke="#6ea8ff" stroke-opacity="0.75" stroke-width="2" stroke-linecap="round"/>
+  <path d="M4 76 L40 65.6 L40 70.8 Z" fill="#eaf1ff"/>
+  <path d="M40 68.2 L46 66.8 L51 56 L58 83 L67 40 L75 70 L84 60 L95 49" fill="none" stroke="#eaf1ff" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M90 50 L100 42" fill="none" stroke="#eaf1ff" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="94.21" cy="36.07" r="7.4" fill="url(#suna)"/>
+  </g>
 </svg>

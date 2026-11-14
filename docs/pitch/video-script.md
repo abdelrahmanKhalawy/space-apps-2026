@@ -10,7 +10,7 @@ Draft for the team (Nada and Ammar own the final cut). Written to fit **30 secon
 | 5–11 s | Hand on a phone: fingertip on the camera. The pulse number appears and the body lights up. | "AstroPulse reads your pulse with the phone's camera. No extra hardware." |
 | 11–19 s | **Replay** tab. Heart-rate row stays green, a flag lands on day 11. | "Fixed ranges say your heart rate is fine. AstroPulse compares you with *your own* normal, and flags the drift days earlier." |
 | 19–25 s | Decision screen goes red: "40 min round trip, act now." | "When it turns red, it tells you what to do right now, and how long Earth needs to answer." |
-| 25–30 s | Ground screen: the doctor's reply arrives. End card: **AstroPulse. Normal for *you*.** | "Fixed ranges ask: is this normal? AstroPulse asks: normal for whom?" |
+| 25–30 s | Ground screen: the doctor's reply arrives. End card: the logo (`docs/brand/logo-mark.svg` on the dark background) with **AstroPulse. Normal, for you.** | "Fixed ranges ask: is this normal? AstroPulse asks: normal for whom?" |
 
 ### Recording notes
 

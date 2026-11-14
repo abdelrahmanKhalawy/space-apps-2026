@@ -3,7 +3,7 @@
 Draft content for Nada. One idea per slide, big numbers, no paragraphs. Screens come from the live app (take screenshots after **Restore demo data**).
 
 ## 1. Cover
-**AstroPulse** — health monitoring for astronauts, normal for *you*.
+**AstroPulse** (logo: `docs/brand/`) — health monitoring for astronauts. *Normal, for you.*
 Team Space Monkeys · NASA Space Apps Challenge 2026, Cairo · live link + QR code.
 
 ## 2. The problem
