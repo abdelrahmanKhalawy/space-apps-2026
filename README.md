@@ -32,6 +32,7 @@ Underneath, a model learns each astronaut's own baseline from their first week o
 ### Beyond the three moments
 
 - **Evidence tab** — a Monte Carlo "virtual crew trial" (`ai/trial.py`, hypotheses written before the first run) that compares a personal baseline with fixed color thresholds. We report what held and what didn't, including a failed hypothesis and the finding that our first model false-alarms under realistic noise.
+- **Replay tab** — the Day-143 scenario day by day: what the fixed color ranges said next to what the personal baseline said (and an honest note where the colors were first).
 - **Crew tab** — a simulated crew of four: is a drift personal (one person) or environmental (everyone at once, with cabin CO₂)?
 - **AstroPulse Index** — one 0–100 number for how far you are from your *own* normal.
 - **Space weather** — live NOAA radiation/solar-storm data for the hazard no vital sign shows.
@@ -136,4 +137,5 @@ We used Claude Code throughout the build: scaffolding the API and the screens; i
 | `research/` | Sourced color thresholds and space-hazard explanations |
 | `data/` | The Day 143 mock scenario, precomputed AI fallback results, and the virtual crew trial results |
 | `contracts/` | The shared data/API shapes every part of the app follows |
-| `docs/` | Decisions, workflow, and this AI-usage log |
+| `docs/` | Decisions, workflow, the winning plan, and this AI-usage log |
+| `docs/pitch/` | Video script, backup slides, judge Q&A, submission text, demo-day checklist |

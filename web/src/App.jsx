@@ -9,6 +9,7 @@ import EntryForm from './entry/EntryForm.jsx'
 import GroundScreen from './ground/GroundScreen.jsx'
 
 const Evidence = lazy(() => import('./evidence/Evidence.jsx'))
+const ReplayView = lazy(() => import('./replay/ReplayView.jsx'))
 const CrewView = lazy(() => import('./crew/CrewView.jsx'))
 const ChecksView = lazy(() => import('./checks/ChecksView.jsx'))
 
@@ -17,6 +18,7 @@ const TABS = [
   { id: 'body', label: 'Body' },
   { id: 'log', label: 'Log a check' },
   { id: 'checks', label: 'Checks' },
+  { id: 'replay', label: 'Replay' },
   { id: 'crew', label: 'Crew' },
   { id: 'evidence', label: 'Evidence' },
 ]
@@ -35,6 +37,11 @@ function CrewApp() {
     checks: (
       <Suspense fallback={<p className="hint">Loading…</p>}>
         <ChecksView />
+      </Suspense>
+    ),
+    replay: (
+      <Suspense fallback={<p className="hint">Loading…</p>}>
+        <ReplayView />
       </Suspense>
     ),
     crew: (

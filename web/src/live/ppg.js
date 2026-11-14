@@ -110,6 +110,28 @@ export function analyze(samples, fs = FS) {
   return { bpm: Math.round(60 / mean(keep)), rmssd: rmssd == null ? null : Math.round(rmssd), beats: keep.length, quality }
 }
 
+const SATURATED = 250 // a channel pinned near 255 carries no pulse: the sensor is clipping
+
+/**
+ * Real phones differ: with the torch on, the RED channel often clips at 255 and the pulse then hides in the green
+ * channel; on other phones red is the clean one. So each channel (red, green) is analyzed on its own and the best
+ * trustworthy result wins: a 'good' grade first, then the most clean beats. Channels that are clipped or flat are skipped.
+ * samples: [{t, r, g, b}]. Returns the same shape as analyze() plus `channel` ('r' | 'g' | null).
+ */
+export function analyzeBest(samples, fs = FS) {
+  let best = { bpm: null, rmssd: null, beats: 0, quality: 'none', channel: null }
+  for (const ch of ['r', 'g']) {
+    const vals = samples.map(s => s[ch])
+    if (vals.length === 0) continue
+    const avg = mean(vals)
+    if (avg >= SATURATED || std(vals) < 0.15) continue // clipped or dead channel
+    const res = analyze(samples.map(s => ({ t: s.t, v: s[ch] })), fs)
+    const rank = r => (r.quality === 'good' ? 2 : r.quality === 'low' ? 1 : 0)
+    if (rank(res) > rank(best) || (rank(res) === rank(best) && res.beats > best.beats)) best = { ...res, channel: ch }
+  }
+  return best
+}
+
 /** Is a fingertip covering the lens? Skin lit from behind is strongly red (high red, low green and blue). With the torch
  * the red is very high; in plain room light it is lower, so the floor is modest and the red-dominance ratio does the work. */
 export function fingerOnLens({ r, g, b }) {
