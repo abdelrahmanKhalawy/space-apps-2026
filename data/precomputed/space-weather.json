@@ -1,0 +1,10 @@
+{
+  "note": "A real NOAA SWPC reading recorded on 2026-11-13, used only when the live feed can't be reached (/api/space-weather).",
+  "observedAt": "2026-11-13T21:47:00Z",
+  "sScale": 0,
+  "gScale": 0,
+  "rScale": 0,
+  "protonFlux10MeV": 0.23,
+  "kp": 0.33,
+  "solarWindKmS": 382
+}

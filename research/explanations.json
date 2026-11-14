@@ -1,0 +1,83 @@
+{
+  "_note": "Drafted in Nada's absence (n2). She should review this when she's back — the medical/NASA content is solid, but the astronaut-facing tone and brevity are a first pass, not hers.",
+
+  "heart_rate": {
+    "hazard": "gravity",
+    "explanation": "In microgravity your body loses the usual pull that keeps fluid in your legs, so about 2 liters shift up toward your chest and head. Your heart and blood vessels weaken from not having to fight gravity, which can leave your body less able to keep blood pressure steady.",
+    "steps": [
+      "Keep up your in-flight exercise — it's the main countermeasure for a weakening heart.",
+      "If your resting heart rate stays elevated for more than a day, log it and tell the ground."
+    ],
+    "sources": [{ "title": "NASA, Cardiovascular Health in Microgravity", "url": "https://www.nasa.gov/missions/station/cardiovascular-health-in-microgravity" }]
+  },
+
+  "spo2": {
+    "hazard": "environment",
+    "explanation": "You're breathing recycled, sealed cabin air. If carbon dioxide builds up because scrubbing falls behind, it can show up as fatigue, headaches, breathing trouble, and eye strain before oxygen itself drops.",
+    "steps": [
+      "Check cabin CO2/ventilation status if you feel short of breath or foggy-headed.",
+      "Low SpO2 with no clear cause: move to a better-ventilated module and recheck."
+    ],
+    "sources": [{ "title": "NASA, Science in Space: Spacecraft Air Quality", "url": "https://www.nasa.gov/missions/station/iss-research/science-in-space-august-4-2023-spacecraft-air-quality/" }]
+  },
+
+  "temperature": {
+    "hazard": "environment",
+    "explanation": "Skin temperature, especially at the fingertips, tracks cabin temperature and local airflow closely, more than it tracks your core body temperature. A drafty or poorly ventilated spot can cool your hands noticeably without anything being wrong with you.",
+    "steps": [
+      "Check the cabin/suit temperature setting before assuming it's a health issue.",
+      "Warm your hands and recheck in a few minutes."
+    ],
+    "sources": [{ "title": "NASA, Science in Space: Spacecraft Air Quality", "url": "https://www.nasa.gov/missions/station/iss-research/science-in-space-august-4-2023-spacecraft-air-quality/" }]
+  },
+
+  "bp_systolic": {
+    "hazard": "gravity",
+    "explanation": "The same headward fluid shift that affects your heart rate also confuses your body's blood-pressure control. Your body senses 'too much fluid up top' and reduces your total blood volume to compensate, which can make it harder to keep blood pressure steady.",
+    "steps": [
+      "Stay on your exercise and fluid-loading routine — it's your main defense.",
+      "A sustained change in blood pressure, not just one odd reading, is worth reporting."
+    ],
+    "sources": [{ "title": "NASA, Cardiovascular Health in Microgravity", "url": "https://www.nasa.gov/missions/station/cardiovascular-health-in-microgravity" }]
+  },
+
+  "bp_diastolic": {
+    "hazard": "gravity",
+    "explanation": "Same mechanism as your systolic number: fluid shifted toward your head, lower total blood volume, and a heart and vessels that have weakened from not working against gravity.",
+    "steps": [
+      "Stay on your exercise and fluid-loading routine — it's your main defense.",
+      "A sustained change, not just one odd reading, is worth reporting."
+    ],
+    "sources": [{ "title": "NASA, Cardiovascular Health in Microgravity", "url": "https://www.nasa.gov/missions/station/cardiovascular-health-in-microgravity" }]
+  },
+
+  "glucose": {
+    "hazard": "isolation",
+    "explanation": "⚠️ Nada should double-check this one — it's our weakest link. NASA's enhanced-diet research is about immune health and the gut microbiome, not blood sugar directly; we're inferring that changed food, lower activity, and mission stress during isolation can affect how your body handles sugar.",
+    "steps": [
+      "Note what and when you last ate before a reading — it matters more here than for other metrics.",
+      "A sustained drift over days, not a single reading, is the signal worth reporting."
+    ],
+    "sources": [{ "title": "NASA, Enhanced Diet May Help Astronauts Adapt to Spaceflight", "url": "https://www.nasa.gov/humans-in-space/enhanced-diet-may-help-astronauts-adapt-to-spaceflight/" }]
+  },
+
+  "sleep_hours": {
+    "hazard": "isolation",
+    "explanation": "The station circles Earth roughly every 90 minutes, so you see about 16 sunrises a day — your body's internal clock has nothing stable to lock onto. Astronauts consistently sleep less in space than on the ground.",
+    "steps": [
+      "Keep a fixed sleep/wake schedule even when the window outside makes no sense.",
+      "Use your module's adjustable lighting and keep your sleep space dark, cool, and quiet."
+    ],
+    "sources": [{ "title": "NASA, Seven Ways Astronauts Improve Sleep", "url": "https://www.nasa.gov/humans-in-space/seven-ways-astronauts-improve-sleep-may-help-you-snooze-better-on-earth/" }]
+  },
+
+  "mood": {
+    "hazard": "isolation",
+    "explanation": "NASA names isolation and confinement — being sealed away from Earth and everyone on it — as the top behavioral-health risk on long missions. The risk grows the longer the mission runs, and mood dips are the earliest, most common sign of it.",
+    "steps": [
+      "Talk to a crewmate or the ground when you notice your mood slipping — don't wait it out alone.",
+      "Keep your normal routine and team contact; both are proven to help."
+    ],
+    "sources": [{ "title": "NASA, About Human Factors and Behavioral Performance", "url": "https://www.nasa.gov/?p=630243" }]
+  }
+}

@@ -1,0 +1,94 @@
+# مصادر حدود الألوان
+
+> اتعملت مكان ندى يوم الجمعة (مش موجودة النهارده)، بأرقام من مصادر طبية رسمية. **لازم ندى تراجعها لما ترجع**، خصوصًا حرارة الجلد (مفيش مصدر طبي دقيق ليها، أرقام تقريبية) والمزاج (مقياس من تصميمنا، مفيش رقم طبي معياري ليه).
+
+مصادر صحية حقيقية زي heart.org وmedlineplus.gov وpmc.ncbi.nlm.nih.gov اتقفلوا من شبكة النت اللي شغالين عليها النهارده (نفس مشكلة فتح `task-tree`). اللي فتح فعليًا: nasa.gov وcdc.gov. الأرقام اللي مصدرها heart.org تحتها، وصلت من نتايج بحث متعددة مستقلة متطابقة على نفس الرقم، مش من فتح الصفحة مباشرة — لو حد قادر يفتحها من شبكة تانية، يتأكد منها.
+
+---
+
+## النبض (`heart_rate`)
+
+**الطبيعي 60–100 bpm.** المصدر: American Heart Association, "All About Heart Rate (Pulse)".
+https://www.heart.org/en/health-topics/high-blood-pressure/the-facts-about-high-blood-pressure/all-about-heart-rate-pulse
+
+حدود الأصفر (50–60 و100–120) قرار تصميم منّا كمنطقة تنبيه قبل الأحمر، مش رقم من AHA نفسها.
+
+## الأكسجين (`spo2`)
+
+**الطبيعي 95–100%.** المصدر: MedlinePlus (NIH), "Pulse Oximetry".
+https://medlineplus.gov/lab-tests/pulse-oximetry
+
+تحت 90% (نقص أكسجين محتاج تدخل) حد شائع في مصادر طبية متعددة، مش من MedlinePlus نفسها بالتحديد.
+
+## حرارة الجلد (`temperature`)
+
+**تقريبية.** مفيش مصدر طبي بيدّي مدى واضح لحرارة جلد الصباع تحديدًا. المصدر الوحيد اللي لقيناه: Wikipedia, "Skin temperature" — حرارة جلد الجذع 33.5–36.9°C، وبيقول إن الأطراف (الصوابع) أبرد من الجذع من غير رقم محدد.
+https://en.wikipedia.org/wiki/Skin_temperature
+
+بنيت المدى على ده بتخفيض بسيط للصوابع. **محتاجة مصدر أدق، أو قياس حقيقي من جهاز عمار نقارن بيه.**
+
+## الضغط (`bp_systolic`, `bp_diastolic`)
+
+**الطبيعي: أقل من 120/80.** المصدر: American Heart Association, "Understanding Blood Pressure Readings".
+https://www.heart.org/en/health-topics/high-blood-pressure/understanding-blood-pressure-readings
+
+جدول AHA الكامل: طبيعي <120/<80، مرتفع شوية 120-129/<80، مرحلة 1: 130-139 أو 80-89، مرحلة 2: ≥140 أو ≥90، أزمة: >180 و/أو >120. إحنا عندنا 3 ألوان بس، فدمجنا "مرتفع شوية" و"مرحلة 1" في الأصفر، و"مرحلة 2" والأزمة في الأحمر.
+
+حد الضغط الواطي (أقل من 90 انقباضي / 60 انبساطي) حد شائع في مصادر طبية، مش من جدول AHA اللي فوق (ده بيتكلم عن الضغط العالي بس).
+
+## السكر (`glucose`)
+
+**الصايم: طبيعي ≤99، ما قبل السكري 100-125، سكري ≥126.** المصدر: CDC, "Testing for Diabetes".
+https://www.cdc.gov/diabetes/diabetes-testing/index.html
+
+**الهبوط: أقل من 70 هبوط، أقل من 54 هبوط شديد.** المصدر: CDC, "Low Blood Sugar (Hypoglycemia)".
+https://www.cdc.gov/diabetes/about/low-blood-sugar-hypoglycemia.html
+
+> ملاحظة: الأرقام دي لصايم ولشخص عادي، مش رائد فضاء بالضرورة. القراءات في البيانات التجريبية مش بالضرورة صايم. استخدمناها كأقرب مرجع متاح.
+
+## النوم (`sleep_hours`)
+
+**7 ساعات على الأقل.** المصدر: CDC, "FastStats: Sleep in Adults".
+https://www.cdc.gov/sleep/data-and-statistics/adults.html
+
+**الحد الأعلى (9 ساعات) من National Sleep Foundation** (Hirshkowitz et al., 2015)، مش من CDC مباشرة، لأن CDC بيقول "7 ساعات أو أكتر" من غير حد أعلى واضح.
+
+## المزاج (`mood`)
+
+**مقياس من تصميمنا، مش رقم طبي.** المزاج بيتسجّل 1 لـ 5 من رائد الفضاء نفسه، ومفيش معيار عالمي موحّد لمقياس زي ده. بنراقبه عشان برنامج ناسا للأبحاث البشرية بيعتبره من أهم مؤشرات العزلة والحبس.
+
+المصدر (سياق، مش رقم): NASA, Isolation Standard Measures (مقياس الحالة المزاجية جزء منها).
+https://ntrs.nasa.gov/api/citations/20230010798/downloads/071622%20CSP_Space%20Psychology.pdf
+
+---
+
+## ربط المؤشر بالخطر الفضائي
+
+ده قرار تصميم منّا (مش من المصدر الطبي نفسه)، بيربط كل مؤشر بأقرب خطر من الخمسة:
+
+| المؤشر | الخطر | السبب |
+|---|---|---|
+| النبض، الضغط | الجاذبية | تغيّرات القلب والأوعية الدموية في الجاذبية المتغيرة معروفة في أبحاث ناسا |
+| الأكسجين، الحرارة | البيئة المقفولة | مرتبطين بجودة هوا وحرارة الكابينة |
+| السكر، النوم، المزاج | العزلة والحبس | مرتبطين بضغط الحياة المعزولة الطويلة |
+
+---
+
+# مصادر نصوص الشرح الفضائي (n2)
+
+> مسودة مكان ندى. التفاصيل في `research/explanations.json`.
+
+- **النبض والضغط:** NASA, Cardiovascular Health in Microgravity — إزاحة السوائل لفوق، وضعف القلب والأوعية من عدم مقاومة الجاذبية.
+  https://www.nasa.gov/missions/station/cardiovascular-health-in-microgravity
+
+- **الأكسجين والحرارة:** NASA, Science in Space: Spacecraft Air Quality — تراكم ثاني أكسيد الكربون وأعراضه، وتأثير التهوية على حرارة الجلد.
+  https://www.nasa.gov/missions/station/iss-research/science-in-space-august-4-2023-spacecraft-air-quality/
+
+- **النوم:** NASA, Seven Ways Astronauts Improve Sleep — 16 شروق يومي بيكسر الساعة البيولوجية.
+  https://www.nasa.gov/humans-in-space/seven-ways-astronauts-improve-sleep-may-help-you-snooze-better-on-earth/
+
+- **المزاج:** NASA, About Human Factors and Behavioral Performance — العزلة والحبس أكبر خطر على الصحة السلوكية في المهام الطويلة.
+  https://www.nasa.gov/?p=630243
+
+- **السكر:** ⚠️ **أضعف ربط عندنا.** المصدر (NASA, Enhanced Diet May Help Astronauts Adapt to Spaceflight) بيتكلم عن المناعة والميكروبيوم، مش السكر مباشرة. الربط بتاعنا استنتاج (أكل متغيّر + نشاط أقل + ضغط العزلة)، مش قول صريح من ناسا. محتاج مصدر أدق من ندى.
+  https://www.nasa.gov/humans-in-space/enhanced-diet-may-help-astronauts-adapt-to-spaceflight/

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="AstroPulse">
+  <path d="M21.86 87.30 A47.0 33.5 -20.0 1 0 94.21 36.07" fill="none" stroke="#ffffff" stroke-width="6.4" stroke-linecap="round"/>
+  <path d="M30.88 48.82 A47.0 33.5 -20.0 0 1 91.75 34.95" fill="none" stroke="#ffffff" stroke-opacity="0.7" stroke-width="2" stroke-linecap="round"/>
+  <path d="M4 76 L40 65.6 L40 70.8 Z" fill="#ffffff"/>
+  <path d="M40 68.2 L46 66.8 L51 56 L58 83 L67 40 L75 70 L84 60 L95 49" fill="none" stroke="#ffffff" stroke-width="5.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M90 50 L100 42" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="94.21" cy="36.07" r="7.4" fill="#ffffff"/>
+</svg>

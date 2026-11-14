@@ -1,0 +1,42 @@
+name: Check the live site
+
+# Runs scripts/preflight.mjs against the live link from GitHub's servers (so it works even when the team network blocks Azure),
+# and can put the demo back to its clean starting state first.
+# Actions -> "Check the live site" -> Run workflow. Leave "restore" ticked before a presentation.
+on:
+  workflow_dispatch:
+    inputs:
+      restore:
+        description: "Restore the demo data first (removes readings, reports and replies added during the demo)"
+        type: boolean
+        default: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      BASE: https://space-monkeys-2026.azurewebsites.net
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Wake the app up
+        run: |
+          for i in $(seq 1 12); do
+            if curl -fsS "$BASE/api/health" | grep -q ok; then echo "app is up"; exit 0; fi
+            echo "waiting ($i)..."; sleep 10
+          done
+          echo "the app did not answer"; exit 1
+      - name: Restore the demo data
+        if: ${{ inputs.restore }}
+        run: curl -fsS -X POST "$BASE/api/demo/restore"
+      - name: Preflight
+        run: node scripts/preflight.mjs "$BASE" | tee preflight.txt
+      - name: Summary
+        if: always()
+        run: |
+          echo '## Live site check' >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          cat preflight.txt >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+          echo '```' >> "$GITHUB_STEP_SUMMARY"

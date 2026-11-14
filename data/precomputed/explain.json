@@ -1,0 +1,74 @@
+[
+  {
+    "metric": "bp_systolic",
+    "hazard": "gravity",
+    "explanation": "The same headward fluid shift that affects your heart rate also confuses your body's blood-pressure control. Your body senses 'too much fluid up top' and reduces your total blood volume to compensate, which can make it harder to keep blood pressure steady.",
+    "steps": [
+      "Stay on your exercise and fluid-loading routine — it's your main defense.",
+      "A sustained change in blood pressure, not just one odd reading, is worth reporting."
+    ],
+    "sources": [
+      {
+        "title": "NASA, Cardiovascular Health in Microgravity",
+        "url": "https://www.nasa.gov/missions/station/cardiovascular-health-in-microgravity"
+      }
+    ],
+    "relatedMetrics": [
+      "heart_rate"
+    ]
+  },
+  {
+    "metric": "heart_rate",
+    "hazard": "gravity",
+    "explanation": "In microgravity your body loses the usual pull that keeps fluid in your legs, so about 2 liters shift up toward your chest and head. Your heart and blood vessels weaken from not having to fight gravity, which can leave your body less able to keep blood pressure steady.",
+    "steps": [
+      "Keep up your in-flight exercise — it's the main countermeasure for a weakening heart.",
+      "If your resting heart rate stays elevated for more than a day, log it and tell the ground."
+    ],
+    "sources": [
+      {
+        "title": "NASA, Cardiovascular Health in Microgravity",
+        "url": "https://www.nasa.gov/missions/station/cardiovascular-health-in-microgravity"
+      }
+    ],
+    "relatedMetrics": [
+      "bp_systolic"
+    ]
+  },
+  {
+    "metric": "mood",
+    "hazard": "isolation",
+    "explanation": "NASA names isolation and confinement — being sealed away from Earth and everyone on it — as the top behavioral-health risk on long missions. The risk grows the longer the mission runs, and mood dips are the earliest, most common sign of it.",
+    "steps": [
+      "Talk to a crewmate or the ground when you notice your mood slipping — don't wait it out alone.",
+      "Keep your normal routine and team contact; both are proven to help."
+    ],
+    "sources": [
+      {
+        "title": "NASA, About Human Factors and Behavioral Performance",
+        "url": "https://www.nasa.gov/?p=630243"
+      }
+    ],
+    "relatedMetrics": [
+      "sleep_hours"
+    ]
+  },
+  {
+    "metric": "sleep_hours",
+    "hazard": "isolation",
+    "explanation": "The station circles Earth roughly every 90 minutes, so you see about 16 sunrises a day — your body's internal clock has nothing stable to lock onto. Astronauts consistently sleep less in space than on the ground.",
+    "steps": [
+      "Keep a fixed sleep/wake schedule even when the window outside makes no sense.",
+      "Use your module's adjustable lighting and keep your sleep space dark, cool, and quiet."
+    ],
+    "sources": [
+      {
+        "title": "NASA, Seven Ways Astronauts Improve Sleep",
+        "url": "https://www.nasa.gov/humans-in-space/seven-ways-astronauts-improve-sleep-may-help-you-snooze-better-on-earth/"
+      }
+    ],
+    "relatedMetrics": [
+      "mood"
+    ]
+  }
+]

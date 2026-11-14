@@ -1,0 +1,82 @@
+# السيرفر
+
+السيرفر اللي كل الأجزاء بتتكلم معاه، وهو اللي بيعرض الشاشات.
+
+صاحبه: عبدالرحمن.
+
+## اقرا قبل ما تبدأ
+
+```
+contracts/api.md
+contracts/reading.md
+```
+
+## تشغيل محلي
+
+محتاج .NET SDK 8 وNode.
+
+```bash
+cd web && npm install && npm run build   # بيبني الشاشات جوه api/wwwroot
+cd ../api && dotnet run --urls http://localhost:5080
+```
+
+افتح `http://localhost:5080` والصحة على `http://localhost:5080/api/health` (بترد `ok`).
+
+أثناء تطوير الشاشات: `cd web && npm run dev` وهيوصّل نفسه بالسيرفر على 5080.
+
+## النشر على Azure App Service
+
+المرة الأولى (في بوابة Azure، بحساب Azure for Students):
+
+1. Create a resource > Web App.
+2. Publish: Code. Runtime stack: .NET 8 (LTS). OS: Linux أو Windows (الاتنين تمام). Region: أقرب واحدة.
+3. Pricing plan: F1 Free أو B1.
+4. بعد ما يتعمل: Settings > Configuration > General settings > فعّل Web sockets (مطلوب للـ SignalR بعدين).
+
+كل مرة تنشر:
+
+```bash
+cd web && npm install && npm run build
+cd ../api && dotnet publish -c Release -o publish
+python -c "import zipfile,os;z=zipfile.ZipFile('publish.zip','w',zipfile.ZIP_DEFLATED);[z.write(os.path.join(r,f),os.path.relpath(os.path.join(r,f),'publish').replace(os.sep,'/')) for r,_,fs in os.walk('publish') for f in fs];z.close()"
+az login
+az webapp deploy --resource-group space-monkeys-rg --name space-monkeys-2026 --src-path publish.zip --type zip
+```
+
+> ⚠️ ماتستخدمش Compress-Archive بتاع PowerShell: بيحط `\` في المسارات ومجلد wwwroot مش بيظهر على Linux (الصفحة بترجع 404).
+
+بديل من غير az: في بوابة Azure افتح Advanced Tools (Kudu) > Tools > Zip Push Deploy، واسحب publish.zip.
+
+### النشر من GitHub (من غير ما تحتاج شبكتك)
+
+لو الشبكة بتقفل الاتصال بـAzure (`ConnectionResetError 10054`)، خلّي GitHub هو اللي ينشر من سيرفراته (`.github/workflows/deploy.yml`):
+
+1. بوابة Azure > الـWeb App `space-monkeys-2026` > **Overview** > **Get publish profile** (بينزّل ملف XML). لو الزرار رمادي: Settings > Configuration > General settings > فعّل **SCM Basic Auth Publishing Credentials**.
+2. GitHub > الريبو > Settings > Secrets and variables > Actions > **New repository secret**. الاسم `AZURE_WEBAPP_PUBLISH_PROFILE` والقيمة محتوى الملف كله.
+3. GitHub > **Actions** > "Deploy to Azure" > **Run workflow** (الفرع main).
+4. الـworkflow بيبني الشاشات والسيرفر وينشر، وبعدين بيجرّب `/api/health` و`/api/status` و`/api/space-weather` والصفحة الرئيسية على اللينك الحي. لو أي واحد فشل، الـrun بيبقى أحمر.
+
+عايزه ينشر لوحده مع كل دمج على main؟ Settings > Secrets and variables > Actions > **Variables** > اعمل متغير `AUTO_DEPLOY` بقيمة `true`.
+
+قاعدة البيانات على Azure بتتحدّث لوحدها: لو بيانات الديمو (`data/mock/day143.json`) اتغيّرت، أول تشغيل بيبدّل القديمة بالجديدة من غير ما يمس قراءات الكاميرا أو اليدوي.
+
+اللينك الحالي: https://space-monkeys-2026.azurewebsites.net (resource group `space-monkeys-rg`، منطقة uaenorth، لأن westeurope ممنوعة في الاشتراك).
+
+ملاحظة: Azure مبقاش بيعرض .NET 8 على Linux، فالتطبيق على runtime 10 ومعاه `DOTNET_ROLL_FORWARD=Major` في App settings. ماتشيلوش.
+
+بعد النشر جرّب:
+
+```
+https://<APP_NAME>.azurewebsites.net/
+https://<APP_NAME>.azurewebsites.net/api/health
+```
+
+> ملاحظة: قاعدة البيانات SQLite هتتحط بعدين (مهمة a1). على Azure لازم يكون مسارها في `/home` عشان تفضل بعد إعادة التشغيل.
+
+## المهام اللي بتسلّم هنا
+
+- [لينك فاضي شغال](../tasks/0-kickoff/k4-empty-deploy.md) · عبدالرحمن
+- [السيرفر وحفظ القراءات](../tasks/1-v1-deliverable/a1-readings-api.md) · عبدالرحمن
+- [قواعد الألوان](../tasks/1-v1-deliverable/a2-color-rules.md) · عبدالرحمن
+- [استقبال القراءات لايف](../tasks/2-v2-space/a5-live-readings.md) · عبدالرحمن
+- [شاشة طبيب الأرض](../tasks/2-v2-space/a6-ground-doctor-screen.md) · عبدالرحمن

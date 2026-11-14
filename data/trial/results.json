@@ -1,0 +1,2638 @@
+{
+  "noise_scale": 1.0,
+  "calibration": {
+    "zscore": {
+      "z": 2.0,
+      "sustained": 4
+    },
+    "cusum": {
+      "k": 1.0,
+      "h": 12
+    }
+  },
+  "fixed": {
+    "detected": 845,
+    "detection_rate": 0.845,
+    "detection_rate_ci": [
+      0.821252700977952,
+      0.8661067389974386
+    ],
+    "false_alarm_rate": 0.358,
+    "false_alarm_rate_ci": [
+      0.32888108037319636,
+      0.38820575882533864
+    ],
+    "median_days_after_onset": 6,
+    "healthy_days_not_green": 0.8357333333333333,
+    "onset_aligned": {
+      "true_detection_rate": 0.693,
+      "true_detection_ci": [
+        0.6637180727753157,
+        0.7208047443703375
+      ],
+      "alarm_before_onset_rate": 0.152,
+      "median_days_after_onset": 7,
+      "lead_vs_color_change": {
+        "n": 693,
+        "median": 0,
+        "ci": [
+          0,
+          0
+        ],
+        "share_earlier": 0.0
+      },
+      "lead_vs_red": {
+        "n": 597,
+        "median": 0,
+        "ci": [
+          0,
+          0
+        ],
+        "share_earlier": 0.17252931323283083
+      }
+    }
+  },
+  "detectors": {
+    "production": {
+      "n_drift": 1000,
+      "n_healthy": 1000,
+      "detected": 999,
+      "detection_rate": 0.999,
+      "detection_rate_ci": [
+        0.9943572970398398,
+        0.9998234581709429
+      ],
+      "false_alarm_rate": 0.94,
+      "false_alarm_rate_ci": [
+        0.9235285893693421,
+        0.9531037398746343
+      ],
+      "median_days_after_onset": 0,
+      "both_fired": 845,
+      "median_lead_days": 6,
+      "median_lead_ci": [
+        5,
+        7
+      ],
+      "lead_share_earlier": 0.7585798816568048,
+      "lead_histogram": {
+        "-6": 36,
+        "-5": 6,
+        "-4": 11,
+        "-3": 22,
+        "-2": 15,
+        "-1": 65,
+        "0": 49,
+        "1": 28,
+        "2": 29,
+        "3": 45,
+        "4": 43,
+        "5": 45,
+        "6": 55,
+        "7": 44,
+        "8": 44,
+        "9": 38,
+        "10": 270
+      },
+      "label": "Our first model (z >= 1.3, 2 days, 7-day baseline), before calibration",
+      "onset_aligned": {
+        "true_detection_rate": 0.517,
+        "true_detection_ci": [
+          0.48602179171422133,
+          0.5478480937338415
+        ],
+        "alarm_before_onset_rate": 0.482,
+        "median_days_after_onset": 2,
+        "lead_vs_color_change": {
+          "n": 385,
+          "median": 5,
+          "ci": [
+            4,
+            6
+          ],
+          "share_earlier": 0.7922077922077922
+        },
+        "lead_vs_red": {
+          "n": 400,
+          "median": 4.0,
+          "ci": [
+            4.0,
+            5.0
+          ],
+          "share_earlier": 0.715
+        }
+      }
+    },
+    "zscore": {
+      "n_drift": 1000,
+      "n_healthy": 1000,
+      "detected": 977,
+      "detection_rate": 0.977,
+      "detection_rate_ci": [
+        0.9657233030515149,
+        0.9846258356970685
+      ],
+      "false_alarm_rate": 0.047,
+      "false_alarm_rate_ci": [
+        0.03552692265984565,
+        0.06194024745942417
+      ],
+      "median_days_after_onset": 6,
+      "both_fired": 834,
+      "median_lead_days": -1.0,
+      "median_lead_ci": [
+        -1.0,
+        0.0
+      ],
+      "lead_share_earlier": 0.41127098321342925,
+      "lead_histogram": {
+        "-6": 202,
+        "-5": 38,
+        "-4": 27,
+        "-3": 68,
+        "-2": 51,
+        "-1": 56,
+        "0": 49,
+        "1": 46,
+        "2": 45,
+        "3": 39,
+        "4": 37,
+        "5": 34,
+        "6": 25,
+        "7": 24,
+        "8": 17,
+        "9": 22,
+        "10": 54
+      },
+      "label": "Personal baseline, z-score calibrated (z >= 2.0, 4 days): the live model",
+      "onset_aligned": {
+        "true_detection_rate": 0.973,
+        "true_detection_ci": [
+          0.9610010105865644,
+          0.9813787433507103
+        ],
+        "alarm_before_onset_rate": 0.004,
+        "median_days_after_onset": 6,
+        "lead_vs_color_change": {
+          "n": 682,
+          "median": 0.0,
+          "ci": [
+            0.0,
+            1.0
+          ],
+          "share_earlier": 0.49853372434017595
+        },
+        "lead_vs_red": {
+          "n": 762,
+          "median": -1.0,
+          "ci": [
+            -1.0,
+            0.0
+          ],
+          "share_earlier": 0.42913385826771655
+        }
+      }
+    },
+    "cusum": {
+      "n_drift": 1000,
+      "n_healthy": 1000,
+      "detected": 981,
+      "detection_rate": 0.981,
+      "detection_rate_ci": [
+        0.9705153112972965,
+        0.9878032122625958
+      ],
+      "false_alarm_rate": 0.073,
+      "false_alarm_rate_ci": [
+        0.058458786926264744,
+        0.09080938446651277
+      ],
+      "median_days_after_onset": 6,
+      "both_fired": 839,
+      "median_lead_days": -1,
+      "median_lead_ci": [
+        -2,
+        0
+      ],
+      "lead_share_earlier": 0.40405244338498214,
+      "lead_histogram": {
+        "-6": 211,
+        "-5": 39,
+        "-4": 43,
+        "-3": 42,
+        "-2": 58,
+        "-1": 53,
+        "0": 54,
+        "1": 43,
+        "2": 45,
+        "3": 36,
+        "4": 41,
+        "5": 27,
+        "6": 28,
+        "7": 25,
+        "8": 21,
+        "9": 21,
+        "10": 52
+      },
+      "label": "Personal baseline, CUSUM calibrated (k=1.0, h=12)",
+      "onset_aligned": {
+        "true_detection_rate": 0.977,
+        "true_detection_ci": [
+          0.9657233030515149,
+          0.9846258356970685
+        ],
+        "alarm_before_onset_rate": 0.004,
+        "median_days_after_onset": 6,
+        "lead_vs_color_change": {
+          "n": 686,
+          "median": 0.0,
+          "ci": [
+            0.0,
+            1.0
+          ],
+          "share_earlier": 0.4912536443148688
+        },
+        "lead_vs_red": {
+          "n": 765,
+          "median": -1,
+          "ci": [
+            -1,
+            0
+          ],
+          "share_earlier": 0.43529411764705883
+        }
+      }
+    }
+  },
+  "tradeoff": {
+    "points": [
+      {
+        "label": "z>=1.5 for 1d",
+        "family": "zscore",
+        "false_alarm_rate": 1.0,
+        "median_days_after_onset": 1.0,
+        "true_detection_rate": 0.06
+      },
+      {
+        "label": "z>=2.0 for 1d",
+        "family": "zscore",
+        "false_alarm_rate": 0.987,
+        "median_days_after_onset": 1,
+        "true_detection_rate": 0.219
+      },
+      {
+        "label": "z>=2.5 for 1d",
+        "family": "zscore",
+        "false_alarm_rate": 0.916,
+        "median_days_after_onset": 2,
+        "true_detection_rate": 0.439
+      },
+      {
+        "label": "z>=3.0 for 1d",
+        "family": "zscore",
+        "false_alarm_rate": 0.759,
+        "median_days_after_onset": 3.0,
+        "true_detection_rate": 0.64
+      },
+      {
+        "label": "z>=4.0 for 1d",
+        "family": "zscore",
+        "false_alarm_rate": 0.359,
+        "median_days_after_onset": 4.5,
+        "true_detection_rate": 0.86
+      },
+      {
+        "label": "z>=5.0 for 1d",
+        "family": "zscore",
+        "false_alarm_rate": 0.112,
+        "median_days_after_onset": 6.0,
+        "true_detection_rate": 0.912
+      },
+      {
+        "label": "z>=1.5 for 2d",
+        "family": "zscore",
+        "false_alarm_rate": 0.856,
+        "median_days_after_onset": 3.0,
+        "true_detection_rate": 0.638
+      },
+      {
+        "label": "z>=2.0 for 2d",
+        "family": "zscore",
+        "false_alarm_rate": 0.518,
+        "median_days_after_onset": 3,
+        "true_detection_rate": 0.835
+      },
+      {
+        "label": "z>=2.5 for 2d",
+        "family": "zscore",
+        "false_alarm_rate": 0.264,
+        "median_days_after_onset": 4,
+        "true_detection_rate": 0.917
+      },
+      {
+        "label": "z>=3.0 for 2d",
+        "family": "zscore",
+        "false_alarm_rate": 0.124,
+        "median_days_after_onset": 5.0,
+        "true_detection_rate": 0.956
+      },
+      {
+        "label": "z>=4.0 for 2d",
+        "family": "zscore",
+        "false_alarm_rate": 0.012,
+        "median_days_after_onset": 7,
+        "true_detection_rate": 0.939
+      },
+      {
+        "label": "z>=5.0 for 2d",
+        "family": "zscore",
+        "false_alarm_rate": 0.002,
+        "median_days_after_onset": 8.0,
+        "true_detection_rate": 0.882
+      },
+      {
+        "label": "z>=1.5 for 3d",
+        "family": "zscore",
+        "false_alarm_rate": 0.408,
+        "median_days_after_onset": 4.0,
+        "true_detection_rate": 0.922
+      },
+      {
+        "label": "z>=2.0 for 3d",
+        "family": "zscore",
+        "false_alarm_rate": 0.164,
+        "median_days_after_onset": 5.0,
+        "true_detection_rate": 0.954
+      },
+      {
+        "label": "z>=2.5 for 3d",
+        "family": "zscore",
+        "false_alarm_rate": 0.055,
+        "median_days_after_onset": 6.0,
+        "true_detection_rate": 0.958
+      },
+      {
+        "label": "z>=3.0 for 3d",
+        "family": "zscore",
+        "false_alarm_rate": 0.022,
+        "median_days_after_onset": 7.0,
+        "true_detection_rate": 0.954
+      },
+      {
+        "label": "z>=4.0 for 3d",
+        "family": "zscore",
+        "false_alarm_rate": 0.0,
+        "median_days_after_onset": 8.0,
+        "true_detection_rate": 0.91
+      },
+      {
+        "label": "z>=5.0 for 3d",
+        "family": "zscore",
+        "false_alarm_rate": 0.0,
+        "median_days_after_onset": 9.0,
+        "true_detection_rate": 0.838
+      },
+      {
+        "label": "z>=1.5 for 4d",
+        "family": "zscore",
+        "false_alarm_rate": 0.132,
+        "median_days_after_onset": 5,
+        "true_detection_rate": 0.977
+      },
+      {
+        "label": "z>=2.0 for 4d",
+        "family": "zscore",
+        "false_alarm_rate": 0.047,
+        "median_days_after_onset": 6,
+        "true_detection_rate": 0.973
+      },
+      {
+        "label": "z>=2.5 for 4d",
+        "family": "zscore",
+        "false_alarm_rate": 0.01,
+        "median_days_after_onset": 7.0,
+        "true_detection_rate": 0.962
+      },
+      {
+        "label": "z>=3.0 for 4d",
+        "family": "zscore",
+        "false_alarm_rate": 0.001,
+        "median_days_after_onset": 8,
+        "true_detection_rate": 0.945
+      },
+      {
+        "label": "z>=4.0 for 4d",
+        "family": "zscore",
+        "false_alarm_rate": 0.0,
+        "median_days_after_onset": 9,
+        "true_detection_rate": 0.879
+      },
+      {
+        "label": "z>=5.0 for 4d",
+        "family": "zscore",
+        "false_alarm_rate": 0.0,
+        "median_days_after_onset": 10.0,
+        "true_detection_rate": 0.796
+      },
+      {
+        "label": "CUSUM k=0.5 h=3",
+        "family": "cusum",
+        "false_alarm_rate": 0.965,
+        "median_days_after_onset": 2.0,
+        "true_detection_rate": 0.47
+      },
+      {
+        "label": "CUSUM k=0.5 h=4",
+        "family": "cusum",
+        "false_alarm_rate": 0.898,
+        "median_days_after_onset": 2,
+        "true_detection_rate": 0.659
+      },
+      {
+        "label": "CUSUM k=0.5 h=6",
+        "family": "cusum",
+        "false_alarm_rate": 0.695,
+        "median_days_after_onset": 3.0,
+        "true_detection_rate": 0.852
+      },
+      {
+        "label": "CUSUM k=0.5 h=8",
+        "family": "cusum",
+        "false_alarm_rate": 0.515,
+        "median_days_after_onset": 4,
+        "true_detection_rate": 0.937
+      },
+      {
+        "label": "CUSUM k=0.5 h=12",
+        "family": "cusum",
+        "false_alarm_rate": 0.268,
+        "median_days_after_onset": 5,
+        "true_detection_rate": 0.973
+      },
+      {
+        "label": "CUSUM k=1.0 h=3",
+        "family": "cusum",
+        "false_alarm_rate": 0.711,
+        "median_days_after_onset": 3.0,
+        "true_detection_rate": 0.72
+      },
+      {
+        "label": "CUSUM k=1.0 h=4",
+        "family": "cusum",
+        "false_alarm_rate": 0.533,
+        "median_days_after_onset": 3,
+        "true_detection_rate": 0.859
+      },
+      {
+        "label": "CUSUM k=1.0 h=6",
+        "family": "cusum",
+        "false_alarm_rate": 0.294,
+        "median_days_after_onset": 4,
+        "true_detection_rate": 0.935
+      },
+      {
+        "label": "CUSUM k=1.0 h=8",
+        "family": "cusum",
+        "false_alarm_rate": 0.183,
+        "median_days_after_onset": 5,
+        "true_detection_rate": 0.965
+      },
+      {
+        "label": "CUSUM k=1.0 h=12",
+        "family": "cusum",
+        "false_alarm_rate": 0.073,
+        "median_days_after_onset": 6,
+        "true_detection_rate": 0.977
+      }
+    ],
+    "fixed": {
+      "label": "Fixed colors (color change)",
+      "family": "fixed",
+      "false_alarm_rate": 0.358,
+      "median_days_after_onset": 7,
+      "true_detection_rate": 0.693
+    },
+    "matched_false_alarm": {
+      "label": "CUSUM k=1.0 h=6",
+      "family": "cusum",
+      "false_alarm_rate": 0.294,
+      "median_days_after_onset": 4,
+      "true_detection_rate": 0.935
+    },
+    "at_5pct_false_alarm": {
+      "label": "z>=2.0 for 4d",
+      "family": "zscore",
+      "false_alarm_rate": 0.047,
+      "median_days_after_onset": 6,
+      "true_detection_rate": 0.973
+    }
+  },
+  "fixed_red": {
+    "detected": 775,
+    "false_alarm_rate": 0.279,
+    "onset_aligned": {
+      "true_detection_rate": 0.637,
+      "true_detection_ci": [
+        0.606723866851864,
+        0.666227562935465
+      ],
+      "alarm_before_onset_rate": 0.138,
+      "median_days_after_onset": 7,
+      "lead_vs_color_change": {
+        "n": 551,
+        "median": 0,
+        "ci": [
+          0,
+          0
+        ],
+        "share_earlier": 0.050816696914700546
+      },
+      "lead_vs_red": {
+        "n": 637,
+        "median": 0,
+        "ci": [
+          0,
+          0
+        ],
+        "share_earlier": 0.0
+      }
+    }
+  },
+  "sensitivity": {
+    "0.5": {
+      "noise_scale": 0.5,
+      "calibration": {
+        "zscore": {
+          "z": 2.0,
+          "sustained": 4
+        },
+        "cusum": {
+          "k": 1.0,
+          "h": 12
+        }
+      },
+      "fixed": {
+        "detected": 843,
+        "detection_rate": 0.843,
+        "detection_rate_ci": [
+          0.8191437085463132,
+          0.8642310390234228
+        ],
+        "false_alarm_rate": 0.197,
+        "false_alarm_rate_ci": [
+          0.173527752304166,
+          0.22279134823918673
+        ],
+        "median_days_after_onset": 7,
+        "healthy_days_not_green": 0.8452333333333334,
+        "onset_aligned": {
+          "true_detection_rate": 0.768,
+          "true_detection_ci": [
+            0.74084178021127,
+            0.7931070021464247
+          ],
+          "alarm_before_onset_rate": 0.075,
+          "median_days_after_onset": 7.0,
+          "lead_vs_color_change": {
+            "n": 768,
+            "median": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "share_earlier": 0.0
+          },
+          "lead_vs_red": {
+            "n": 594,
+            "median": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "share_earlier": 0.22895622895622897
+          }
+        }
+      },
+      "detectors": {
+        "production": {
+          "n_drift": 1000,
+          "n_healthy": 1000,
+          "detected": 1000,
+          "detection_rate": 1.0,
+          "detection_rate_ci": [
+            0.9961731014136095,
+            1.0
+          ],
+          "false_alarm_rate": 0.94,
+          "false_alarm_rate_ci": [
+            0.9235285893693421,
+            0.9531037398746343
+          ],
+          "median_days_after_onset": 0.0,
+          "both_fired": 843,
+          "median_lead_days": 7,
+          "median_lead_ci": [
+            7,
+            8
+          ],
+          "lead_share_earlier": 0.8600237247924081,
+          "lead_histogram": {
+            "-6": 6,
+            "-5": 4,
+            "-4": 4,
+            "-3": 13,
+            "-2": 8,
+            "-1": 45,
+            "0": 38,
+            "1": 26,
+            "2": 31,
+            "3": 38,
+            "4": 50,
+            "5": 51,
+            "6": 64,
+            "7": 48,
+            "8": 61,
+            "9": 51,
+            "10": 305
+          },
+          "label": "Our first model (z >= 1.3, 2 days, 7-day baseline), before calibration",
+          "onset_aligned": {
+            "true_detection_rate": 0.518,
+            "true_detection_ci": [
+              0.48702012301568326,
+              0.5488421086352068
+            ],
+            "alarm_before_onset_rate": 0.482,
+            "median_days_after_onset": 1.0,
+            "lead_vs_color_change": {
+              "n": 423,
+              "median": 6,
+              "ci": [
+                5,
+                7
+              ],
+              "share_earlier": 0.8699763593380615
+            },
+            "lead_vs_red": {
+              "n": 346,
+              "median": 7.5,
+              "ci": [
+                7.0,
+                8.0
+              ],
+              "share_earlier": 0.9046242774566474
+            }
+          }
+        },
+        "zscore": {
+          "n_drift": 1000,
+          "n_healthy": 1000,
+          "detected": 997,
+          "detection_rate": 0.997,
+          "detection_rate_ci": [
+            0.9912168282105721,
+            0.9989792345945557
+          ],
+          "false_alarm_rate": 0.0,
+          "false_alarm_rate_ci": [
+            0.0,
+            0.003826898586390522
+          ],
+          "median_days_after_onset": 4,
+          "both_fired": 842,
+          "median_lead_days": 2.0,
+          "median_lead_ci": [
+            1.0,
+            2.0
+          ],
+          "lead_share_earlier": 0.5724465558194775,
+          "lead_histogram": {
+            "-6": 84,
+            "-5": 17,
+            "-4": 22,
+            "-3": 64,
+            "-2": 45,
+            "-1": 57,
+            "0": 71,
+            "1": 58,
+            "2": 67,
+            "3": 52,
+            "4": 58,
+            "5": 47,
+            "6": 44,
+            "7": 31,
+            "8": 28,
+            "9": 23,
+            "10": 74
+          },
+          "label": "Personal baseline, z-score calibrated (z >= 2.0, 4 days): the live model",
+          "onset_aligned": {
+            "true_detection_rate": 0.997,
+            "true_detection_ci": [
+              0.9912168282105721,
+              0.9989792345945557
+            ],
+            "alarm_before_onset_rate": 0.0,
+            "median_days_after_onset": 4,
+            "lead_vs_color_change": {
+              "n": 767,
+              "median": 2,
+              "ci": [
+                2,
+                2
+              ],
+              "share_earlier": 0.6284224250325945
+            },
+            "lead_vs_red": {
+              "n": 671,
+              "median": 3,
+              "ci": [
+                3,
+                4
+              ],
+              "share_earlier": 0.7093889716840537
+            }
+          }
+        },
+        "cusum": {
+          "n_drift": 1000,
+          "n_healthy": 1000,
+          "detected": 1000,
+          "detection_rate": 1.0,
+          "detection_rate_ci": [
+            0.9961731014136095,
+            1.0
+          ],
+          "false_alarm_rate": 0.001,
+          "false_alarm_rate_ci": [
+            0.0001765418290572713,
+            0.0056427029601604705
+          ],
+          "median_days_after_onset": 5.0,
+          "both_fired": 843,
+          "median_lead_days": 1,
+          "median_lead_ci": [
+            1,
+            2
+          ],
+          "lead_share_earlier": 0.5682087781731909,
+          "lead_histogram": {
+            "-6": 89,
+            "-5": 20,
+            "-4": 41,
+            "-3": 40,
+            "-2": 48,
+            "-1": 54,
+            "0": 72,
+            "1": 59,
+            "2": 74,
+            "3": 51,
+            "4": 45,
+            "5": 54,
+            "6": 42,
+            "7": 29,
+            "8": 23,
+            "9": 30,
+            "10": 72
+          },
+          "label": "Personal baseline, CUSUM calibrated (k=1.0, h=12)",
+          "onset_aligned": {
+            "true_detection_rate": 1.0,
+            "true_detection_ci": [
+              0.9961731014136095,
+              1.0
+            ],
+            "alarm_before_onset_rate": 0.0,
+            "median_days_after_onset": 5.0,
+            "lead_vs_color_change": {
+              "n": 768,
+              "median": 2.0,
+              "ci": [
+                2.0,
+                2.0
+              ],
+              "share_earlier": 0.6236979166666666
+            },
+            "lead_vs_red": {
+              "n": 672,
+              "median": 3.0,
+              "ci": [
+                3.0,
+                4.0
+              ],
+              "share_earlier": 0.6994047619047619
+            }
+          }
+        }
+      },
+      "tradeoff": {
+        "points": [
+          {
+            "label": "z>=1.5 for 1d",
+            "family": "zscore",
+            "false_alarm_rate": 0.999,
+            "median_days_after_onset": 0.0,
+            "true_detection_rate": 0.148
+          },
+          {
+            "label": "z>=2.0 for 1d",
+            "family": "zscore",
+            "false_alarm_rate": 0.965,
+            "median_days_after_onset": 1.0,
+            "true_detection_rate": 0.476
+          },
+          {
+            "label": "z>=2.5 for 1d",
+            "family": "zscore",
+            "false_alarm_rate": 0.655,
+            "median_days_after_onset": 1.0,
+            "true_detection_rate": 0.792
+          },
+          {
+            "label": "z>=3.0 for 1d",
+            "family": "zscore",
+            "false_alarm_rate": 0.234,
+            "median_days_after_onset": 2.0,
+            "true_detection_rate": 0.95
+          },
+          {
+            "label": "z>=4.0 for 1d",
+            "family": "zscore",
+            "false_alarm_rate": 0.007,
+            "median_days_after_onset": 3,
+            "true_detection_rate": 0.993
+          },
+          {
+            "label": "z>=5.0 for 1d",
+            "family": "zscore",
+            "false_alarm_rate": 0.0,
+            "median_days_after_onset": 4,
+            "true_detection_rate": 0.987
+          },
+          {
+            "label": "z>=1.5 for 2d",
+            "family": "zscore",
+            "false_alarm_rate": 0.553,
+            "median_days_after_onset": 2.0,
+            "true_detection_rate": 0.836
+          },
+          {
+            "label": "z>=2.0 for 2d",
+            "family": "zscore",
+            "false_alarm_rate": 0.135,
+            "median_days_after_onset": 2.0,
+            "true_detection_rate": 0.972
+          },
+          {
+            "label": "z>=2.5 for 2d",
+            "family": "zscore",
+            "false_alarm_rate": 0.021,
+            "median_days_after_onset": 3.0,
+            "true_detection_rate": 0.996
+          },
+          {
+            "label": "z>=3.0 for 2d",
+            "family": "zscore",
+            "false_alarm_rate": 0.004,
+            "median_days_after_onset": 3,
+            "true_detection_rate": 0.997
+          },
+          {
+            "label": "z>=4.0 for 2d",
+            "family": "zscore",
+            "false_alarm_rate": 0.0,
+            "median_days_after_onset": 4.0,
+            "true_detection_rate": 0.988
+          },
+          {
+            "label": "z>=5.0 for 2d",
+            "family": "zscore",
+            "false_alarm_rate": 0.0,
+            "median_days_after_onset": 5.0,
+            "true_detection_rate": 0.974
+          },
+          {
+            "label": "z>=1.5 for 3d",
+            "family": "zscore",
+            "false_alarm_rate": 0.123,
+            "median_days_after_onset": 3,
+            "true_detection_rate": 0.981
+          },
+          {
+            "label": "z>=2.0 for 3d",
+            "family": "zscore",
+            "false_alarm_rate": 0.011,
+            "median_days_after_onset": 3.0,
+            "true_detection_rate": 0.994
+          },
+          {
+            "label": "z>=2.5 for 3d",
+            "family": "zscore",
+            "false_alarm_rate": 0.0,
+            "median_days_after_onset": 4,
+            "true_detection_rate": 0.997
+          },
+          {
+            "label": "z>=3.0 for 3d",
+            "family": "zscore",
+            "false_alarm_rate": 0.0,
+            "median_days_after_onset": 5.0,
+            "true_detection_rate": 0.992
+          },
+          {
+            "label": "z>=4.0 for 3d",
+            "family": "zscore",
+            "false_alarm_rate": 0.0,
+            "median_days_after_onset": 5,
+            "true_detection_rate": 0.979
+          },
+          {
+            "label": "z>=5.0 for 3d",
+            "family": "zscore",
+            "false_alarm_rate": 0.0,
+            "median_days_after_onset": 6.0,
+            "true_detection_rate": 0.962
+          },
+          {
+            "label": "z>=1.5 for 4d",
+            "family": "zscore",
+            "false_alarm_rate": 0.022,
+            "median_days_after_onset": 4,
+            "true_detection_rate": 0.999
+          },
+          {
+            "label": "z>=2.0 for 4d",
+            "family": "zscore",
+            "false_alarm_rate": 0.0,
+            "median_days_after_onset": 4,
+            "true_detection_rate": 0.997
+          },
+          {
+            "label": "z>=2.5 for 4d",
+            "family": "zscore",
+            "false_alarm_rate": 0.0,
+            "median_days_after_onset": 5,
+            "true_detection_rate": 0.995
+          },
+          {
+            "label": "z>=3.0 for 4d",
+            "family": "zscore",
+            "false_alarm_rate": 0.0,
+            "median_days_after_onset": 6.0,
+            "true_detection_rate": 0.986
+          },
+          {
+            "label": "z>=4.0 for 4d",
+            "family": "zscore",
+            "false_alarm_rate": 0.0,
+            "median_days_after_onset": 6.0,
+            "true_detection_rate": 0.97
+          },
+          {
+            "label": "z>=5.0 for 4d",
+            "family": "zscore",
+            "false_alarm_rate": 0.0,
+            "median_days_after_onset": 7,
+            "true_detection_rate": 0.955
+          },
+          {
+            "label": "CUSUM k=0.5 h=3",
+            "family": "cusum",
+            "false_alarm_rate": 0.865,
+            "median_days_after_onset": 1.0,
+            "true_detection_rate": 0.75
+          },
+          {
+            "label": "CUSUM k=0.5 h=4",
+            "family": "cusum",
+            "false_alarm_rate": 0.671,
+            "median_days_after_onset": 2.0,
+            "true_detection_rate": 0.896
+          },
+          {
+            "label": "CUSUM k=0.5 h=6",
+            "family": "cusum",
+            "false_alarm_rate": 0.371,
+            "median_days_after_onset": 3.0,
+            "true_detection_rate": 0.974
+          },
+          {
+            "label": "CUSUM k=0.5 h=8",
+            "family": "cusum",
+            "false_alarm_rate": 0.195,
+            "median_days_after_onset": 3,
+            "true_detection_rate": 0.997
+          },
+          {
+            "label": "CUSUM k=0.5 h=12",
+            "family": "cusum",
+            "false_alarm_rate": 0.052,
+            "median_days_after_onset": 4.0,
+            "true_detection_rate": 1.0
+          },
+          {
+            "label": "CUSUM k=1.0 h=3",
+            "family": "cusum",
+            "false_alarm_rate": 0.238,
+            "median_days_after_onset": 2,
+            "true_detection_rate": 0.959
+          },
+          {
+            "label": "CUSUM k=1.0 h=4",
+            "family": "cusum",
+            "false_alarm_rate": 0.115,
+            "median_days_after_onset": 2,
+            "true_detection_rate": 0.987
+          },
+          {
+            "label": "CUSUM k=1.0 h=6",
+            "family": "cusum",
+            "false_alarm_rate": 0.025,
+            "median_days_after_onset": 3.0,
+            "true_detection_rate": 0.998
+          },
+          {
+            "label": "CUSUM k=1.0 h=8",
+            "family": "cusum",
+            "false_alarm_rate": 0.006,
+            "median_days_after_onset": 4.0,
+            "true_detection_rate": 1.0
+          },
+          {
+            "label": "CUSUM k=1.0 h=12",
+            "family": "cusum",
+            "false_alarm_rate": 0.001,
+            "median_days_after_onset": 5.0,
+            "true_detection_rate": 1.0
+          }
+        ],
+        "fixed": {
+          "label": "Fixed colors (color change)",
+          "family": "fixed",
+          "false_alarm_rate": 0.197,
+          "median_days_after_onset": 7.0,
+          "true_detection_rate": 0.768
+        },
+        "matched_false_alarm": {
+          "label": "CUSUM k=1.0 h=4",
+          "family": "cusum",
+          "false_alarm_rate": 0.115,
+          "median_days_after_onset": 2,
+          "true_detection_rate": 0.987
+        },
+        "at_5pct_false_alarm": {
+          "label": "CUSUM k=1.0 h=6",
+          "family": "cusum",
+          "false_alarm_rate": 0.025,
+          "median_days_after_onset": 3.0,
+          "true_detection_rate": 0.998
+        }
+      },
+      "fixed_red": {
+        "detected": 672,
+        "false_alarm_rate": 0.087,
+        "onset_aligned": {
+          "true_detection_rate": 0.637,
+          "true_detection_ci": [
+            0.606723866851864,
+            0.666227562935465
+          ],
+          "alarm_before_onset_rate": 0.035,
+          "median_days_after_onset": 9,
+          "lead_vs_color_change": {
+            "n": 586,
+            "median": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "share_earlier": 0.017064846416382253
+          },
+          "lead_vs_red": {
+            "n": 637,
+            "median": 0,
+            "ci": [
+              0,
+              0
+            ],
+            "share_earlier": 0.0
+          }
+        }
+      }
+    },
+    "1.5": {
+      "noise_scale": 1.5,
+      "calibration": {
+        "zscore": {
+          "z": 2.0,
+          "sustained": 4
+        },
+        "cusum": {
+          "k": 1.0,
+          "h": 12
+        }
+      },
+      "fixed": {
+        "detected": 843,
+        "detection_rate": 0.843,
+        "detection_rate_ci": [
+          0.8191437085463132,
+          0.8642310390234228
+        ],
+        "false_alarm_rate": 0.505,
+        "false_alarm_rate_ci": [
+          0.47405144035460534,
+          0.5359102906595307
+        ],
+        "median_days_after_onset": 5,
+        "healthy_days_not_green": 0.8296,
+        "onset_aligned": {
+          "true_detection_rate": 0.618,
+          "true_detection_ci": [
+            0.5874877734491345,
+            0.6476090784844774
+          ],
+          "alarm_before_onset_rate": 0.225,
+          "median_days_after_onset": 7.0,
+          "lead_vs_color_change": {
+            "n": 618,
+            "median": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "share_earlier": 0.0
+          },
+          "lead_vs_red": {
+            "n": 572,
+            "median": 0.0,
+            "ci": [
+              0.0,
+              0.0
+            ],
+            "share_earlier": 0.11188811188811189
+          }
+        }
+      },
+      "detectors": {
+        "production": {
+          "n_drift": 1000,
+          "n_healthy": 1000,
+          "detected": 998,
+          "detection_rate": 0.998,
+          "detection_rate_ci": [
+            0.9927370411104123,
+            0.9994513678975429
+          ],
+          "false_alarm_rate": 0.94,
+          "false_alarm_rate_ci": [
+            0.9235285893693421,
+            0.9531037398746343
+          ],
+          "median_days_after_onset": 0.0,
+          "both_fired": 842,
+          "median_lead_days": 4.0,
+          "median_lead_ci": [
+            3.5,
+            5.0
+          ],
+          "lead_share_earlier": 0.672209026128266,
+          "lead_histogram": {
+            "-6": 57,
+            "-5": 19,
+            "-4": 20,
+            "-3": 37,
+            "-2": 18,
+            "-1": 70,
+            "0": 55,
+            "1": 37,
+            "2": 31,
+            "3": 49,
+            "4": 39,
+            "5": 40,
+            "6": 46,
+            "7": 26,
+            "8": 36,
+            "9": 38,
+            "10": 224
+          },
+          "label": "Our first model (z >= 1.3, 2 days, 7-day baseline), before calibration",
+          "onset_aligned": {
+            "true_detection_rate": 0.516,
+            "true_detection_ci": [
+              0.48502358387647304,
+              0.5468539553687625
+            ],
+            "alarm_before_onset_rate": 0.482,
+            "median_days_after_onset": 3.0,
+            "lead_vs_color_change": {
+              "n": 351,
+              "median": 4,
+              "ci": [
+                3,
+                5
+              ],
+              "share_earlier": 0.7407407407407407
+            },
+            "lead_vs_red": {
+              "n": 463,
+              "median": 1,
+              "ci": [
+                0,
+                2
+              ],
+              "share_earlier": 0.5118790496760259
+            }
+          }
+        },
+        "zscore": {
+          "n_drift": 1000,
+          "n_healthy": 1000,
+          "detected": 931,
+          "detection_rate": 0.931,
+          "detection_rate_ci": [
+            0.9135849276398866,
+            0.945116285778645
+          ],
+          "false_alarm_rate": 0.06,
+          "false_alarm_rate_ci": [
+            0.046896260125365796,
+            0.07647141063065788
+          ],
+          "median_days_after_onset": 8,
+          "both_fired": 790,
+          "median_lead_days": -4.0,
+          "median_lead_ci": [
+            -5.0,
+            -3.0
+          ],
+          "lead_share_earlier": 0.29873417721518986,
+          "lead_histogram": {
+            "-6": 338,
+            "-5": 33,
+            "-4": 28,
+            "-3": 42,
+            "-2": 45,
+            "-1": 44,
+            "0": 24,
+            "1": 30,
+            "2": 28,
+            "3": 32,
+            "4": 34,
+            "5": 22,
+            "6": 18,
+            "7": 25,
+            "8": 12,
+            "9": 6,
+            "10": 29
+          },
+          "label": "Personal baseline, z-score calibrated (z >= 2.0, 4 days): the live model",
+          "onset_aligned": {
+            "true_detection_rate": 0.926,
+            "true_detection_ci": [
+              0.908094233760596,
+              0.9406452486437995
+            ],
+            "alarm_before_onset_rate": 0.005,
+            "median_days_after_onset": 8.0,
+            "lead_vs_color_change": {
+              "n": 582,
+              "median": -1.0,
+              "ci": [
+                -2.0,
+                -1.0
+              ],
+              "share_earlier": 0.40034364261168387
+            },
+            "lead_vs_red": {
+              "n": 825,
+              "median": -5,
+              "ci": [
+                -6,
+                -5
+              ],
+              "share_earlier": 0.22787878787878788
+            }
+          }
+        },
+        "cusum": {
+          "n_drift": 1000,
+          "n_healthy": 1000,
+          "detected": 942,
+          "detection_rate": 0.942,
+          "detection_rate_ci": [
+            0.9257500917212245,
+            0.9548669299284063
+          ],
+          "false_alarm_rate": 0.096,
+          "false_alarm_rate_ci": [
+            0.0792566195200465,
+            0.11583551453775706
+          ],
+          "median_days_after_onset": 8.0,
+          "both_fired": 800,
+          "median_lead_days": -4.0,
+          "median_lead_ci": [
+            -5.0,
+            -3.0
+          ],
+          "lead_share_earlier": 0.2875,
+          "lead_histogram": {
+            "-6": 332,
+            "-5": 44,
+            "-4": 34,
+            "-3": 45,
+            "-2": 41,
+            "-1": 31,
+            "0": 43,
+            "1": 34,
+            "2": 29,
+            "3": 27,
+            "4": 27,
+            "5": 27,
+            "6": 20,
+            "7": 20,
+            "8": 10,
+            "9": 13,
+            "10": 23
+          },
+          "label": "Personal baseline, CUSUM calibrated (k=1.0, h=12)",
+          "onset_aligned": {
+            "true_detection_rate": 0.933,
+            "true_detection_ci": [
+              0.9157875981239373,
+              0.9468983077002487
+            ],
+            "alarm_before_onset_rate": 0.009,
+            "median_days_after_onset": 8,
+            "lead_vs_color_change": {
+              "n": 585,
+              "median": -1,
+              "ci": [
+                -2,
+                0
+              ],
+              "share_earlier": 0.38803418803418804
+            },
+            "lead_vs_red": {
+              "n": 830,
+              "median": -5.0,
+              "ci": [
+                -6.0,
+                -5.0
+              ],
+              "share_earlier": 0.22409638554216868
+            }
+          }
+        }
+      },
+      "tradeoff": {
+        "points": [
+          {
+            "label": "z>=1.5 for 1d",
+            "family": "zscore",
+            "false_alarm_rate": 1.0,
+            "median_days_after_onset": 1,
+            "true_detection_rate": 0.059
+          },
+          {
+            "label": "z>=2.0 for 1d",
+            "family": "zscore",
+            "false_alarm_rate": 0.987,
+            "median_days_after_onset": 1,
+            "true_detection_rate": 0.215
+          },
+          {
+            "label": "z>=2.5 for 1d",
+            "family": "zscore",
+            "false_alarm_rate": 0.916,
+            "median_days_after_onset": 3,
+            "true_detection_rate": 0.425
+          },
+          {
+            "label": "z>=3.0 for 1d",
+            "family": "zscore",
+            "false_alarm_rate": 0.759,
+            "median_days_after_onset": 4.0,
+            "true_detection_rate": 0.61
+          },
+          {
+            "label": "z>=4.0 for 1d",
+            "family": "zscore",
+            "false_alarm_rate": 0.377,
+            "median_days_after_onset": 6.0,
+            "true_detection_rate": 0.8
+          },
+          {
+            "label": "z>=5.0 for 1d",
+            "family": "zscore",
+            "false_alarm_rate": 0.154,
+            "median_days_after_onset": 8,
+            "true_detection_rate": 0.809
+          },
+          {
+            "label": "z>=1.5 for 2d",
+            "family": "zscore",
+            "false_alarm_rate": 0.856,
+            "median_days_after_onset": 3.0,
+            "true_detection_rate": 0.626
+          },
+          {
+            "label": "z>=2.0 for 2d",
+            "family": "zscore",
+            "false_alarm_rate": 0.531,
+            "median_days_after_onset": 5.0,
+            "true_detection_rate": 0.814
+          },
+          {
+            "label": "z>=2.5 for 2d",
+            "family": "zscore",
+            "false_alarm_rate": 0.285,
+            "median_days_after_onset": 6,
+            "true_detection_rate": 0.885
+          },
+          {
+            "label": "z>=3.0 for 2d",
+            "family": "zscore",
+            "false_alarm_rate": 0.153,
+            "median_days_after_onset": 7.0,
+            "true_detection_rate": 0.882
+          },
+          {
+            "label": "z>=4.0 for 2d",
+            "family": "zscore",
+            "false_alarm_rate": 0.032,
+            "median_days_after_onset": 9.0,
+            "true_detection_rate": 0.832
+          },
+          {
+            "label": "z>=5.0 for 2d",
+            "family": "zscore",
+            "false_alarm_rate": 0.008,
+            "median_days_after_onset": 10.0,
+            "true_detection_rate": 0.722
+          },
+          {
+            "label": "z>=1.5 for 3d",
+            "family": "zscore",
+            "false_alarm_rate": 0.419,
+            "median_days_after_onset": 5.0,
+            "true_detection_rate": 0.9
+          },
+          {
+            "label": "z>=2.0 for 3d",
+            "family": "zscore",
+            "false_alarm_rate": 0.185,
+            "median_days_after_onset": 7,
+            "true_detection_rate": 0.923
+          },
+          {
+            "label": "z>=2.5 for 3d",
+            "family": "zscore",
+            "false_alarm_rate": 0.072,
+            "median_days_after_onset": 8,
+            "true_detection_rate": 0.905
+          },
+          {
+            "label": "z>=3.0 for 3d",
+            "family": "zscore",
+            "false_alarm_rate": 0.037,
+            "median_days_after_onset": 9,
+            "true_detection_rate": 0.869
+          },
+          {
+            "label": "z>=4.0 for 3d",
+            "family": "zscore",
+            "false_alarm_rate": 0.005,
+            "median_days_after_onset": 10,
+            "true_detection_rate": 0.755
+          },
+          {
+            "label": "z>=5.0 for 3d",
+            "family": "zscore",
+            "false_alarm_rate": 0.001,
+            "median_days_after_onset": 11,
+            "true_detection_rate": 0.637
+          },
+          {
+            "label": "z>=1.5 for 4d",
+            "family": "zscore",
+            "false_alarm_rate": 0.145,
+            "median_days_after_onset": 7.0,
+            "true_detection_rate": 0.946
+          },
+          {
+            "label": "z>=2.0 for 4d",
+            "family": "zscore",
+            "false_alarm_rate": 0.06,
+            "median_days_after_onset": 8.0,
+            "true_detection_rate": 0.926
+          },
+          {
+            "label": "z>=2.5 for 4d",
+            "family": "zscore",
+            "false_alarm_rate": 0.019,
+            "median_days_after_onset": 9.0,
+            "true_detection_rate": 0.882
+          },
+          {
+            "label": "z>=3.0 for 4d",
+            "family": "zscore",
+            "false_alarm_rate": 0.007,
+            "median_days_after_onset": 10,
+            "true_detection_rate": 0.817
+          },
+          {
+            "label": "z>=4.0 for 4d",
+            "family": "zscore",
+            "false_alarm_rate": 0.002,
+            "median_days_after_onset": 11.0,
+            "true_detection_rate": 0.686
+          },
+          {
+            "label": "z>=5.0 for 4d",
+            "family": "zscore",
+            "false_alarm_rate": 0.0,
+            "median_days_after_onset": 12,
+            "true_detection_rate": 0.569
+          },
+          {
+            "label": "CUSUM k=0.5 h=3",
+            "family": "cusum",
+            "false_alarm_rate": 0.965,
+            "median_days_after_onset": 2.0,
+            "true_detection_rate": 0.46
+          },
+          {
+            "label": "CUSUM k=0.5 h=4",
+            "family": "cusum",
+            "false_alarm_rate": 0.898,
+            "median_days_after_onset": 3,
+            "true_detection_rate": 0.639
+          },
+          {
+            "label": "CUSUM k=0.5 h=6",
+            "family": "cusum",
+            "false_alarm_rate": 0.704,
+            "median_days_after_onset": 4,
+            "true_detection_rate": 0.835
+          },
+          {
+            "label": "CUSUM k=0.5 h=8",
+            "family": "cusum",
+            "false_alarm_rate": 0.531,
+            "median_days_after_onset": 5.0,
+            "true_detection_rate": 0.922
+          },
+          {
+            "label": "CUSUM k=0.5 h=12",
+            "family": "cusum",
+            "false_alarm_rate": 0.285,
+            "median_days_after_onset": 7,
+            "true_detection_rate": 0.953
+          },
+          {
+            "label": "CUSUM k=1.0 h=3",
+            "family": "cusum",
+            "false_alarm_rate": 0.712,
+            "median_days_after_onset": 4.0,
+            "true_detection_rate": 0.698
+          },
+          {
+            "label": "CUSUM k=1.0 h=4",
+            "family": "cusum",
+            "false_alarm_rate": 0.542,
+            "median_days_after_onset": 4.0,
+            "true_detection_rate": 0.828
+          },
+          {
+            "label": "CUSUM k=1.0 h=6",
+            "family": "cusum",
+            "false_alarm_rate": 0.313,
+            "median_days_after_onset": 6,
+            "true_detection_rate": 0.909
+          },
+          {
+            "label": "CUSUM k=1.0 h=8",
+            "family": "cusum",
+            "false_alarm_rate": 0.203,
+            "median_days_after_onset": 7.0,
+            "true_detection_rate": 0.938
+          },
+          {
+            "label": "CUSUM k=1.0 h=12",
+            "family": "cusum",
+            "false_alarm_rate": 0.096,
+            "median_days_after_onset": 8,
+            "true_detection_rate": 0.933
+          }
+        ],
+        "fixed": {
+          "label": "Fixed colors (color change)",
+          "family": "fixed",
+          "false_alarm_rate": 0.505,
+          "median_days_after_onset": 7.0,
+          "true_detection_rate": 0.618
+        },
+        "matched_false_alarm": {
+          "label": "z>=1.5 for 3d",
+          "family": "zscore",
+          "false_alarm_rate": 0.419,
+          "median_days_after_onset": 5.0,
+          "true_detection_rate": 0.9
+        },
+        "at_5pct_false_alarm": {
+          "label": "z>=2.5 for 4d",
+          "family": "zscore",
+          "false_alarm_rate": 0.019,
+          "median_days_after_onset": 9.0,
+          "true_detection_rate": 0.882
+        }
+      },
+      "fixed_red": {
+        "detected": 884,
+        "false_alarm_rate": 0.55,
+        "onset_aligned": {
+          "true_detection_rate": 0.599,
+          "true_detection_ci": [
+            0.5683001748076085,
+            0.6289420992722862
+          ],
+          "alarm_before_onset_rate": 0.285,
+          "median_days_after_onset": 6,
+          "lead_vs_color_change": {
+            "n": 473,
+            "median": 0,
+            "ci": [
+              0,
+              0
+            ],
+            "share_earlier": 0.10993657505285412
+          },
+          "lead_vs_red": {
+            "n": 599,
+            "median": 0,
+            "ci": [
+              0,
+              0
+            ],
+            "share_earlier": 0.0
+          }
+        }
+      }
+    }
+  },
+  "hypotheses": {
+    "H1": {
+      "text": "Median lead over the fixed color change is above 0 days (95% CI excludes 0)",
+      "value": -1.0,
+      "ci": [
+        -1.0,
+        0.0
+      ],
+      "passed": false
+    },
+    "H2": {
+      "text": "False-alarm rate on healthy crews is at most 5% (held-out test set)",
+      "value": 0.047,
+      "passed": true
+    },
+    "H3": {
+      "text": "Detects at least 80% of drifting crews inside the window",
+      "value": 0.977,
+      "passed": true
+    }
+  },
+  "fixtures": [
+    {
+      "drifting": true,
+      "onset": 11,
+      "series": {
+        "heart_rate": [
+          80.322,
+          77.515,
+          79.87,
+          79.967,
+          80.413,
+          81.929,
+          79.484,
+          81.59,
+          80.004,
+          80.972,
+          78.15,
+          86.643,
+          85.946,
+          82.363,
+          85.107,
+          90.896,
+          89.883,
+          89.381,
+          95.097,
+          93.367,
+          100.081,
+          94.057,
+          97.573,
+          102.577,
+          103.246,
+          104.283,
+          105.681,
+          106.841,
+          107.157,
+          110.778
+        ],
+        "sleep_hours": [
+          6.325,
+          6.533,
+          5.514,
+          6.17,
+          5.832,
+          5.652,
+          6.474,
+          6.488,
+          6.476,
+          5.257,
+          6.151,
+          5.774,
+          5.697,
+          5.599,
+          5.829,
+          4.771,
+          6.085,
+          5.302,
+          5.713,
+          6.148,
+          4.784,
+          4.755,
+          4.884,
+          4.337,
+          4.344,
+          5.17,
+          4.238,
+          4.014,
+          4.083,
+          3.605
+        ],
+        "bp_systolic": [
+          122.72,
+          128.925,
+          117.97,
+          123.566,
+          122.714,
+          116.433,
+          119.689,
+          125.152,
+          126.861,
+          124.81,
+          115.537,
+          123.571,
+          116.545,
+          125.953,
+          119.36,
+          118.458,
+          121.269,
+          122.409,
+          133.628,
+          123.27,
+          123.248,
+          125.73,
+          134.162,
+          137.0,
+          122.637,
+          137.56,
+          135.836,
+          126.095,
+          137.477,
+          135.383
+        ]
+      },
+      "alarms": {
+        "fixed": 15,
+        "fixed_red": 15,
+        "production": 12,
+        "zscore": 17,
+        "cusum": 14
+      }
+    },
+    {
+      "drifting": true,
+      "onset": 9,
+      "series": {
+        "heart_rate": [
+          64.959,
+          67.311,
+          65.649,
+          64.921,
+          65.88,
+          64.925,
+          67.247,
+          62.127,
+          63.579,
+          67.746,
+          66.658,
+          70.211,
+          70.611,
+          74.476,
+          77.283,
+          79.669,
+          85.906,
+          84.089,
+          81.318,
+          84.315,
+          88.28,
+          90.205,
+          92.641,
+          94.942,
+          94.437,
+          101.658,
+          97.171,
+          100.981,
+          103.605,
+          103.363
+        ],
+        "sleep_hours": [
+          5.952,
+          6.109,
+          6.203,
+          5.604,
+          6.517,
+          6.303,
+          5.736,
+          5.869,
+          5.852,
+          6.315,
+          5.786,
+          6.324,
+          5.536,
+          5.877,
+          5.74,
+          4.157,
+          4.847,
+          5.403,
+          4.684,
+          4.684,
+          5.138,
+          4.983,
+          5.139,
+          4.308,
+          5.438,
+          5.467,
+          4.833,
+          3.969,
+          4.611,
+          3.199
+        ],
+        "bp_systolic": [
+          122.22,
+          120.522,
+          123.318,
+          115.374,
+          124.022,
+          113.207,
+          123.798,
+          120.226,
+          123.233,
+          118.864,
+          118.729,
+          120.777,
+          127.235,
+          123.819,
+          128.046,
+          123.377,
+          125.052,
+          130.53,
+          125.009,
+          128.663,
+          125.362,
+          124.669,
+          128.527,
+          128.227,
+          131.448,
+          128.532,
+          129.488,
+          133.63,
+          133.071,
+          131.348
+        ]
+      },
+      "alarms": {
+        "fixed": 15,
+        "fixed_red": 15,
+        "production": 8,
+        "zscore": 14,
+        "cusum": 13
+      }
+    },
+    {
+      "drifting": true,
+      "onset": 9,
+      "series": {
+        "heart_rate": [
+          61.988,
+          64.836,
+          63.146,
+          63.876,
+          60.8,
+          59.966,
+          63.602,
+          64.17,
+          63.905,
+          60.526,
+          63.026,
+          63.409,
+          62.584,
+          60.154,
+          60.373,
+          59.245,
+          61.39,
+          63.31,
+          61.17,
+          64.755,
+          61.672,
+          61.112,
+          63.268,
+          67.437,
+          63.011,
+          62.754,
+          61.713,
+          62.478,
+          62.85,
+          62.021
+        ],
+        "sleep_hours": [
+          6.547,
+          6.392,
+          6.091,
+          6.194,
+          5.882,
+          6.696,
+          6.421,
+          6.613,
+          6.185,
+          5.564,
+          5.44,
+          5.953,
+          5.239,
+          5.492,
+          5.398,
+          4.608,
+          4.565,
+          4.606,
+          5.005,
+          3.703,
+          4.41,
+          2.729,
+          3.483,
+          3.256,
+          3.187,
+          3.254,
+          3.145,
+          1.824,
+          2.625,
+          1.763
+        ],
+        "bp_systolic": [
+          117.17,
+          115.504,
+          123.408,
+          123.213,
+          123.797,
+          126.03,
+          121.692,
+          121.661,
+          125.513,
+          130.727,
+          135.522,
+          118.762,
+          121.423,
+          127.078,
+          134.284,
+          130.293,
+          126.653,
+          125.904,
+          129.607,
+          135.308,
+          135.272,
+          135.764,
+          140.229,
+          135.813,
+          144.809,
+          143.789,
+          139.369,
+          136.831,
+          140.425,
+          148.125
+        ]
+      },
+      "alarms": {
+        "fixed": 15,
+        "fixed_red": 15,
+        "production": 10,
+        "zscore": 15,
+        "cusum": 14
+      }
+    },
+    {
+      "drifting": true,
+      "onset": 15,
+      "series": {
+        "heart_rate": [
+          65.744,
+          66.441,
+          64.844,
+          67.357,
+          69.738,
+          67.245,
+          64.179,
+          66.976,
+          68.615,
+          66.913,
+          65.961,
+          70.169,
+          68.347,
+          67.63,
+          67.653,
+          67.239,
+          70.912,
+          70.135,
+          70.157,
+          70.008,
+          73.509,
+          76.694,
+          76.017,
+          80.397,
+          78.838,
+          80.397,
+          81.761,
+          81.194,
+          87.61,
+          88.062
+        ],
+        "sleep_hours": [
+          5.763,
+          6.106,
+          5.281,
+          5.704,
+          5.988,
+          7.231,
+          5.8,
+          6.815,
+          7.258,
+          6.564,
+          6.127,
+          6.142,
+          6.433,
+          6.855,
+          5.898,
+          6.411,
+          6.509,
+          6.475,
+          6.897,
+          6.671,
+          6.852,
+          5.252,
+          6.936,
+          6.768,
+          6.01,
+          7.3,
+          7.153,
+          5.724,
+          6.864,
+          7.003
+        ],
+        "bp_systolic": [
+          130.674,
+          126.162,
+          128.56,
+          130.359,
+          129.265,
+          126.707,
+          130.343,
+          122.71,
+          126.731,
+          126.911,
+          128.845,
+          129.521,
+          133.575,
+          123.96,
+          127.321,
+          134.664,
+          131.02,
+          124.948,
+          134.813,
+          135.734,
+          134.783,
+          132.254,
+          133.741,
+          135.437,
+          130.314,
+          143.385,
+          142.577,
+          146.696,
+          139.104,
+          138.151
+        ]
+      },
+      "alarms": {
+        "fixed": 25,
+        "fixed_red": 25,
+        "production": 8,
+        "zscore": 19,
+        "cusum": 21
+      }
+    },
+    {
+      "drifting": true,
+      "onset": 12,
+      "series": {
+        "heart_rate": [
+          64.647,
+          61.484,
+          62.509,
+          61.244,
+          64.008,
+          59.17,
+          61.394,
+          62.152,
+          64.97,
+          61.945,
+          60.869,
+          61.744,
+          59.233,
+          63.313,
+          66.652,
+          64.393,
+          65.073,
+          67.521,
+          69.159,
+          69.689,
+          66.225,
+          70.839,
+          72.235,
+          70.137,
+          72.027,
+          71.963,
+          71.672,
+          73.738,
+          74.659,
+          76.943
+        ],
+        "sleep_hours": [
+          6.171,
+          6.474,
+          5.805,
+          4.565,
+          6.631,
+          6.227,
+          6.237,
+          6.693,
+          6.064,
+          5.405,
+          5.849,
+          5.304,
+          5.837,
+          5.72,
+          5.715,
+          5.748,
+          4.621,
+          5.657,
+          5.294,
+          5.299,
+          4.633,
+          4.802,
+          5.84,
+          5.122,
+          5.082,
+          4.53,
+          3.823,
+          4.648,
+          4.104,
+          4.771
+        ],
+        "bp_systolic": [
+          120.604,
+          108.878,
+          117.468,
+          117.627,
+          123.982,
+          118.404,
+          118.613,
+          111.709,
+          113.701,
+          111.276,
+          120.598,
+          109.817,
+          113.214,
+          117.463,
+          128.802,
+          124.374,
+          129.606,
+          130.728,
+          118.771,
+          128.073,
+          125.565,
+          129.193,
+          127.605,
+          128.866,
+          136.85,
+          137.517,
+          128.094,
+          131.324,
+          140.13,
+          134.02
+        ]
+      },
+      "alarms": {
+        "fixed": 28,
+        "fixed_red": 16,
+        "production": 15,
+        "zscore": 20,
+        "cusum": 20
+      }
+    },
+    {
+      "drifting": true,
+      "onset": 16,
+      "series": {
+        "heart_rate": [
+          50.805,
+          53.783,
+          48.071,
+          52.805,
+          50.759,
+          53.382,
+          51.31,
+          52.33,
+          52.95,
+          50.235,
+          55.029,
+          51.835,
+          52.713,
+          51.737,
+          50.542,
+          52.75,
+          52.322,
+          58.533,
+          56.379,
+          58.287,
+          61.643,
+          63.75,
+          65.484,
+          68.984,
+          67.423,
+          69.926,
+          72.486,
+          74.104,
+          75.22,
+          73.518
+        ],
+        "sleep_hours": [
+          6.03,
+          6.772,
+          6.834,
+          7.362,
+          6.533,
+          6.431,
+          6.225,
+          6.983,
+          6.026,
+          6.784,
+          6.679,
+          6.479,
+          6.115,
+          6.514,
+          6.439,
+          6.009,
+          7.043,
+          5.458,
+          5.679,
+          6.403,
+          6.434,
+          5.728,
+          5.919,
+          5.274,
+          5.702,
+          4.796,
+          5.843,
+          5.637,
+          4.531,
+          5.082
+        ],
+        "bp_systolic": [
+          113.651,
+          122.098,
+          113.54,
+          124.753,
+          115.188,
+          115.698,
+          122.815,
+          118.265,
+          121.498,
+          119.509,
+          117.428,
+          118.515,
+          115.738,
+          118.802,
+          111.649,
+          114.904,
+          112.104,
+          119.191,
+          122.214,
+          121.22,
+          123.994,
+          126.6,
+          123.615,
+          125.335,
+          124.125,
+          122.736,
+          129.65,
+          128.803,
+          128.479,
+          132.166
+        ]
+      },
+      "alarms": {
+        "fixed": 25,
+        "fixed_red": 25,
+        "production": 18,
+        "zscore": 20,
+        "cusum": 21
+      }
+    },
+    {
+      "drifting": false,
+      "onset": null,
+      "series": {
+        "heart_rate": [
+          66.051,
+          65.619,
+          67.377,
+          67.015,
+          64.318,
+          62.95,
+          64.9,
+          63.475,
+          60.99,
+          63.855,
+          68.102,
+          65.731,
+          61.647,
+          63.663,
+          62.816,
+          67.179,
+          63.941,
+          63.672,
+          66.831,
+          61.902,
+          66.818,
+          63.693,
+          65.94,
+          63.574,
+          63.544,
+          61.136,
+          57.847,
+          63.293,
+          65.653,
+          62.843
+        ],
+        "sleep_hours": [
+          6.253,
+          7.634,
+          7.034,
+          6.637,
+          6.955,
+          6.606,
+          6.756,
+          6.948,
+          7.012,
+          6.949,
+          7.03,
+          7.618,
+          5.981,
+          6.444,
+          6.997,
+          7.692,
+          6.613,
+          7.299,
+          6.968,
+          7.111,
+          5.598,
+          7.359,
+          6.781,
+          6.8,
+          6.575,
+          7.334,
+          6.737,
+          6.168,
+          6.641,
+          8.133
+        ],
+        "bp_systolic": [
+          111.634,
+          111.28,
+          115.002,
+          116.442,
+          110.676,
+          109.955,
+          113.889,
+          106.7,
+          116.308,
+          108.768,
+          113.279,
+          111.181,
+          113.148,
+          107.852,
+          114.648,
+          116.128,
+          113.03,
+          118.811,
+          114.467,
+          110.013,
+          111.975,
+          116.806,
+          115.222,
+          116.58,
+          110.569,
+          110.573,
+          112.14,
+          111.349,
+          111.607,
+          108.376
+        ]
+      },
+      "alarms": {
+        "fixed": 26,
+        "fixed_red": null,
+        "production": 8,
+        "zscore": null,
+        "cusum": null
+      }
+    },
+    {
+      "drifting": false,
+      "onset": null,
+      "series": {
+        "heart_rate": [
+          62.614,
+          64.904,
+          60.459,
+          61.681,
+          63.133,
+          65.187,
+          61.728,
+          63.802,
+          63.859,
+          63.55,
+          66.141,
+          66.289,
+          63.733,
+          63.088,
+          63.166,
+          62.776,
+          63.816,
+          63.492,
+          63.943,
+          65.793,
+          64.827,
+          62.177,
+          64.533,
+          61.259,
+          65.26,
+          62.637,
+          65.171,
+          62.381,
+          62.52,
+          61.473
+        ],
+        "sleep_hours": [
+          7.807,
+          7.23,
+          6.644,
+          6.376,
+          7.461,
+          7.296,
+          6.707,
+          6.816,
+          7.576,
+          6.824,
+          7.506,
+          6.816,
+          6.922,
+          6.27,
+          6.98,
+          6.425,
+          6.392,
+          6.217,
+          6.791,
+          5.883,
+          6.735,
+          6.508,
+          7.029,
+          6.492,
+          6.59,
+          6.583,
+          6.336,
+          6.594,
+          6.338,
+          6.658
+        ],
+        "bp_systolic": [
+          117.503,
+          119.269,
+          117.691,
+          113.581,
+          118.871,
+          123.748,
+          117.018,
+          118.941,
+          114.107,
+          111.259,
+          117.243,
+          117.172,
+          117.133,
+          119.928,
+          114.03,
+          118.318,
+          112.017,
+          115.717,
+          118.687,
+          119.262,
+          116.921,
+          112.616,
+          121.384,
+          118.656,
+          118.058,
+          114.599,
+          119.034,
+          112.741,
+          122.253,
+          117.517
+        ]
+      },
+      "alarms": {
+        "fixed": null,
+        "fixed_red": null,
+        "production": 9,
+        "zscore": null,
+        "cusum": null
+      }
+    }
+  ],
+  "config": {
+    "days": 30,
+    "baseline_days": 7,
+    "n_per_arm": 1000,
+    "metrics": [
+      "heart_rate",
+      "sleep_hours",
+      "bp_systolic"
+    ],
+    "person": {
+      "heart_rate": [
+        66.0,
+        6.0,
+        52.0,
+        84.0
+      ],
+      "sleep_hours": [
+        6.5,
+        0.7,
+        5.3,
+        7.8
+      ],
+      "bp_systolic": [
+        116.0,
+        8.0,
+        98.0,
+        132.0
+      ]
+    },
+    "daily_noise": {
+      "heart_rate": 2.0,
+      "sleep_hours": 0.5,
+      "bp_systolic": 4.0
+    },
+    "std_floor": {
+      "heart_rate": 1.0,
+      "sleep_hours": 0.25,
+      "bp_systolic": 2.0
+    },
+    "drift_per_day": {
+      "heart_rate": [
+        0.6,
+        2.0
+      ],
+      "sleep_hours": [
+        -0.2,
+        -0.05
+      ],
+      "bp_systolic": [
+        0.4,
+        1.2
+      ]
+    },
+    "drift_onset": [
+      9,
+      16
+    ]
+  }
+}

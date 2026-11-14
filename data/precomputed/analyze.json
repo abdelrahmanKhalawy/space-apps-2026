@@ -1,0 +1,67 @@
+{
+  "crewId": "crew-1",
+  "baseline": {
+    "bp_diastolic": {
+      "mean": 75.86,
+      "std": 1.5
+    },
+    "bp_systolic": {
+      "mean": 117.93,
+      "std": 2.0
+    },
+    "glucose": {
+      "mean": 89.29,
+      "std": 3.0
+    },
+    "heart_rate": {
+      "mean": 64.13,
+      "std": 1.0
+    },
+    "mood": {
+      "mean": 4.14,
+      "std": 0.35
+    },
+    "sleep_hours": {
+      "mean": 7.26,
+      "std": 0.25
+    },
+    "spo2": {
+      "mean": 97.43,
+      "std": 0.5
+    },
+    "temperature": {
+      "mean": 34.2,
+      "std": 0.2
+    }
+  },
+  "anomalies": [
+    {
+      "metric": "bp_systolic",
+      "since": "2026-11-09T00:00:00Z",
+      "direction": "up",
+      "score": 4.29,
+      "colorStillGreen": false
+    },
+    {
+      "metric": "heart_rate",
+      "since": "2026-11-07T00:00:00Z",
+      "direction": "up",
+      "score": 18.45,
+      "colorStillGreen": true
+    },
+    {
+      "metric": "mood",
+      "since": "2026-11-09T00:00:00Z",
+      "direction": "down",
+      "score": 6.12,
+      "colorStillGreen": true
+    },
+    {
+      "metric": "sleep_hours",
+      "since": "2026-11-10T00:00:00Z",
+      "direction": "down",
+      "score": 9.43,
+      "colorStillGreen": false
+    }
+  ]
+}

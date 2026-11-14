@@ -1,0 +1,35 @@
+import { useState } from 'react'
+import { GROUPS, loadConsent, saveConsent } from './consent.js'
+import { isHighContrast, setHighContrast } from '../a11y.js'
+
+/** What Earth may see in reports. Defaults to everything. A red alert is always sent. */
+export default function PrivacyPanel() {
+  const [consent, setConsent] = useState(loadConsent)
+  const [contrast, setContrast] = useState(isHighContrast)
+  const toggle = g => {
+    const next = { ...consent, [g]: !consent[g] }
+    setConsent(next)
+    saveConsent(next)
+  }
+  return (
+    <details className="priv">
+      <summary>Privacy: what Earth can see</summary>
+      <p className="hint">Choose which groups of indicators go into reports to the ground. A <strong>red alert is always sent</strong>, so the flight surgeon knows something is wrong. Only the details are held back.</p>
+      {Object.entries(GROUPS).map(([g, info]) => (
+        <label key={g} className="priv-row">
+          <input type="checkbox" checked={consent[g]} onChange={() => toggle(g)} />
+          <span>Share {info.label.toLowerCase()}</span>
+        </label>
+      ))}
+      <label className="priv-row">
+        <input type="checkbox" checked={contrast} onChange={e => { setContrast(e.target.checked); setHighContrast(e.target.checked) }} />
+        <span>High-contrast display</span>
+      </label>
+      <p className="hint">
+        Your data is yours: <a href="/api/export?crewId=crew-1" download>download your readings (CSV)</a> ·{' '}
+        <a href="/api/export?crewId=crew-1&format=json" download>JSON</a> ·{' '}
+        <a href="/swagger" target="_blank" rel="noreferrer">API documentation</a>
+      </p>
+    </details>
+  )
+}
