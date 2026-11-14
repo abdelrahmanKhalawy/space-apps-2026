@@ -47,6 +47,19 @@ az webapp deploy --resource-group space-monkeys-rg --name space-monkeys-2026 --s
 
 بديل من غير az: في بوابة Azure افتح Advanced Tools (Kudu) > Tools > Zip Push Deploy، واسحب publish.zip.
 
+### النشر من GitHub (من غير ما تحتاج شبكتك)
+
+لو الشبكة بتقفل الاتصال بـAzure (`ConnectionResetError 10054`)، خلّي GitHub هو اللي ينشر من سيرفراته (`.github/workflows/deploy.yml`):
+
+1. بوابة Azure > الـWeb App `space-monkeys-2026` > **Overview** > **Get publish profile** (بينزّل ملف XML). لو الزرار رمادي: Settings > Configuration > General settings > فعّل **SCM Basic Auth Publishing Credentials**.
+2. GitHub > الريبو > Settings > Secrets and variables > Actions > **New repository secret**. الاسم `AZURE_WEBAPP_PUBLISH_PROFILE` والقيمة محتوى الملف كله.
+3. GitHub > **Actions** > "Deploy to Azure" > **Run workflow** (الفرع main).
+4. الـworkflow بيبني الشاشات والسيرفر وينشر، وبعدين بيجرّب `/api/health` و`/api/status` و`/api/space-weather` والصفحة الرئيسية على اللينك الحي. لو أي واحد فشل، الـrun بيبقى أحمر.
+
+عايزه ينشر لوحده مع كل دمج على main؟ Settings > Secrets and variables > Actions > **Variables** > اعمل متغير `AUTO_DEPLOY` بقيمة `true`.
+
+قاعدة البيانات على Azure بتتحدّث لوحدها: لو بيانات الديمو (`data/mock/day143.json`) اتغيّرت، أول تشغيل بيبدّل القديمة بالجديدة من غير ما يمس قراءات الكاميرا أو اليدوي.
+
 اللينك الحالي: https://space-monkeys-2026.azurewebsites.net (resource group `space-monkeys-rg`، منطقة uaenorth، لأن westeurope ممنوعة في الاشتراك).
 
 ملاحظة: Azure مبقاش بيعرض .NET 8 على Linux، فالتطبيق على runtime 10 ومعاه `DOTNET_ROLL_FORWARD=Major` في App settings. ماتشيلوش.
