@@ -95,6 +95,9 @@ export default function EntryForm() {
             ))}
           </ul>
           <small>Recorded at {formatTime(saved[0]?.takenAt)}</small>
+          <p>
+            <a className="cam-link" href="#status">See your status</a>
+          </p>
         </section>
       )}
 

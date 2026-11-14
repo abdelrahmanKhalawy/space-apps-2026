@@ -46,8 +46,6 @@ export default function Dashboard({ reloadKey = 0 }) {
 
   return (
     <section className="dashboard">
-      <DecisionScreen status={status} units={units} />
-      <EarthReply />
       <div className={`banner banner-${status.overall ?? 'none'}`} role="status" data-testid="overall">
         <span className="banner-icon" aria-hidden="true">
           {status.overall === 'green' ? '✓' : '!'}
@@ -57,8 +55,9 @@ export default function Dashboard({ reloadKey = 0 }) {
           <span>{summarize(status)}</span>
         </div>
       </div>
+      <DecisionScreen status={status} units={units} />
+      <EarthReply />
       <IndexCard readings={data.readings} thresholds={thresholds} />
-      <button type="button" className="cam-link print-btn" onClick={() => window.print()}>Print a summary for the flight surgeon</button>
       <SpaceWeather />
       {mode === 'sample' && (
         <p className="notice" role="note">
@@ -72,7 +71,7 @@ export default function Dashboard({ reloadKey = 0 }) {
         <>
         <div className="section-head">
           <h2>Indicators</h2>
-          <span>{items.length} feeds</span>
+          <span>Tap a card for details</span>
         </div>
         <div className="cards">
           {items.map(item => (
@@ -92,7 +91,10 @@ export default function Dashboard({ reloadKey = 0 }) {
         </div>
         </>
       )}
-      <PrivacyPanel />
+      <div className="share">
+        <PrivacyPanel />
+        <button type="button" className="cam-link print-btn" onClick={() => window.print()}>Print a summary for the flight surgeon</button>
+      </div>
       <ReportSheet status={status} readings={data.readings} thresholds={thresholds} explain={data.explain} forecast={data.forecast} />
     </section>
   )

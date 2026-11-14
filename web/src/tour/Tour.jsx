@@ -15,7 +15,7 @@ const STEPS = [
 const get = () => { try { return localStorage.getItem(KEY) } catch { return null } }
 const put = v => { try { localStorage.setItem(KEY, v) } catch { /* private window */ } }
 
-export default function Tour({ onGo }) {
+export default function Tour({ onGo, showAgain = true }) {
   const [state, setState] = useState(() => (get() === 'done' ? 'hidden' : 'banner')) // banner | touring | hidden
   const [i, setI] = useState(0)
 
@@ -26,6 +26,7 @@ export default function Tour({ onGo }) {
   const end = () => { put('done'); setState('hidden') }
 
   if (state === 'hidden') {
+    if (!showAgain) return null
     return (
       <button type="button" className="tour-again cam-link" onClick={() => { setI(0); setState('touring') }}>
         Take the 60-second tour

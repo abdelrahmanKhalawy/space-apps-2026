@@ -40,7 +40,7 @@ body { margin: 0; background: var(--bg); color: var(--text); }
 .tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; max-width: 100%; }
 .tabs::-webkit-scrollbar { display: none; }
 .tab {
-  flex: none; min-height: 44px; padding: 0 14px; cursor: pointer; background: transparent; color: var(--muted);
+  flex: none; min-height: 44px; padding: 0 11px; cursor: pointer; background: transparent; color: var(--muted);
   border: 0; border-bottom: 2px solid transparent; font-size: 0.92rem; font-weight: 600; white-space: nowrap;
 }
 .tab:hover { color: var(--text); }
@@ -725,6 +725,27 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 .cam-bar div { background: var(--salmon); }
 .cam-result strong { font-family: var(--mono); }
 .speak { border-radius: 8px; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* the sharing controls at the bottom of Status */
+.share { margin-top: 14px; display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.share .priv { width: 100%; margin-top: 0; }
+.print-btn { margin-top: 0; }
+
+/* Status on a phone: the indicators are a compact two-column grid; a healthy one only shows its value, and
+   opens for the advice, the chart and the explanation */
+@media (max-width: 640px) {
+  .cards { grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
+  .card { padding: 12px 12px 10px; gap: 6px; }
+  .card-head { grid-template-columns: 1fr; grid-template-areas: 'name' 'value' 'pill'; gap: 2px; }
+  .card-head .pill { justify-self: start; margin-top: 4px; }
+  .card-value { font-size: 1.7rem; }
+  .card-green:not(.card-open) .card-advice,
+  .card-green:not(.card-open) .speak,
+  .card-green:not(.card-open) .card-meta { display: none; }
+  .card-foot { flex-direction: column; gap: 2px; }
+  .card-open .card-head { grid-template-columns: 1fr auto; grid-template-areas: 'name pill' 'value value'; }
+  .card-open .card-head .pill { margin-top: 0; justify-self: end; }
+}
 
 /* the crew scenario picker scrolls sideways on a phone instead of wrapping */
 @media (max-width: 640px) {
