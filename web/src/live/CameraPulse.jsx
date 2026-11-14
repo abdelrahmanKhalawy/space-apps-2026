@@ -36,6 +36,8 @@ export default function CameraPulse({ onUse = null, buttonLabel = 'Measure my pu
   const [msg, setMsg] = useState('')
   const [progress, setProgress] = useState(0)
   const [finger, setFinger] = useState(false)
+  const [torchOn, setTorchOn] = useState(false)
+  const [rgb, setRgb] = useState(null)
   const [wave, setWave] = useState([])
   const [result, setResult] = useState(null)
   const [sent, setSent] = useState(null)
@@ -70,9 +72,12 @@ export default function CameraPulse({ onUse = null, buttonLabel = 'Measure my pu
     const track = stream.current.getVideoTracks()[0]
     // The torch lights the fingertip evenly. Not every phone or browser lets a web page turn it on.
     try {
-      if (track.getCapabilities?.().torch) await track.applyConstraints({ advanced: [{ torch: true }] })
+      if (track.getCapabilities?.().torch) {
+        await track.applyConstraints({ advanced: [{ torch: true }] })
+        setTorchOn(true)
+      } else setTorchOn(false)
     } catch {
-      /* carry on with ambient light */
+      setTorchOn(false) // carry on with ambient light
     }
     const v = video.current
     v.srcObject = stream.current
@@ -99,6 +104,7 @@ export default function CameraPulse({ onUse = null, buttonLabel = 'Measure my pu
       const c = { r: r / n, g: g / n, b: b / n }
       const on = fingerOnLens(c)
       setFinger(on)
+      if (frames % 8 === 0) setRgb({ r: Math.round(c.r), g: Math.round(c.g), b: Math.round(c.b) })
       if (elapsed < SETTLE_MS) { setProgress(0); return }
       frames++
       if (on) fingerFrames++
@@ -110,7 +116,7 @@ export default function CameraPulse({ onUse = null, buttonLabel = 'Measure my pu
         stop()
         const res = analyzeBest(samples)
         const covered = frames ? fingerFrames / frames : 0
-        setResult({ ...res, covered })
+        setResult({ ...res, covered, avg: samples.length ? { r: Math.round(samples.reduce((a, s) => a + s.r, 0) / samples.length), g: Math.round(samples.reduce((a, s) => a + s.g, 0) / samples.length) } : null })
         setPhase('done')
       }
     }, 33)
@@ -121,7 +127,9 @@ export default function CameraPulse({ onUse = null, buttonLabel = 'Measure my pu
     setPhase('idle')
   }
 
-  const good = result && result.quality === 'good' && result.covered >= 0.8
+  // Judged by the SIGNAL: 'good' already needs a dozen regular heartbeats in a plausible range. The finger check only
+  // guards against a pulse found in something that is not a fingertip (a flickering lamp), so it is a loose floor.
+  const good = result && result.quality === 'good' && result.covered >= 0.4
   const send = async () => {
     // The dashboard shows each metric's newest reading BY TIME, so never send one older than the newest on the server.
     let newest = 0
@@ -163,6 +171,8 @@ export default function CameraPulse({ onUse = null, buttonLabel = 'Measure my pu
               <p className="cam-step">
                 {finger ? 'Hold still. Keep your fingertip fully over the camera lens.' : 'Cover the camera lens (and the flash) completely with your fingertip.'}
               </p>
+              {!torchOn && <p className="hint">This browser can't switch the flash on, so use bright light (a window or a lamp) and rest the fingertip gently on the lens. Don't press hard: that stops the blood flow.</p>}
+              {rgb && <p className="hint cam-rgb">Camera sees: red {rgb.r} · green {rgb.g} · blue {rgb.b} {finger ? '(fingertip detected)' : '(no fingertip yet)'}</p>}
               <div className="cam-bar" aria-hidden="true"><div style={{ width: `${progress * 100}%` }} /></div>
               <Wave points={wave} />
               <button type="button" className="cam-link" onClick={cancel}>Cancel</button>
@@ -182,9 +192,15 @@ export default function CameraPulse({ onUse = null, buttonLabel = 'Measure my pu
                   {sent === 'fail' && <p className="cam-error">Could not reach the server.</p>}
                 </>
               ) : (
-                <p className="cam-error">
-                  {result.covered < 0.8 ? 'Your finger moved off the lens.' : 'The signal was too weak or noisy.'} Press a little firmer, keep still, and try again.
-                </p>
+                <>
+                  <p className="cam-error">
+                    {result.covered < 0.4
+                      ? "I couldn't see your fingertip on the lens. Cover the camera lens completely (not just the flash) with the pad of your finger."
+                      : 'I saw your fingertip but the pulse signal was too weak or too noisy.'}{' '}
+                    {torchOn ? 'Keep still and try again.' : 'Try in brighter light, rest (don\'t press) the fingertip, keep still, and try again.'}
+                  </p>
+                  {result.avg && <p className="hint cam-rgb">Average colors seen: red {result.avg.r}, green {result.avg.g}. Fingertip frames: {Math.round(result.covered * 100)}%.</p>}
+                </>
               )}
               <button type="button" className="cam-link" onClick={start}>Measure again</button>{' '}
               <button type="button" className="cam-link" onClick={cancel}>Close</button>

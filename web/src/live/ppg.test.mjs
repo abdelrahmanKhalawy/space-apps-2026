@@ -84,7 +84,9 @@ for (const bpm of [52, 65, 72, 88, 110, 140]) {
 // 5) finger detection
 check('finger on lens (torch)', fingerOnLens({ r: 230, g: 40, b: 30 }), '')
 check('no finger (grey room)', !fingerOnLens({ r: 110, g: 105, b: 100 }), '')
-check('dark lens is not a finger', !fingerOnLens({ r: 20, g: 5, b: 5 }), '')
+check('dark lens is not a finger', !fingerOnLens({ r: 15, g: 4, b: 4 }), '')
+check('finger in room light, no flash (dark red) is a finger', fingerOnLens({ r: 52, g: 11, b: 7 }), '')
+check('a bright scene with no finger is not', !fingerOnLens({ r: 140, g: 130, b: 120 }), '')
 
 // 6) real phones: the red channel may be clipped at 255 (torch) while the pulse lives in green, or the other way round
 {
