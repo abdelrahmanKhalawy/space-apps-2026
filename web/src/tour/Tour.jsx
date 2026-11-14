@@ -36,7 +36,7 @@ export default function Tour({ onGo }) {
     return (
       <section className="tour-banner" aria-label="About AstroPulse">
         <p>
-          <strong>New here?</strong> AstroPulse helps an astronaut notice when their health drifts from <em>their own</em> normal, days before fixed
+          <strong className="tour-eyebrow">New here?</strong> AstroPulse helps an astronaut notice when their health drifts from <em>their own</em> normal, days before fixed
           ranges would, and what to do while Earth is minutes away. Everything on screen is sample data.
         </p>
         <div>
@@ -49,7 +49,13 @@ export default function Tour({ onGo }) {
   const step = STEPS[i]
   return (
     <aside className="tour-card" role="dialog" aria-label="Tour" aria-live="polite">
-      <p className="tour-step">{i + 1} of {STEPS.length}</p>
+      <p className="tour-step">
+        <span>Tour</span>
+        <span>{i + 1} / {STEPS.length}</span>
+      </p>
+      <div className="tour-bar" aria-hidden="true">
+        {STEPS.map((_, k) => <span key={k} className={k <= i ? 'on' : undefined} />)}
+      </div>
       <strong>{step.title}</strong>
       <p>{step.text}</p>
       <div className="tour-actions">
