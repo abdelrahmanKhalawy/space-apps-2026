@@ -4,7 +4,7 @@ import * as signalR from '@microsoft/signalr'
 /**
  * Bumps a counter every time a new reading should make the dashboard reload:
  * - on every "reading" event from the SignalR hub (contracts/api.md: /hubs/readings), or
- * - every 2s, if the hub never managed to connect (fallback from a5's brief).
+ * - every 5s while the tab is visible, if the hub never managed to connect (fallback from a5's brief).
  *
  * The caller doesn't need the reading itself — it just refetches /api/status and
  * /api/readings, which is simple, always correct, and fast enough for this app's size.
@@ -20,7 +20,8 @@ export default function useLive() {
 
     const startPolling = () => {
       if (pollRef.current) return
-      pollRef.current = setInterval(bump, 2000)
+      // Each bump refetches the dashboard (4 requests), so the fallback is gentle: 5 s, and not at all in a hidden tab.
+      pollRef.current = setInterval(() => { if (!document.hidden) bump() }, 5000)
     }
     const stopPolling = () => {
       clearInterval(pollRef.current)
@@ -33,6 +34,8 @@ export default function useLive() {
       .configureLogging(signalR.LogLevel.Warning)
       .build()
 
+    const onVisible = () => { if (!document.hidden) bump() } // catch up when the tab comes back
+    document.addEventListener('visibilitychange', onVisible)
     connection.on('reading', bump)
     connection.onreconnected(() => {
       if (stopped) return
@@ -54,6 +57,7 @@ export default function useLive() {
 
     return () => {
       stopped = true
+      document.removeEventListener('visibilitychange', onVisible)
       stopPolling()
       connection.stop()
     }

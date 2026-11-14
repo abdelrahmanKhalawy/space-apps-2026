@@ -101,7 +101,7 @@ function CrewApp() {
             </div>
             <span className={connected ? 'live-pill on' : 'live-pill'} role="status" data-testid="live-pill">
               <span className="live-dot" aria-hidden="true" />
-              {connected ? 'Live' : 'Updating every 2 s'}
+              {connected ? 'Live' : 'Updating every 5 s'}
             </span>
           </div>
           <nav className="tabs" role="tablist" aria-label="Screens">

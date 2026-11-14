@@ -77,7 +77,7 @@ A mission's connection comes and goes, so the app is built to keep working: it i
 |---|---|
 | Color ranges | Real published ranges (AHA, CDC, MedlinePlus, NSF). The yellow bands are our design. See `research/sources.md`. |
 | Space weather | **Real**, live from NOAA SWPC (a recorded real reading if NOAA can't be reached). The "solar storm" preview is simulated and labeled. |
-| Phone-camera pulse | **Real measurement**, approximate accuracy. Tested here on synthetic signals and a simulated camera feed; needs a real-phone check. |
+| Phone-camera pulse | **Real measurement**, approximate accuracy. The algorithm is validated on 53 real recorded finger signals (1.1 bpm mean error on accepted readings); the camera itself still needs a real-phone check. |
 | Crew readings and the Day-143 story | **Synthetic**, generated data. |
 | Virtual crew trial, Crew tab | **Simulation** with assumed noise levels. Not validated on real astronauts. |
 | AstroPulse Index, "person or environment" rule | **Our own** methods, not published standards. |
@@ -97,8 +97,8 @@ The two-week "Day 143" scenario (`data/mock/day143.json`) is **synthetic, genera
 
 ```bash
 # CI (.github/workflows/ci.yml) runs all of this on every pull request
-cd web && npm test                      # 9 Node suites: detectors parity, PPG, Index, crew rule, checks, offline, privacy...
-cd tests/SpaceApi.Tests && dotnet test  # 16 C# tests: live model vs the Python model, and the whole API run in memory
+cd web && npm test                      # 15 Node suites: detector parity, camera pulse, Index, crew rule, replay, CSV import, guided steps, offline, privacy...
+cd tests/SpaceApi.Tests && dotnet test  # 29 C# tests: live model vs the Python model, NASA DONKI parsing, and the whole API run in memory
 python ai/trial.py                      # re-runs the virtual crew trial (writes data/trial/results.json)
 ```
 

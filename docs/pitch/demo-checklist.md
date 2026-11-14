@@ -7,6 +7,7 @@ Do this in order, 20 minutes before presenting. Everything needs only a phone or
 - [ ] Open `<LIVE LINK>#ground` on the laptop. Press **Restore demo data**. Reload the phone page.
 - [ ] Phone: allow the camera when asked. Try **Measure my pulse with the phone camera** once with flash/good light. If it gives no clean reading after two tries, plan to use **Simulate readings**.
 - [ ] Phone volume on (for **Read aloud**), screen timeout off, battery above 50%, power bank ready.
+- [ ] On every device you will present from: dismiss the first-visit banner (tap **No thanks**), or it shows over the demo. It is remembered per device and browser.
 - [ ] Laptop: second tab on the **Replay** tab at day 1, third tab on **Evidence**.
 - [ ] Install the app to the phone's home screen once (offline fallback), then confirm the Status page opens in airplane mode.
 - [ ] CI green on `main`, and the live link is the latest `main`: run **Actions → Deploy to Azure** (see `api/README.md`) and check that run is green.

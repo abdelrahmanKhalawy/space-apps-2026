@@ -33,7 +33,7 @@ No, and the Replay tab shows that: for sleep the fixed range changed first. It c
 ## About the product
 
 **How accurate is the camera pulse?**
-Approximate (a few bpm) and it needs good light and a still finger. It is labeled as an experiment, not a medical measurement. The app picks the cleanest color channel, rejects noisy recordings, and a simulator is the fallback.
+Approximate, and it needs good light and a still finger. The algorithm itself was checked on 53 real recorded finger signals from a public dataset (BIDMC) against the ECG heart rate: on the readings the app accepts (82% of 25-second windows) the average error was 1.1 bpm and 97% were within 5 bpm. Those are pulse-oximeter signals from patients, not phone-camera video, so we still call the camera feature an experiment and not a medical measurement. The app picks the cleanest color channel, rejects noisy recordings instead of guessing, and a simulator is the fallback.
 
 **Is this a medical device?**
 No. It is decision support and a prototype, and it says so on screen and in the README.
@@ -51,6 +51,12 @@ One link, nothing to install, works on any phone or laptop, which also made it t
 
 **How did you use AI?**
 Claude Code helped write most of the code, the research summaries and the tests. Every use is logged in `docs/ai-usage.md`. Decisions, scope and what to claim were ours, and the claims are backed by tests and sourced texts.
+
+**Can I try it on my own data?**
+Yes: the *Your data* tab reads a CSV of daily resting heart rate (and sleep) from a watch or health app, entirely in the browser, and shows your own normal next to the fixed ranges. A very fit person whose resting rate is below 60 is flagged almost every day by fixed ranges, which is the point.
+
+**What happens when something turns yellow or red?**
+The app walks the crew member through it: what to do now, a timer, measuring again (by camera or typed), and a decision: back in range, closer, or not better. If it is not better, the report to Earth says what was already tried. It is decision support in the spirit of NASA's work on autonomous crew medical support, not medical advice.
 
 **What would you do with another month?**
 Validate on analog-mission data, replace the simulated SpO₂ and temperature with a real wearable, extend the personal baseline to heart-rate variability, and run usability tests with people who are not engineers.
