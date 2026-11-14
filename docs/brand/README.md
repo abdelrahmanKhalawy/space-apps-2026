@@ -13,7 +13,9 @@ An **orbit ring** (the person's own baseline), a **heartbeat line** crossing it 
 | `app-icon.svg` | Dark app icon (rounded square). Also the favicon (`web/public/icon.svg`). |
 | `app-icon-light.svg` | Light app icon, for white backgrounds and documents. |
 | `logo-mono-white.svg` / `logo-mono-black.svg` | One-color versions (print, watermarks, stamps). |
-| `og.svg` | Social card source (1200x630): mark, wordmark, tagline. |
+| `logo-lockup.png` | The horizontal lockup (mark + wordmark + tagline) as designed: use it as is on dark backgrounds, in the README, slides and video end card. |
+| `og-card.png` | The social card (1200x630) built from the lockup; also `web/public/og.png`. |
+| `og.svg` | An alternative social card drawn from the SVG mark. |
 | `make_logo.py` | Draws all of the above from a few numbers. |
 | `export-png.mjs` | Renders the PNGs the web app needs (icons, social card). |
 
