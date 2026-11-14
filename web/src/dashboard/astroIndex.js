@@ -13,6 +13,7 @@
 
 export const BASELINE_DAYS = 7
 const COLOR_STRAIN = { green: 0, yellow: 0.2, red: 0.8 }
+const STABLE_RED_CAP = 0.45 // a red range at your own steady normal reads as Watch, not Act now
 // A silent baseline must not turn a tiny wobble into a huge z-score: the least spread we trust, per metric.
 export const STD_FLOOR = {
   heart_rate: 1.0, spo2: 0.5, temperature: 0.2, bp_systolic: 2.0, bp_diastolic: 1.5, glucose: 3.0, sleep_hours: 0.25, mood: 0.35,
@@ -66,7 +67,13 @@ export function computeIndex(readings, thresholds) {
       z = (daily[daily.length - 1] - mean(base)) / sd
       personal = Math.min(1, Math.max(0, (Math.abs(z) - 1.5) / 3))
     }
-    const colorStrain = COLOR_STRAIN[color] ?? 0
+    // If this person's baseline is learned and they are sitting right at it, a fixed RED line alone is not "act now":
+    // their normal may simply lie there (a very fit person's resting heart rate below the usual range). It still shows as
+    // a Watch, so a stable-but-unusual normal is never hidden, and a real drift still goes straight to the top.
+    const metricBaselineReady = daily.length >= BASELINE_DAYS + 2
+    const colorStrain = metricBaselineReady && personal === 0
+      ? Math.min(COLOR_STRAIN[color] ?? 0, STABLE_RED_CAP)
+      : COLOR_STRAIN[color] ?? 0
     parts.push({ metric, strain: Math.max(personal, colorStrain), personal, colorStrain, color, z })
   }
 

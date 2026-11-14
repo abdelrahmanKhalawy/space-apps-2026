@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import results from '../../../data/trial/results.json'
+import pulse from '../../../data/validation/bidmc.json'
 import thresholds from '../dashboard/thresholds.js'
 import { METRICS, METRIC_LABEL, allAlarms, makeCrew, mulberry32 } from './trial.js'
 
@@ -255,6 +256,23 @@ export default function Evidence() {
       </section>
 
       <Replay />
+
+      <section className="ev-block">
+        <h3>The pulse algorithm on real recordings</h3>
+        <p className="hint">
+          The camera feature uses one algorithm to read a heart rate from a finger signal. We ran it on {pulse.summary.recordings} real recorded finger signals
+          (the public BIDMC dataset) and compared it with the heart rate from the ECG recorded at the same time.
+        </p>
+        <div className="ev-stats">
+          <Stat big={`${pulse.summary.mean_abs_error_bpm} bpm`} label="average error on readings the app accepts" note={`Median ${pulse.summary.median_abs_error_bpm} bpm. 90% of readings within ${pulse.summary.p90_abs_error_bpm} bpm.`} />
+          <Stat big={`${pulse.summary.within_5_bpm_pct}%`} label="of accepted readings within 5 bpm" note={`${pulse.summary.within_2_bpm_pct}% within 2 bpm.`} />
+          <Stat big={`${pulse.summary.accepted_share}%`} label="of 25-second windows accepted" note={`${pulse.summary.accepted_windows} of ${pulse.summary.windows}. The rest the app rejects instead of guessing.`} />
+        </div>
+        <p className="hint">
+          Limits: these are pulse-oximeter signals from hospital patients, not phone-camera video, so this checks the signal processing on real pulses and
+          real noise, not the camera or a moving hand. Dataset: PhysioNet BIDMC (Open Data Commons Attribution License). Reproduce with the “Validate pulse algorithm” workflow.
+        </p>
+      </section>
 
       <section className="ev-block">
         <h3>What this does not show</h3>

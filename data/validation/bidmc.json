@@ -1,0 +1,21 @@
+{
+  "dataset": "BIDMC PPG and Respiration Dataset v1.0.0 (PhysioNet), Open Data Commons Attribution License v1.0",
+  "citation": "Pimentel MAF et al., Towards a robust estimation of respiratory rate from pulse oximeters, IEEE Trans Biomed Eng 64(8):1914-1923, 2017.",
+  "method": "Sliding 25-second windows every 60 seconds. The algorithm (web/src/live/ppg.js, the same one the phone-camera feature uses) estimates heart rate from the finger PPG; the reference is the mean ECG-derived heart rate over the same window. Only windows the app would accept (quality \"good\") count towards the error.",
+  "limits": "Pulse-oximeter PPG from hospital patients, not phone-camera video. It validates the signal processing on real pulse waveforms and noise, not the camera, its optics or motion on a real phone.",
+  "generated": "2026-11-14",
+  "provenance": "Numbers copied from the log of GitHub Actions run 43542695347 (workflow 'Validate pulse algorithm'), because the team network could not download the run's artifact. Re-run the workflow to reproduce.",
+  "failed_records": [],
+  "summary": {
+    "recordings": 53,
+    "windows": 424,
+    "accepted_windows": 348,
+    "accepted_share": 82.1,
+    "mean_abs_error_bpm": 1.1,
+    "median_abs_error_bpm": 0.4,
+    "p90_abs_error_bpm": 2.5,
+    "within_2_bpm_pct": 88.2,
+    "within_5_bpm_pct": 96.6,
+    "window_seconds": 25
+  }
+}
