@@ -1,7 +1,7 @@
 // Checks for the hologram camera: the maths maps points both ways, flights start and end where they should,
 // and organs are where the picture shows them.
 import assert from 'node:assert/strict'
-import { IMG, OVERVIEW, ORGAN_ORDER, ORGAN_SPOTS, ANCHORS, makeView, poseFor, startFlight, poseAt, hitOrgan } from './holo.js'
+import { IMG, OVERVIEW, ORGAN_ORDER, ORGAN_SPOTS, ORGAN_SHAPES, ANCHORS, makeView, poseFor, startFlight, poseAt, hitOrgan } from './holo.js'
 
 const test = (name, fn) => {
   fn()
@@ -72,9 +72,9 @@ test('a flight starts at the old pose, ends at the new one, and bows out sideway
   assert.ok(near(start.pose.zoom, OVERVIEW.zoom, 1e-9))
   assert.equal(end.done, true)
   assert.ok(near(end.pose.zoom, to.zoom, 1e-9) && near(end.pose.swing, 0) && near(end.pose.roll, 0))
-  assert.ok(Math.abs(mid.pose.swing) > 30, 'the shot swings out halfway')
-  assert.ok(Math.abs(mid.pose.roll) > 0.03, 'the shot tilts halfway')
-  assert.ok(mid.pose.zoom < Math.sqrt(OVERVIEW.zoom * to.zoom), 'the camera pulls back halfway')
+  assert.ok(Math.abs(mid.pose.swing) > 8 && Math.abs(mid.pose.swing) < 40, 'the shot drifts a little to the side halfway')
+  assert.ok(Math.abs(mid.pose.roll) > 0.005 && Math.abs(mid.pose.roll) < 0.03, 'the tilt is slight')
+  assert.ok(mid.pose.zoom < Math.sqrt(OVERVIEW.zoom * to.zoom), 'the camera eases back halfway')
 })
 
 test('the swing flips with the side', () => {
@@ -82,4 +82,17 @@ test('the swing flips with the side', () => {
   const a = poseAt(startFlight(OVERVIEW, to, 0, 1, 1000), 500, 400).pose
   const b = poseAt(startFlight(OVERVIEW, to, 0, -1, 1000), 500, 400).pose
   assert.ok(a.swing > 0 && b.swing < 0 && near(a.swing, -b.swing))
+})
+
+test('every organ outline is inside the picture and clicks land on the right organ', () => {
+  for (const id of ORGAN_ORDER) {
+    for (const poly of ORGAN_SHAPES[id]) {
+      assert.ok(poly.length >= 10, `${id} has enough points`)
+      assert.ok(poly.every(([x, y]) => x > 0 && x < IMG.w && y > 0 && y < IMG.h))
+    }
+  }
+  assert.equal(hitOrgan(462, 331), 'heart', 'the heart wins over the lungs behind it')
+  assert.equal(hitOrgan(410, 340), 'lungs')
+  assert.equal(hitOrgan(495, 340), 'lungs')
+  assert.equal(hitOrgan(452, 484), 'metabolism')
 })

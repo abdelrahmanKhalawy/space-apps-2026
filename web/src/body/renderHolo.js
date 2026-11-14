@@ -4,7 +4,7 @@
 // swing, a pull-back and a tilt) and keeps a slow handheld drift. No library.
 import heroUrl from './hologram.webp'
 import {
-  IMG, OVERVIEW, ORGAN_ORDER, ORGAN_SPOTS, ORGAN_LABELS, ORGAN_NUMBERS, ANCHORS,
+  IMG, OVERVIEW, ORGAN_ORDER, ORGAN_SPOTS, ORGAN_SHAPES, ORGAN_LABELS, ORGAN_NUMBERS, ANCHORS,
   makeView, poseFor, startFlight, poseAt, hitOrgan,
 } from './holo.js'
 
@@ -197,6 +197,46 @@ export function createHoloRenderer(canvas, { onSelect }) {
     }
   }
 
+  // Each organ outlined in its status color, so they read clearly apart (the heart sits over the lungs)
+  function smoothPath(poly) {
+    const n = poly.length
+    ctx.moveTo((poly[n - 1][0] + poly[0][0]) / 2, (poly[n - 1][1] + poly[0][1]) / 2)
+    for (let i = 0; i < n; i++) {
+      const p = poly[i]
+      const q = poly[(i + 1) % n]
+      ctx.quadraticCurveTo(p[0], p[1], (p[0] + q[0]) / 2, (p[1] + q[1]) / 2)
+    }
+  }
+  function drawOutlines(t) {
+    const sel = state.selected
+    ctx.globalCompositeOperation = 'source-over'
+    // the heart is drawn last so its outline stays on top of the lungs
+    for (const id of ['lungs', 'metabolism', 'brain', 'heart']) {
+      const col = COLORS[statusOf(id)]
+      const isSel = sel === id
+      const quiet = sel && !isSel ? 0.22 : 1
+      const beat = reduced ? 0 : id === 'heart' ? heartbeat(t) : 0.5 + 0.5 * Math.sin(t * 1.3 + id.length)
+      for (const poly of ORGAN_SHAPES[id]) {
+        ctx.beginPath()
+        smoothPath(poly)
+        ctx.closePath()
+        ctx.fillStyle = rgba(col, (0.1 + 0.07 * beat + (isSel ? 0.1 : 0) + (hover === id ? 0.08 : 0)) * quiet)
+        ctx.fill()
+        ctx.shadowColor = rgba(col, 0.9 * quiet)
+        ctx.shadowBlur = (isSel ? 14 : 8) * dpr
+        ctx.strokeStyle = rgba(col, (isSel ? 1 : 0.85) * quiet)
+        ctx.lineWidth = Math.max(1.4 / view.scale, (isSel ? 2.4 : 1.6) / view.scale)
+        if (isSel && !reduced) {
+          ctx.setLineDash([10, 6])
+          ctx.lineDashOffset = -t * 14
+        }
+        ctx.stroke()
+        ctx.setLineDash([])
+        ctx.shadowBlur = 0
+      }
+    }
+  }
+
   // The scan band sweeping down the body, and the dust floating up around it
   function drawScan(t) {
     if (reduced) return
@@ -318,21 +358,21 @@ export function createHoloRenderer(canvas, { onSelect }) {
     } else {
       cam = { ...goal }
       if (!reduced) {
-        cam.roll += Math.sin(t * 0.2) * 0.006
-        cam.zoom *= 1 + Math.sin(t * 0.27) * 0.012
-        cam.fx += Math.sin(t * 0.31) * (state.selected ? 4 : 9) / cam.zoom
-        cam.fy += Math.sin(t * 0.23) * (state.selected ? 3 : 6) / cam.zoom
+        cam.roll += Math.sin(t * 0.2) * 0.002
+        cam.zoom *= 1 + Math.sin(t * 0.27) * 0.006
+        cam.fx += Math.sin(t * 0.31) * (state.selected ? 2 : 5) / cam.zoom
+        cam.fy += Math.sin(t * 0.23) * (state.selected ? 2 : 3) / cam.zoom
       }
     }
     if (!reduced) {
       // a hair of handheld shake
-      cam.fx += (0.9 * Math.sin(t * 7.3) + 0.5 * Math.sin(t * 13.1)) / cam.zoom
-      cam.fy += (0.7 * Math.sin(t * 9.1)) / cam.zoom
+      cam.fx += (0.25 * Math.sin(t * 7.3) + 0.15 * Math.sin(t * 13.1)) / cam.zoom
+      cam.fy += (0.2 * Math.sin(t * 9.1)) / cam.zoom
       // hover depth: the scene leans a little towards the pointer
       hoverPos.x += (hoverPos.tx - hoverPos.x) * 0.06
       hoverPos.y += (hoverPos.ty - hoverPos.y) * 0.06
-      cam.swing += hoverPos.x * 10
-      cam.fy += hoverPos.y * 6 / cam.zoom
+      cam.swing += hoverPos.x * 5
+      cam.fy += hoverPos.y * 3 / cam.zoom
     }
     if (!drag.down && drag.releasedAt && nowMs - drag.releasedAt > 600) {
       drag.x *= 0.93
@@ -347,6 +387,7 @@ export function createHoloRenderer(canvas, { onSelect }) {
     ctx.clearRect(0, 0, W, H)
     drawPicture(t)
     drawStatusGlows(t)
+    drawOutlines(t)
     drawScan(t)
     setScreenTransform()
     ctx.globalCompositeOperation = 'source-over'
