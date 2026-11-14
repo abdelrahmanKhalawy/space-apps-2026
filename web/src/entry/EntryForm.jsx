@@ -77,7 +77,7 @@ export default function EntryForm() {
 
   return (
     <form className="entry" onSubmit={onSubmit} noValidate>
-      <h2>Log a check</h2>
+      <h2>Log vitals</h2>
       <p className="hint">Fill in what you measured. Skip what you did not. It takes under a minute.</p>
 
       {status === 'saved' && (

@@ -48,13 +48,21 @@ Underneath, a model learns each astronaut's own baseline from their first week o
 - **"How sure are we?" badges** — every indicator says whether its ranges and its space-hazard link are strong, approximate, disputed, or our own inference.
 - **Works when the link drops** — installable, offline outbox for readings, read-aloud advice, privacy choices (a red alert is always sent), and a printable summary for the doctor.
 
+## For judges: two minutes
+
+1. Open the live link on a phone. Press **Take the 60-second tour** (seven short steps), or just read on.
+2. **Status**: sleep is red. Press **Guide me through it**, then **Report to Earth**. Open **Ground control view** (bottom of the page) in a second tab, press **Skip to next arrival**, answer as the doctor, and watch the reply cross the delay back.
+3. **Replay**: press play. Heart rate never leaves green, yet the flag on day 11 shows the personal baseline noticed the drift.
+4. **Evidence**: 2,000 simulated crews (97% of drifts caught at 4.7% false alarms; our first model false-alarmed on 94%, so we recalibrated it) and 53 real pulse recordings (1.1 bpm mean error). One pre-registered hypothesis failed and is listed.
+5. Phone only: **Measure my pulse with the phone camera** reads your real pulse through your fingertip. Everything else on screen is labeled sample data.
+
 ## Try it
 
 Open the live link above — no install needed, works on a phone or laptop:
 
 1. On a phone, press **Measure my pulse with the phone camera** (top of the page): cover the camera lens and flash with a fingertip for 25 seconds and the browser reads your real heart rate (and a rough HRV) from the light through your skin, then press **Send as my heart rate**. It is an experiment with approximate accuracy, not a medical measurement, and it needs camera permission on https or localhost. On a laptop or without a camera, press **Simulate readings** to start live sample readings.
 2. Open **Body** to see the interactive body update live, by color.
-3. Open the **Log a check** tab to enter blood pressure, blood sugar, sleep, or mood.
+3. Open the **Log vitals** tab to enter blood pressure, blood sugar, sleep, or mood. **Quick tests** has a reaction test and a near-vision check.
 4. Click any metric card on the Status tab to expand its chart; when the model has flagged that metric, you'll also see why, what to do, and a forecast.
 5. Open `#ground` (linked in the footer) in a second tab for the ground-control (flight surgeon) view.
 
