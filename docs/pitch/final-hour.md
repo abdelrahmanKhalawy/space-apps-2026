@@ -47,6 +47,8 @@
 node scripts/preflight.mjs https://space-monkeys-2026.azurewebsites.net
 ```
 
+**أو من GitHub (لو شبكتك بتقفل Azure):** Actions ← **Check the live site** ← Run workflow. بيصحّي التطبيق، وبيرجّع الديمو لحالته الأولى (لو سيبت خانة restore معلّمة)، وبيشغّل نفس الفحص، والنتيجة في صفحة الـrun.
+
 - كل السطور `ok` والنتيجة `PASSED` = تمام.
 - `WARN demo state is not clean` = اعمل الخطوة 5.
 - `WARN space weather ... not live` = السيرفر مش بيوصل NOAA (بيعرض قراءة مسجّلة، مش مشكلة للعرض).
