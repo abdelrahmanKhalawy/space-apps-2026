@@ -14,7 +14,7 @@
 export const BASELINE_DAYS = 7
 const COLOR_STRAIN = { green: 0, yellow: 0.2, red: 0.8 }
 // A silent baseline must not turn a tiny wobble into a huge z-score: the least spread we trust, per metric.
-const STD_FLOOR = {
+export const STD_FLOOR = {
   heart_rate: 1.0, spo2: 0.5, temperature: 0.2, bp_systolic: 2.0, bp_diastolic: 1.5, glucose: 3.0, sleep_hours: 0.25, mood: 0.35,
 }
 
