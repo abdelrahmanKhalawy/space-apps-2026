@@ -107,7 +107,10 @@ export function analyze(samples, fs = FS) {
 
   const share = keep.length / ibis.length
   const quality = keep.length >= 12 && share >= 0.7 ? 'good' : 'low'
-  return { bpm: Math.round(60 / mean(keep)), rmssd: rmssd == null ? null : Math.round(rmssd), beats: keep.length, quality }
+  // regularity: how steady the beat spacing is (0 = perfectly even). Double-counted beats (a pulse's second bump read as
+  // its own beat) make the spacing uneven, so this is what tells a clean reading from a doubled one.
+  const spread = std(keep) / mean(keep)
+  return { bpm: Math.round(60 / mean(keep)), rmssd: rmssd == null ? null : Math.round(rmssd), beats: keep.length, quality, spread: Math.round(spread * 1000) / 1000 }
 }
 
 const SATURATED = 250 // a channel pinned near 255 carries no pulse: the sensor is clipping
@@ -116,18 +119,25 @@ const SATURATED = 250 // a channel pinned near 255 carries no pulse: the sensor 
  * Real phones differ: with the torch on, the RED channel often clips at 255 and the pulse then hides in the green
  * channel; on other phones red is the clean one. So each channel (red, green) is analyzed on its own and the best
  * trustworthy result wins: a 'good' grade first, then the most clean beats. Channels that are clipped or flat are skipped.
- * samples: [{t, r, g, b}]. Returns the same shape as analyze() plus `channel` ('r' | 'g' | null).
+ * samples: [{t, r, g, b}]. Returns the same shape as analyze() plus `channel` ('r' | 'g' | null) and `polarity` (1 or -1).
  */
 export function analyzeBest(samples, fs = FS) {
-  let best = { bpm: null, rmssd: null, beats: 0, quality: 'none', channel: null }
+  let best = { bpm: null, rmssd: null, beats: 0, quality: 'none', channel: null, polarity: 1, spread: null }
+  const rank = r => (r.quality === 'good' ? 2 : r.quality === 'low' ? 1 : 0)
   for (const ch of ['r', 'g']) {
     const vals = samples.map(s => s[ch])
     if (vals.length === 0) continue
     const avg = mean(vals)
     if (avg >= SATURATED || std(vals) < 0.15) continue // clipped or dead channel
-    const res = analyze(samples.map(s => ({ t: s.t, v: s[ch] })), fs)
-    const rank = r => (r.quality === 'good' ? 2 : r.quality === 'low' ? 1 : 0)
-    if (rank(res) > rank(best) || (rank(res) === rank(best) && res.beats > best.beats)) best = { ...res, channel: ch }
+    // Polarity: more blood means LESS light in a camera image (the red channel dips on each beat), while a pulse
+    // oximeter plots it the other way up. Beat timing is the same either way, but the peak finder prefers sharp
+    // systolic peaks, so both orientations are tried and the cleaner result wins.
+    for (const polarity of [1, -1]) {
+      const res = analyze(samples.map(s => ({ t: s.t, v: polarity * s[ch] })), fs)
+      // Better = higher grade, then STEADIER beat spacing. (Never "more beats": a doubled count has more beats and is wrong.)
+      const better = rank(res) > rank(best) || (rank(res) === rank(best) && res.spread != null && (best.spread == null || res.spread < best.spread))
+      if (better) best = { ...res, channel: ch, polarity }
+    }
   }
   return best
 }
