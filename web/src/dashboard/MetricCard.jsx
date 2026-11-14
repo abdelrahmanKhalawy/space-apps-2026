@@ -4,6 +4,7 @@ import { formatTime, formatValue } from './status.js'
 import WhyThisMatters, { ForecastLine } from './WhyThisMatters.jsx'
 import EvidenceBadges from './EvidenceBadges.jsx'
 import SpeakButton from '../voice/SpeakButton.jsx'
+import ProtocolRunner from '../protocol/ProtocolRunner.jsx'
 
 // The chart is loaded the first time someone opens a card, so the cards appear fast.
 const MetricChart = lazy(() => import('./MetricChart.jsx'))
@@ -49,6 +50,7 @@ export default function MetricCard({ item, unit, readings, threshold, explain, f
             <MetricChart metric={item.metric} readings={readings} threshold={threshold} />
           </Suspense>
           <WhyThisMatters explain={explain} color={color} />
+          {item.color === 'yellow' && item.advice && <ProtocolRunner item={item} unit={unit} />}
           <EvidenceBadges metric={item.metric} />
         </div>
       )}

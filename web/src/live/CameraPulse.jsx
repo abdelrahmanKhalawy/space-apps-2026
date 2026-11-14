@@ -31,7 +31,7 @@ function Wave({ points }) {
 
 /** Put a fingertip on the phone's camera: heart rate (and a rough HRV) from the light passing through the skin.
  * An experiment, not a medical device. The simulator button stays as the fallback. */
-export default function CameraPulse() {
+export default function CameraPulse({ onUse = null, buttonLabel = 'Measure my pulse with the phone camera' }) {
   const [phase, setPhase] = useState('idle') // idle | starting | measuring | done | error
   const [msg, setMsg] = useState('')
   const [progress, setProgress] = useState(0)
@@ -145,7 +145,7 @@ export default function CameraPulse() {
   return (
     <div className="cam">
       {phase === 'idle' && (
-        <button type="button" className="cam-btn" onClick={start}>Measure my pulse with the phone camera</button>
+        <button type="button" className="cam-btn" onClick={start}>{buttonLabel}</button>
       )}
       {phase !== 'idle' && (
         <div className="cam-panel" role="region" aria-label="Camera pulse measurement">
@@ -174,7 +174,9 @@ export default function CameraPulse() {
                 <>
                   <p className="cam-result"><strong>{result.bpm}</strong> bpm{result.rmssd != null && <span> · HRV {result.rmssd} ms (rough)</span>}</p>
                   <p className="hint">Measured from {result.beats} heartbeats through your fingertip. Experimental, ±a few bpm. Not a medical measurement.</p>
-                  {sent === 'ok' ? <p className="cam-ok">Sent. It now shows on the dashboard and the body.</p> : (
+                  {onUse ? (
+                    <button type="button" className="ev-btn" onClick={() => { onUse(result.bpm); cancel() }}>Use this value</button>
+                  ) : sent === 'ok' ? <p className="cam-ok">Sent. It now shows on the dashboard and the body.</p> : (
                     <button type="button" className="ev-btn" onClick={send}>Send as my heart rate</button>
                   )}
                   {sent === 'fail' && <p className="cam-error">Could not reach the server.</p>}
