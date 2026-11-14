@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { analyze, fingerOnLens } from './ppg.js'
+import { analyzeBest, fingerOnLens } from './ppg.js'
 
 const CREW_ID = 'crew-1'
 const SETTLE_MS = 3000 // auto-exposure needs a moment, so the first seconds are thrown away
@@ -102,12 +102,13 @@ export default function CameraPulse() {
       if (elapsed < SETTLE_MS) { setProgress(0); return }
       frames++
       if (on) fingerFrames++
-      samples.push({ t: now, v: c.r })
+      samples.push({ t: now, r: c.r, g: c.g, b: c.b })
       setProgress(Math.min(1, (elapsed - SETTLE_MS) / MEASURE_MS))
-      if (samples.length % 3 === 0) setWave(samples.slice(-150).map(s => s.v))
+      // live waveform: red, unless red is clipped (then green carries the pulse)
+      if (samples.length % 3 === 0) setWave(samples.slice(-150).map(s => (c.r >= 250 ? s.g : s.r)))
       if (elapsed >= SETTLE_MS + MEASURE_MS) {
         stop()
-        const res = analyze(samples)
+        const res = analyzeBest(samples)
         const covered = frames ? fingerFrames / frames : 0
         setResult({ ...res, covered })
         setPhase('done')
