@@ -1,8 +1,8 @@
-// The body map: a 3D hologram of a person on a canvas (model.js builds it, camera3d.js is the camera,
-// render3d.js draws it). Pick a part and the camera flies to it. Drag to turn the body around.
-// The buttons under the figure (BodyView) do the same picking for keyboards and screen readers.
+// The body map: the Stitch hologram picture on a canvas (holo.js is the camera, renderHolo.js draws it and adds the
+// live layer on top). Pick a part and the camera flies to it. The buttons under the figure (BodyView) do the same
+// picking for keyboards and screen readers.
 import { useEffect, useRef } from 'react'
-import { createBodyRenderer } from './render3d.js'
+import { createHoloRenderer } from './renderHolo.js'
 
 export default function BodyFigure({ organs, selected, pulsing, onSelect }) {
   const canvasRef = useRef(null)
@@ -11,7 +11,7 @@ export default function BodyFigure({ organs, selected, pulsing, onSelect }) {
   onSelectRef.current = onSelect
 
   useEffect(() => {
-    const renderer = createBodyRenderer(canvasRef.current, { onSelect: id => onSelectRef.current(id) })
+    const renderer = createHoloRenderer(canvasRef.current, { onSelect: id => onSelectRef.current(id) })
     rendererRef.current = renderer
     return () => renderer.destroy()
   }, [])
@@ -28,7 +28,7 @@ export default function BodyFigure({ organs, selected, pulsing, onSelect }) {
         ref={canvasRef}
         className="body-canvas"
         role="img"
-        aria-label={`3D body model. ${summary}. Use the buttons below to pick a part.`}
+        aria-label={`Body hologram. ${summary}. Use the buttons below to pick a part.`}
         data-testid="body-canvas"
       />
     </div>
