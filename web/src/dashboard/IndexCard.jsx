@@ -7,7 +7,8 @@ const TONE_COLOR = { green: '#3ddc84', yellow: '#ffcc4d', orange: '#ff9f43', red
 function why(p) {
   if (p.z != null && p.personal > 0) {
     const dir = p.z > 0 ? 'above' : 'below'
-    return Math.abs(p.z) > 6 ? `far ${dir} your own normal` : `${Math.abs(p.z).toFixed(1)}σ ${dir} your own normal`
+    const size = Math.abs(p.z)
+    return `${size > 6 ? 'far' : size > 3.5 ? 'well' : 'a bit'} ${dir} your own normal`
   }
   return p.color === 'red' ? 'in the red zone' : 'outside the usual range'
 }
@@ -39,6 +40,7 @@ export default function IndexCard({ readings, thresholds }) {
           <p className="idx-note">Everything is close to your own normal.</p>
         )}
         {!idx.baselineReady && <p className="idx-note">Still learning your normal. It needs about 9 days of readings.</p>}
+        <p className="idx-note">0 means exactly your normal. 100 means far from it.</p>
         <p className="idx-fine">Our own composite score, a prototype. Not a validated clinical score.</p>
       </div>
     </section>

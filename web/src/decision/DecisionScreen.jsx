@@ -106,6 +106,7 @@ export default function DecisionScreen({ status, units }) {
             <strong className="delay-time">{formatDuration(roundTrip)}</strong>
             <span className="delay-label">round trip from {MISSIONS[mission].label}</span>
           </div>
+          <p className="delay-where">Where is the crew? This sets the delay.</p>
           <div className="missions" role="radiogroup" aria-label="Mission location">
             {Object.entries(MISSIONS).map(([id, m]) => (
               <button

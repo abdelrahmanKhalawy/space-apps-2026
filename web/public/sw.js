@@ -7,7 +7,7 @@ const DATA = 'astropulse-data-v1'
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(SHELL).then(c => c.addAll(['/', '/manifest.webmanifest', '/icon.svg'])).then(() => self.skipWaiting()),
+    caches.open(SHELL).then(c => c.addAll(['/', '/manifest.webmanifest', '/icon.svg', '/icon-192.png'])).then(() => self.skipWaiting()),
   )
 })
 

@@ -1,13 +1,16 @@
 {
   "name": "AstroPulse",
   "short_name": "AstroPulse",
-  "description": "Health monitoring for astronauts on long missions, built for NASA Space Apps Cairo 2026.",
+  "description": "Normal, for you. Health monitoring for astronauts, learned from each person's own baseline. Built for NASA Space Apps Cairo 2026.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
   "background_color": "#0b1020",
   "theme_color": "#0b1020",
   "icons": [
-    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }

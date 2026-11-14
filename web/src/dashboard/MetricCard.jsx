@@ -36,7 +36,7 @@ export default function MetricCard({ item, unit, readings, threshold, explain, f
         </>
       )}
       <p className="card-meta">
-        {item.hazard && <span className="tag">{HAZARD_NAMES[item.hazard] ?? item.hazard}</span>}
+        {item.hazard && <span className="tag" title="The NASA spaceflight hazard this indicator is linked to">{HAZARD_NAMES[item.hazard] ?? item.hazard}</span>}
         <span>{formatTime(item.takenAt)}</span>
       </p>
       <p className="card-foot">

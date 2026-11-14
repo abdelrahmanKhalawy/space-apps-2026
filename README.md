@@ -1,6 +1,10 @@
 <!-- TODO before submitting: add the demo video link under "Live app" (f3). -->
 
+<p align="center"><img src="docs/brand/app-icon.svg" width="112" alt="AstroPulse logo"></p>
+
 # AstroPulse
+
+*Normal, for you.* Brand files and rules: [`docs/brand/`](docs/brand/).
 
 **NASA Space Apps Challenge 2026, Cairo — Team Space Monkeys 🚀**
 
