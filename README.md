@@ -1,6 +1,6 @@
 <!-- TODO before submitting: add the demo video link under "Live app" (f3). -->
 
-<p align="center"><img src="docs/brand/app-icon.svg" width="112" alt="AstroPulse logo"></p>
+<p align="center"><img src="docs/brand/logo-lockup.png" width="640" alt="AstroPulse: Normal, for you."></p>
 
 # AstroPulse
 

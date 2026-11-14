@@ -134,6 +134,7 @@ export default function GroundScreen() {
         <div>
           <p className="gr-brand">AstroPulse · Ground Control</p>
           <h1>Flight surgeon console</h1>
+          <p className="gr-who">You are the doctor on Earth. When the astronaut sends a report it arrives after the signal delay. Write a reply and it takes the same time to get back.</p>
         </div>
         <a className="gr-link" href="#status">
           Open crew screen

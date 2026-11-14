@@ -6,6 +6,7 @@ import CameraPulse from './live/CameraPulse.jsx'
 import useLive from './live/useLive.js'
 import useOutbox from './offline/useOutbox.js'
 import Tour from './tour/Tour.jsx'
+import PageHelp from './help/PageHelp.jsx'
 import BrandMark from './brand/BrandMark.jsx'
 import { getLang, setLang, useLang } from './i18n/lang.js'
 import EntryForm from './entry/EntryForm.jsx'
@@ -143,7 +144,10 @@ function CrewApp() {
             {pending} reading{pending === 1 ? '' : 's'} saved on this device, waiting for a connection.
           </p>
         )}
-        <main id="main" tabIndex="-1">{SCREENS[tab]}</main>
+        <main id="main" tabIndex="-1">
+          <PageHelp tab={tab} key={tab} />
+          {SCREENS[tab]}
+        </main>
         <footer>
           <p className="disclaimer">Decision support, not a diagnosis.</p>
           <small>

@@ -5,11 +5,13 @@ import { useEffect, useState } from 'react'
 const KEY = 'astropulse.tour'
 
 const STEPS = [
-  { tab: 'status', title: '1 · The crew member\'s screen', text: 'Day 14 of a simulated trip to Mars. Sleep is red, so the app says what to do now and how long Earth needs to answer. Try "Report to Earth".' },
-  { tab: 'replay', title: '2 · Normal for YOU', text: 'Press play. Heart rate never leaves green, yet the flag on day 11 shows AstroPulse noticed it was drifting from this person\'s own normal.' },
-  { tab: 'evidence', title: '3 · We tested it, and show the misses', text: 'Two thousand simulated crews, and 53 real pulse recordings for the camera feature. One hypothesis failed and it is listed.' },
-  { tab: 'yourdata', title: '4 · Try it on your own data', text: 'Have a smartwatch? Drop a CSV of daily resting heart rate. It stays in your browser. Or try the sample file.' },
-  { tab: 'status', title: '5 · Your turn', text: 'Tap "Measure my pulse" on a phone, or "Simulate readings". Open the Ground control link at the bottom to play the flight surgeon.' },
+  { tab: 'status', title: '1 · The astronaut\'s screen', text: 'This is a simulated astronaut, day 14 of a trip to Mars. Sleep is red, so the app says what to do right now and how long Earth needs to answer (40 minutes there and back).' },
+  { tab: 'status', title: '2 · Make a number change', text: 'On a phone press "Measure my pulse": it reads your real pulse through your fingertip, using only the camera. On a laptop press "Simulate readings". Then tap any card to see why.' },
+  { tab: 'replay', title: '3 · Normal for YOU', text: 'Press play. Ordinary apps use one fixed range for everybody. AstroPulse learns your own normal. Heart rate never leaves green here, yet the flag on day 11 shows it noticed a drift.' },
+  { tab: 'crew', title: '4 · One person, or the whole place?', text: 'If one person drifts it is probably personal. If the whole crew drifts together, it is probably the environment (like the air). Try the three scenarios.' },
+  { tab: 'evidence', title: '5 · Does it really work?', text: 'We tested it on 2,000 simulated crews and checked the camera pulse on 53 real recordings. One idea of ours failed, and it is listed too.' },
+  { tab: 'yourdata', title: '6 · Try it on your own data', text: 'Have a smartwatch? Drop a CSV of your daily resting heart rate. It stays in your browser. No file? Press "Try a sample file".' },
+  { tab: 'status', title: '7 · Be the doctor on Earth', text: 'At the very bottom of the page, open "Ground control view". Send a report from the astronaut, then answer it as the flight surgeon and watch the delay both ways.' },
 ]
 
 const get = () => { try { return localStorage.getItem(KEY) } catch { return null } }
