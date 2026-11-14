@@ -17,7 +17,8 @@ const iso = ms => new Date(ms).toISOString().replace(/\.\d{3}Z$/, 'Z')
  */
 export default function ProtocolRunner({ item, mission = 'mars', unit }) {
   const rules = thresholds[item.metric]
-  const protocol = useMemo(() => buildProtocol({ metric: item.metric, color: item.color, advice: item.advice }), [item])
+  // The step logic reads English advice, even when the Arabic advice is shown elsewhere.
+  const protocol = useMemo(() => buildProtocol({ metric: item.metric, color: item.color, advice: rules?.advice_en?.[item.color] ?? item.advice }), [item])
   const name = METRIC_NAMES[item.metric] ?? item.metric
   const u = unitLabel(unit ?? rules?.unit ?? '')
 

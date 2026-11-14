@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { GROUPS, loadConsent, saveConsent } from './consent.js'
+import { isHighContrast, setHighContrast } from '../a11y.js'
 
 /** What Earth may see in reports. Defaults to everything. A red alert is always sent. */
 export default function PrivacyPanel() {
   const [consent, setConsent] = useState(loadConsent)
+  const [contrast, setContrast] = useState(isHighContrast)
   const toggle = g => {
     const next = { ...consent, [g]: !consent[g] }
     setConsent(next)
@@ -19,6 +21,10 @@ export default function PrivacyPanel() {
           <span>Share {info.label.toLowerCase()}</span>
         </label>
       ))}
+      <label className="priv-row">
+        <input type="checkbox" checked={contrast} onChange={e => { setContrast(e.target.checked); setHighContrast(e.target.checked) }} />
+        <span>High-contrast display</span>
+      </label>
       <p className="hint">
         Your data is yours: <a href="/api/export?crewId=crew-1" download>download your readings (CSV)</a> ·{' '}
         <a href="/api/export?crewId=crew-1&format=json" download>JSON</a> ·{' '}

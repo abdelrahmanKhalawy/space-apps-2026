@@ -1,3 +1,4 @@
+import { getLang } from '../i18n/lang.js'
 import { METRIC_ORDER, METRIC_NAMES } from './metricInfo.js'
 
 // Pure helpers for the dashboard. No React and no fetch, so they are easy to test.
@@ -48,7 +49,7 @@ export function localStatus(readings, thresholds, crewId = 'crew-1') {
       color,
       takenAt: latest.takenAt,
       // English by default, like GET /api/status; the Arabic original is in `advice` (?lang=ar on the server).
-      advice: color && t ? t.advice_en?.[color] ?? t.advice?.[color] ?? null : null,
+      advice: color && t ? (getLang() === 'ar' ? t.advice?.[color] ?? t.advice_en?.[color] : t.advice_en?.[color] ?? t.advice?.[color]) ?? null : null,
       hazard: t?.hazard ?? null,
     })
   }

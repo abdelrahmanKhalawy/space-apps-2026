@@ -1,5 +1,6 @@
 import thresholds from './thresholds.js'
 import { localStatus } from './status.js'
+import { langQuery } from '../i18n/lang.js'
 
 const CREW_ID = 'crew-1'
 
@@ -12,7 +13,7 @@ async function getJson(url) {
 /** Just the current status (what the live body polls). Returns null if the server cannot be reached. */
 export async function fetchStatus() {
   try {
-    return await getJson(`/api/status?crewId=${CREW_ID}`)
+    return await getJson(`/api/status?crewId=${CREW_ID}${langQuery()}`)
   } catch {
     return null
   }
@@ -50,7 +51,7 @@ const fetchForecast = () => fetchByMetric('/api/forecast', () => import('../../.
 export async function loadDashboard() {
   try {
     const [status, readings, explain, forecast] = await Promise.all([
-      getJson(`/api/status?crewId=${CREW_ID}`),
+      getJson(`/api/status?crewId=${CREW_ID}${langQuery()}`),
       getJson(`/api/readings?crewId=${CREW_ID}`),
       fetchExplain(),
       fetchForecast(),
