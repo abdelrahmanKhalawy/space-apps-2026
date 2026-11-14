@@ -10,10 +10,10 @@ export const easeInOut = t => -(Math.cos(Math.PI * t) - 1) / 2 // smooth start a
 // Where each organ sits in the picture: center c, radii r (px) and how far the camera zooms to look at it.
 export const ORGAN_ORDER = ['brain', 'lungs', 'heart', 'metabolism']
 export const ORGAN_SPOTS = {
-  brain: { c: [451, 120], r: [32, 30], zoom: 2.8 },
-  lungs: { c: [450, 316], r: [70, 88], zoom: 2.2 },
-  heart: { c: [462, 331], r: [28, 38], zoom: 2.7 },
-  metabolism: { c: [450, 484], r: [54, 40], zoom: 2.3 },
+  brain: { c: [451, 120], r: [32, 30], zoom: 2.3 },
+  lungs: { c: [450, 316], r: [70, 88], zoom: 1.9 },
+  heart: { c: [462, 331], r: [28, 38], zoom: 2.2 },
+  metabolism: { c: [450, 484], r: [54, 40], zoom: 2.0 },
 }
 // The outline of each organ in the picture (traced from its colors): the lungs have two lobes. Used to draw the
 // organs clearly apart from each other and to know which one a click lands on.
@@ -90,26 +90,23 @@ export function hitOrgan(x, y, pad = 1.1) {
 }
 
 /**
- * A flight from one pose to another, a gentle camera move: the shot drifts a little to one side, eases back
- * slightly halfway, tilts a hair, and settles on the target. side flips the swing direction.
+ * A flight from one pose to another: a plain, smooth glide (the zoom and the look-at point ease together, with no
+ * swing, tilt or pull-back).
  */
-export function startFlight(from, to, now, side, duration = 1800) {
-  return { from, to, t0: now, duration, side }
+export function startFlight(from, to, now, duration = 1400) {
+  return { from, to, t0: now, duration }
 }
 
-export function poseAt(f, now, width = 400) {
+export function poseAt(f, now) {
   const p = clamp((now - f.t0) / f.duration, 0, 1)
   const e = easeInOut(p)
-  const w = Math.sin(Math.PI * p)
-  const lag = easeInOut(clamp(p * 1.15 - 0.08, 0, 1)) // the look-at point trails the move a little
-  const zoom = Math.exp(lerp(Math.log(f.from.zoom), Math.log(f.to.zoom), e)) * (1 - 0.05 * w)
   return {
     pose: {
-      fx: lerp(f.from.fx, f.to.fx, lag),
-      fy: lerp(f.from.fy, f.to.fy, lag),
-      zoom,
-      roll: f.side * 0.015 * w,
-      swing: f.side * 0.035 * width * w,
+      fx: lerp(f.from.fx, f.to.fx, e),
+      fy: lerp(f.from.fy, f.to.fy, e),
+      zoom: Math.exp(lerp(Math.log(f.from.zoom), Math.log(f.to.zoom), e)),
+      roll: 0,
+      swing: 0,
     },
     done: p >= 1,
   }

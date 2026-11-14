@@ -58,30 +58,36 @@ test('every callout anchor is on the picture', () => {
 test('looking at a part zooms in on it', () => {
   for (const id of ORGAN_ORDER) {
     const p = poseFor(id)
-    assert.ok(p.zoom > 1.8 * OVERVIEW.zoom)
+    assert.ok(p.zoom > 1.4 * OVERVIEW.zoom && p.zoom < 3)
     assert.ok(near(p.fx, ORGAN_SPOTS[id].c[0]) && near(p.fy, ORGAN_SPOTS[id].c[1]))
   }
 })
 
-test('a flight starts at the old pose, ends at the new one, and bows out sideways in between', () => {
+test('a flight is a plain glide: it starts and ends where it should and never swings or tilts', () => {
   const to = poseFor('heart')
-  const f = startFlight(OVERVIEW, to, 1000, 1, 2000)
-  const start = poseAt(f, 1000, 400)
-  const mid = poseAt(f, 2000, 400)
-  const end = poseAt(f, 3000, 400)
-  assert.ok(near(start.pose.zoom, OVERVIEW.zoom, 1e-9))
+  const f = startFlight(OVERVIEW, to, 1000, 1000)
+  const start = poseAt(f, 1000)
+  const end = poseAt(f, 2000)
+  assert.ok(near(start.pose.zoom, OVERVIEW.zoom, 1e-9) && near(start.pose.fx, OVERVIEW.fx, 1e-9))
   assert.equal(end.done, true)
-  assert.ok(near(end.pose.zoom, to.zoom, 1e-9) && near(end.pose.swing, 0) && near(end.pose.roll, 0))
-  assert.ok(Math.abs(mid.pose.swing) > 8 && Math.abs(mid.pose.swing) < 40, 'the shot drifts a little to the side halfway')
-  assert.ok(Math.abs(mid.pose.roll) > 0.005 && Math.abs(mid.pose.roll) < 0.03, 'the tilt is slight')
-  assert.ok(mid.pose.zoom < Math.sqrt(OVERVIEW.zoom * to.zoom), 'the camera eases back halfway')
+  assert.ok(near(end.pose.zoom, to.zoom, 1e-9) && near(end.pose.fx, to.fx, 1e-9) && near(end.pose.fy, to.fy, 1e-9))
+  let last = 0
+  for (let ms = 1000; ms <= 2000; ms += 50) {
+    const p = poseAt(f, ms).pose
+    assert.equal(p.swing, 0)
+    assert.equal(p.roll, 0)
+    assert.ok(p.zoom >= last - 1e-9, 'the zoom only grows on the way in')
+    last = p.zoom
+  }
 })
 
-test('the swing flips with the side', () => {
-  const to = poseFor('brain')
-  const a = poseAt(startFlight(OVERVIEW, to, 0, 1, 1000), 500, 400).pose
-  const b = poseAt(startFlight(OVERVIEW, to, 0, -1, 1000), 500, 400).pose
-  assert.ok(a.swing > 0 && b.swing < 0 && near(a.swing, -b.swing))
+test('the glide eases in and out: slow at both ends, quicker in the middle', () => {
+  const f = startFlight(OVERVIEW, poseFor('brain'), 0, 1000)
+  const z = ms => poseAt(f, ms).pose.zoom
+  const early = z(100) - z(0)
+  const middle = z(550) - z(450)
+  const late = z(1000) - z(900)
+  assert.ok(middle > early * 3 && middle > late * 3)
 })
 
 test('every organ outline is inside the picture and clicks land on the right organ', () => {

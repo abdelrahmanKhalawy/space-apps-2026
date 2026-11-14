@@ -1,7 +1,6 @@
 // Draws the hologram picture on a canvas and runs the camera: the Stitch figure (a glowing see-through body with a
 // skeleton and organs) as the hero, with our own live layer on top: organ glows in the status colors, a heartbeat,
-// a scan band, floating dust, numbered callouts, and a camera that flies to the part you pick (an arc with a sideways
-// swing, a pull-back and a tilt) and keeps a slow handheld drift. No library.
+// a scan ring, floating dust, numbered callouts, and a camera that glides to the part you pick. No library.
 import heroUrl from './hologram.webp'
 import {
   IMG, OVERVIEW, ORGAN_ORDER, ORGAN_SPOTS, ORGAN_SHAPES, ORGAN_LABELS, ORGAN_NUMBERS, ANCHORS,
@@ -51,13 +50,11 @@ export function createHoloRenderer(canvas, { onSelect }) {
   let pose = { ...OVERVIEW }
   let goal = { ...OVERVIEW }
   let flight = null
-  let side = 1
   let lastSelected = null
   const startedAt = performance.now()
 
   // pointer: hover nudges the scene a little (depth), dragging pans it and it eases back
   const drag = { x: 0, y: 0, down: false, moved: false, px: 0, py: 0, releasedAt: 0 }
-  const hoverPos = { x: 0, y: 0, tx: 0, ty: 0 }
   let hover = null
   let view = makeView(pose, 1, 1)
 
@@ -88,13 +85,12 @@ export function createHoloRenderer(canvas, { onSelect }) {
     if (next.selected !== lastSelected) {
       lastSelected = next.selected
       state.selected = next.selected
-      side = -side
       goal = next.selected && ORGAN_SPOTS[next.selected] ? poseFor(next.selected) : { ...OVERVIEW }
       if (reduced) {
         pose = { ...goal }
         flight = null
       } else {
-        flight = startFlight({ ...pose, roll: 0, swing: 0 }, goal, performance.now(), side)
+        flight = startFlight({ ...pose, roll: 0, swing: 0 }, goal, performance.now())
       }
     }
   }
@@ -164,6 +160,17 @@ export function createHoloRenderer(canvas, { onSelect }) {
     }
   }
 
+  // Runs fn with everything except the heart as the drawing area, so the lungs never glow or fill under the heart
+  function withoutHeart(fn) {
+    ctx.save()
+    ctx.beginPath()
+    ctx.rect(0, 0, IMG.w, IMG.h)
+    smoothPath(ORGAN_SHAPES.heart[0])
+    ctx.clip('evenodd')
+    fn()
+    ctx.restore()
+  }
+
   // Each organ glows in its live status color, on top of the picture
   function drawStatusGlows(t) {
     const sel = state.selected
@@ -182,8 +189,12 @@ export function createHoloRenderer(canvas, { onSelect }) {
       }
       const quiet = sel && !isSel ? 0.25 : 1
       const a = (0.13 + 0.16 * beat + 0.3 * flash + (isSel ? 0.12 : 0)) * quiet
-      glow(col, o.c[0], o.c[1], Math.max(...o.r) * (isSel ? 1.9 : 1.6), a)
-      if (hover === id) glow(col, o.c[0], o.c[1], Math.max(...o.r) * 1.7, 0.2)
+      const paint = () => {
+        glow(col, o.c[0], o.c[1], Math.max(...o.r) * (isSel ? 1.9 : 1.6), a)
+        if (hover === id) glow(col, o.c[0], o.c[1], Math.max(...o.r) * 1.7, 0.2)
+      }
+      if (id === 'lungs') withoutHeart(paint)
+      else paint()
     }
     // the heart sends out a ripple on every beat
     if (!reduced && !(sel && sel !== 'heart')) {
@@ -217,21 +228,33 @@ export function createHoloRenderer(canvas, { onSelect }) {
       const quiet = sel && !isSel ? 0.22 : 1
       const beat = reduced ? 0 : id === 'heart' ? heartbeat(t) : 0.5 + 0.5 * Math.sin(t * 1.3 + id.length)
       for (const poly of ORGAN_SHAPES[id]) {
+        const fill = rgba(col, (id === 'lungs' ? 0.06 : 0.1 + (id === 'heart' ? 0.04 : 0)) * quiet + (0.05 * beat + (isSel ? 0.08 : 0) + (hover === id ? 0.06 : 0)) * quiet)
+        const outline = () => {
+          ctx.beginPath()
+          smoothPath(poly)
+          ctx.closePath()
+          ctx.fillStyle = fill
+          ctx.fill()
+        }
+        if (id === 'lungs') withoutHeart(outline)
+        else outline()
+        // a thin dark edge under the colored line keeps neighbours apart, a soft one around the heart most of all
         ctx.beginPath()
         smoothPath(poly)
         ctx.closePath()
-        ctx.fillStyle = rgba(col, (0.1 + 0.07 * beat + (isSel ? 0.1 : 0) + (hover === id ? 0.08 : 0)) * quiet)
-        ctx.fill()
-        ctx.shadowColor = rgba(col, 0.9 * quiet)
-        ctx.shadowBlur = (isSel ? 14 : 8) * dpr
-        ctx.strokeStyle = rgba(col, (isSel ? 1 : 0.85) * quiet)
-        ctx.lineWidth = Math.max(1.4 / view.scale, (isSel ? 2.4 : 1.6) / view.scale)
-        if (isSel && !reduced) {
-          ctx.setLineDash([10, 6])
-          ctx.lineDashOffset = -t * 14
+        if (id === 'heart') {
+          ctx.strokeStyle = `rgba(4,9,24,${0.22 * quiet})`
+          ctx.lineWidth = 8 / view.scale
+          ctx.stroke()
         }
+        ctx.strokeStyle = `rgba(4,9,24,${0.32 * quiet})`
+        ctx.lineWidth = 3 / view.scale
         ctx.stroke()
-        ctx.setLineDash([])
+        ctx.shadowColor = rgba(col, 0.8 * quiet)
+        ctx.shadowBlur = (isSel ? 10 : 6) * dpr
+        ctx.strokeStyle = rgba(col, (isSel ? 1 : 0.8) * quiet)
+        ctx.lineWidth = Math.max(1.3, isSel ? 2 : 1.5) / view.scale
+        ctx.stroke()
         ctx.shadowBlur = 0
       }
     }
@@ -274,8 +297,8 @@ export function createHoloRenderer(canvas, { onSelect }) {
     const [sx, sy] = view.toScreen(o.c[0], o.c[1])
     const R = Math.max(...o.r) * view.scale
     ctx.globalCompositeOperation = 'lighter'
-    for (const ph of [0, 0.5]) {
-      const p = reduced ? 0.3 : (t * 0.7 + ph) % 1
+    for (const ph of [0]) {
+      const p = reduced ? 0.3 : (t * 0.4 + ph) % 1
       ctx.beginPath()
       ctx.arc(sx, sy, Math.min(R, Math.min(W, H) * 0.3) * (1.2 + 0.9 * p), 0, TAU)
       ctx.strokeStyle = rgba(col, (1 - p) * 0.55 * zoomed)
@@ -349,7 +372,7 @@ export function createHoloRenderer(canvas, { onSelect }) {
     // camera: a flight, or the rest pose with a slow drift
     let cam
     if (flight) {
-      const r = poseAt(flight, nowMs, W)
+      const r = poseAt(flight, nowMs)
       cam = { ...r.pose }
       if (r.done) {
         pose = { ...goal }
@@ -357,22 +380,11 @@ export function createHoloRenderer(canvas, { onSelect }) {
       }
     } else {
       cam = { ...goal }
-      if (!reduced) {
-        cam.roll += Math.sin(t * 0.2) * 0.002
-        cam.zoom *= 1 + Math.sin(t * 0.27) * 0.006
-        cam.fx += Math.sin(t * 0.31) * (state.selected ? 2 : 5) / cam.zoom
-        cam.fy += Math.sin(t * 0.23) * (state.selected ? 2 : 3) / cam.zoom
+      // at rest the picture only breathes a little, and not at all once a part is picked
+      if (!reduced && !state.selected) {
+        cam.fx += Math.sin(t * 0.31) * 2
+        cam.fy += Math.sin(t * 0.23) * 1.5
       }
-    }
-    if (!reduced) {
-      // a hair of handheld shake
-      cam.fx += (0.25 * Math.sin(t * 7.3) + 0.15 * Math.sin(t * 13.1)) / cam.zoom
-      cam.fy += (0.2 * Math.sin(t * 9.1)) / cam.zoom
-      // hover depth: the scene leans a little towards the pointer
-      hoverPos.x += (hoverPos.tx - hoverPos.x) * 0.06
-      hoverPos.y += (hoverPos.ty - hoverPos.y) * 0.06
-      cam.swing += hoverPos.x * 5
-      cam.fy += hoverPos.y * 3 / cam.zoom
     }
     if (!drag.down && drag.releasedAt && nowMs - drag.releasedAt > 600) {
       drag.x *= 0.93
@@ -436,8 +448,6 @@ export function createHoloRenderer(canvas, { onSelect }) {
       canvas.style.cursor = 'grabbing'
     } else {
       hover = hit(p.x, p.y)
-      hoverPos.tx = (p.x / W - 0.5) * 2
-      hoverPos.ty = (p.y / H - 0.5) * 2
       canvas.style.cursor = hover ? 'pointer' : 'grab'
     }
   }
@@ -453,8 +463,6 @@ export function createHoloRenderer(canvas, { onSelect }) {
   }
   const onLeave = () => {
     hover = null
-    hoverPos.tx = 0
-    hoverPos.ty = 0
   }
   canvas.addEventListener('pointerdown', onDown)
   canvas.addEventListener('pointermove', onMove)
