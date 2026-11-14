@@ -251,7 +251,7 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 .body-figure { position: sticky; top: 64px; }
 .panel-label { align-self: flex-start; margin: 0; font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 .body-stage { position: relative; width: 100%; max-width: 440px; -webkit-mask-image: radial-gradient(ellipse 72% 70% at 50% 50%, #000 62%, transparent 100%); mask-image: radial-gradient(ellipse 72% 70% at 50% 50%, #000 62%, transparent 100%); }
-.body-canvas { display: block; width: 100%; aspect-ratio: 4 / 5; cursor: grab; touch-action: pan-y; }
+.body-canvas { display: block; width: 100%; aspect-ratio: 896 / 1200; cursor: grab; touch-action: pan-y; }
 
 .overview { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .overview-row {
