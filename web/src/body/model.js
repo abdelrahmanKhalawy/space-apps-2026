@@ -89,16 +89,14 @@ export function buildBody(density = 1) {
     }
   }
 
-  const nTorso = n(40)
+  const nTorso = n(36)
   chain++
   for (let y = 80; y <= 148; y += 2.2) {
     const [a, b, cz] = torsoAt(y)
     horizontal('torso', y, a, b, 0, cz, nTorso)
   }
-  chain++
-  for (let y = 147; y <= 158; y += 2.2) horizontal('neck', y, 5.2, 5.2, 0, 0.2, n(18))
-  const nHead = n(28)
-  chain++
+  for (let y = 147; y <= 158; y += 2.2) horizontal('neck', y, 5.2, 5.2, 0, 0.2, nTorso)
+  const nHead = nTorso
   for (let y = 156; y <= 180.4; y += 2) {
     const k = (y - 168.4) / 12.3
     const s = Math.sqrt(Math.max(0, 1 - k * k))
@@ -179,7 +177,18 @@ export function buildBody(density = 1) {
     const step = Math.max(2, Math.round(a.count / 10))
     for (let k = 0; k < a.count; k += step) links.push(a.start + k, b.start + k)
   }
-  return { V, N, rings, links: Uint32Array.from(links) }
+  // The surface as quads (four vertex indices each) between neighbouring rings
+  const quads = []
+  for (let r = 0; r + 1 < rings.length; r++) {
+    const a = rings[r]
+    const b = rings[r + 1]
+    if (a.chain !== b.chain || a.count !== b.count) continue
+    for (let k = 0; k < a.count; k++) {
+      const k2 = (k + 1) % a.count
+      quads.push(a.start + k, a.start + k2, b.start + k2, b.start + k)
+    }
+  }
+  return { V, N, rings, links: Uint32Array.from(links), quads: Uint32Array.from(quads) }
 }
 
 // Blood vessels: routes from the heart out to the head, arms and legs (left side listed; right mirrors).
@@ -206,3 +215,70 @@ export const ORGAN_LABELS = { brain: 'BRAIN', lungs: 'LUNGS', heart: 'HEART', me
 export const ORGAN_NUMBERS = { brain: '01', lungs: '02', heart: '03', metabolism: '04', skin: '05' }
 // Where the skin label points: the side of the right hip
 export const SKIN_ANCHOR = [-18, 95, 0]
+
+/**
+ * The skeleton, drawn faintly inside the body: spine, ribs, collar bones, pelvis, arm and leg bones, a skull outline.
+ * Returns { lines, joints }: lines are lists of [x, y, z] points, joints are single points.
+ */
+export function buildSkeleton() {
+  const lines = []
+  const joints = []
+  const mirror = (pts, sign) => pts.map(p => [p[0] * sign, p[1], p[2]])
+
+  // spine
+  const spine = []
+  for (let y = 92; y <= 146; y += 3.4) {
+    const t = (y - 92) / 54
+    const p = [0, y, -3.6 + 1.3 * Math.sin(t * TAU)]
+    spine.push(p)
+    joints.push(p)
+  }
+  lines.push(spine)
+
+  // ribs: ellipse arcs from the spine round the side to the breastbone, sloping down towards the front
+  const widths = [11.5, 14, 15.6, 16.6, 16.8, 16.2, 15.2, 13.8, 12.2]
+  widths.forEach((a, k) => {
+    const y0 = 141 - k * 3.7
+    const b = a * 0.6
+    const arc = []
+    for (let q = 0; q <= 14; q++) {
+      const phi = Math.PI * (0.06 + 0.86 * (q / 14))
+      arc.push([a * Math.sin(phi), y0 - 5.2 * (phi / Math.PI), 0.9 - b * Math.cos(phi)])
+    }
+    lines.push(mirror(arc, 1), mirror(arc, -1))
+  })
+  lines.push([[0, 143, 8.6], [0, 124, 9.8]]) // breastbone
+
+  // collar bones
+  const collar = [[1.5, 143, 7], [10, 143.5, 5], [22, 141, 1]]
+  lines.push(mirror(collar, 1), mirror(collar, -1))
+
+  // pelvis: two arcs that nearly meet at the front
+  const hip = []
+  for (let q = 0; q <= 12; q++) {
+    const phi = Math.PI * (0.1 + 0.8 * (q / 12))
+    hip.push([14.5 * Math.sin(phi), 93 - 4 * Math.sin(phi * 1.0), -0.5 - 8.6 * Math.cos(phi)])
+  }
+  lines.push(mirror(hip, 1), mirror(hip, -1))
+
+  // arms and legs: bones with a joint at each end
+  for (const sign of [1, -1]) {
+    const arm = mirror([[22, 141, 0], [34, 113, 0], [44, 89, 0], [51, 72, 0]], sign)
+    const leg = mirror([[9.5, 88, -0.5], [9.6, 48, 0.6], [9, 10, -0.4], [9.5, 2.5, 12]], sign)
+    lines.push(arm, leg)
+    joints.push(...arm, ...leg)
+  }
+
+  // skull: cranium ring, jaw and the two eye sockets
+  const ring = (cx, cy, cz, r, plane, count = 22) =>
+    Array.from({ length: count + 1 }, (_, k) => {
+      const th = (k / count) * TAU
+      return plane === 'h'
+        ? [cx + r * Math.cos(th), cy, cz + r * 1.15 * Math.sin(th)]
+        : [cx + r * Math.cos(th), cy + r * Math.sin(th), cz]
+    })
+  lines.push(ring(0, 172, 1, 8.4, 'h'), ring(0, 166, 1, 7.6, 'h'))
+  lines.push([[-8, 168, 2], [-7, 162, 5], [-3.5, 158, 9], [0, 157, 10], [3.5, 158, 9], [7, 162, 5], [8, 168, 2]])
+  lines.push(ring(-3.4, 169, 9.6, 1.7, 'v', 10), ring(3.4, 169, 9.6, 1.7, 'v', 10))
+  return { lines, joints }
+}
