@@ -100,6 +100,7 @@ The two-week "Day 143" scenario (`data/mock/day143.json`) is **synthetic, genera
 cd web && npm test                      # 15 Node suites: detector parity, camera pulse, Index, crew rule, replay, CSV import, guided steps, offline, privacy...
 cd tests/SpaceApi.Tests && dotnet test  # 29 C# tests: live model vs the Python model, NASA DONKI parsing, and the whole API run in memory
 python ai/trial.py                      # re-runs the virtual crew trial (writes data/trial/results.json)
+node scripts/preflight.mjs <url>          # checks a running copy (local or the live link) the way a judge meets it
 ```
 
 ## Sources
