@@ -26,6 +26,7 @@ Screenshot: the **Replay** tab (heart-rate row green, flag on day 11).
 ## 5. We tested it, and we show the misses
 - Virtual crew trial: 2,000 simulated crew members, hypotheses written before running.
 - At 4.7% false alarms: **97%** of drifts caught.
+- Camera pulse algorithm checked on **53 real recordings** (BIDMC): **1.1 bpm** average error on accepted readings.
 - Our first model false-alarmed on **94%** of healthy crews → we recalibrated it. One hypothesis failed and is reported.
 Chart: speed vs false alarms (Evidence tab).
 

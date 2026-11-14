@@ -1,4 +1,4 @@
-// The four indicators the finger device cannot measure, entered by hand.
+// The four indicators entered by hand (the phone camera and the simulator cover the pulse).
 // Names and units come from contracts/reading.md and must match it exactly.
 //
 // min/max are INPUT SANITY limits only: they reject numbers that cannot be real

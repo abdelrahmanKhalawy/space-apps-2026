@@ -42,7 +42,7 @@ export const STATUS_WORDS = { green: 'Healthy', yellow: 'Watch', red: 'Act now' 
 
 // Where a reading came from, as the astronaut reads it (contracts/reading.md: device, manual, camera, mock).
 export const SOURCE_LABELS = {
-  device: 'Finger device',
+  device: 'Simulated readings',
   manual: 'Entered by crew',
   camera: 'Phone camera',
   mock: 'Sample data',
