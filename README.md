@@ -32,6 +32,8 @@ Underneath, a model learns each astronaut's own baseline from their first week o
 ### Beyond the three moments
 
 - **Evidence tab** — a Monte Carlo "virtual crew trial" (`ai/trial.py`, hypotheses written before the first run) that compares a personal baseline with fixed color thresholds. We report what held and what didn't, including a failed hypothesis and the finding that our first model false-alarms under realistic noise.
+- **Guided steps** — for a yellow or red indicator: what to do now, a timer, measure again (camera or typed), then a decision (back in range / closer / not better) and, if needed, a report to Earth that says what was tried. Inspired by NASA's work on autonomous crew medical support; decision support, not medical advice.
+- **Your data tab** — drop a CSV of your own daily resting heart rate (and sleep) from a watch or health app and see *your* normal next to the fixed ranges. It stays in your browser.
 - **Replay tab** — the Day-143 scenario day by day: what the fixed color ranges said next to what the personal baseline said (and an honest note where the colors were first).
 - **Crew tab** — a simulated crew of four: is a drift personal (one person) or environmental (everyone at once, with cabin CO₂)?
 - **AstroPulse Index** — one 0–100 number for how far you are from your *own* normal.
@@ -107,6 +109,9 @@ Full detail, with every link and an honest note on which ones are stronger than 
 - **Color thresholds** — American Heart Association (heart rate, blood pressure), MedlinePlus/NIH (oxygen saturation), CDC (blood sugar, sleep). Skin temperature has no precise clinical source and is an approximation; mood is a self-reported 1–5 scale with no clinical standard, included because NASA's Human Research Program tracks it as a leading indicator of isolation.
 - **Space-hazard explanations** — NASA (cardiovascular health in microgravity, cabin air quality, sleep in orbit, behavioral health and isolation). The blood-sugar/isolation link is our own inference from NASA's nutrition research, not a direct NASA statement — flagged as our weakest source.
 - **Space weather (radiation)** — live from NOAA's Space Weather Prediction Center (`services.swpc.noaa.gov`: NOAA scales, GOES proton flux, Kp, solar wind), read by `GET /api/space-weather`. If NOAA can't be reached the app serves a recorded real reading and labels it. The "simulated solar storm" preview is labeled as simulated.
+- **Real-recording validation** — the camera-pulse algorithm is checked against 53 recordings of the public BIDMC PPG and Respiration Dataset (PhysioNet, Open Data Commons Attribution License): 1.1 bpm mean error on accepted readings. Reproduce with the "Validate pulse algorithm" GitHub workflow.
+- **Recent solar events** — NASA DONKI (flares, solar particle events, geomagnetic storms) on the space-weather card.
+- **Outside evidence for personal baselines** — Mishra et al., "Pre-symptomatic detection of COVID-19 from smartwatch data", Nature Biomedical Engineering, 2020.
 - **Method inspiration** — NASA's Integrated Medical Model (a Monte Carlo risk simulation), NASA HRP's open question on meaningful thresholds and crew self-monitoring, Mars-500 findings that individuals respond very differently to isolation, and NASA's CO₂ technical brief. Full list in [`docs/winning-plan.md`](docs/winning-plan.md).
 - **Challenge background** — NASA's own [challenge page](https://www.spaceappschallenge.org/2026/challenges/health-monitoring-software/) and its Resources tab (five hazards of human spaceflight, risks of human spaceflight).
 

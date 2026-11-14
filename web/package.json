@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "test": "node src/evidence/parity.mjs && node src/live/ppg.test.mjs && node src/dashboard/astroIndex.test.mjs && node src/dashboard/evidence.test.mjs && node src/crew/cause.test.mjs && node src/checks/logic.test.mjs && node src/offline/outbox.test.mjs && node src/offline/sw.test.mjs && node src/voice/speak.test.mjs && node src/privacy/consent.test.mjs && node src/body/holo.test.mjs && node src/replay/logic.test.mjs && node src/live/validate.test.mjs"
+    "test": "node src/evidence/parity.mjs && node src/live/ppg.test.mjs && node src/dashboard/astroIndex.test.mjs && node src/dashboard/evidence.test.mjs && node src/crew/cause.test.mjs && node src/checks/logic.test.mjs && node src/offline/outbox.test.mjs && node src/offline/sw.test.mjs && node src/voice/speak.test.mjs && node src/privacy/consent.test.mjs && node src/body/holo.test.mjs && node src/replay/logic.test.mjs && node src/live/validate.test.mjs && node src/protocol/logic.test.mjs && node src/import/parse.test.mjs"
   },
   "dependencies": {
     "@microsoft/signalr": "^11.0.0",

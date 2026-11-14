@@ -37,5 +37,15 @@ check('top driver on the last day is a drifting metric', ['sleep_hours', 'heart_
 }
 check('labels', labelFor(0).label === 'Steady' && labelFor(25).label === 'Watch' && labelFor(50).label === 'Strained' && labelFor(75).label === 'Act now' && labelFor(100).label === 'Act now')
 
+// A very fit person: resting heart rate steady at 48 (a fixed RED range) for weeks. Their own normal, not an emergency.
+{
+  const rows = []
+  for (let d = 1; d <= 20; d++) rows.push({ metric: 'heart_rate', value: 48 + (d % 3 === 0 ? 1 : 0), takenAt: `2026-11-${String(d).padStart(2, '0')}T07:00:00Z` })
+  const r = computeIndex(rows, thresholds)
+  check('steady at a red range that is their own normal: Watch, not Act now', r.score >= 25 && r.score < 75, `score ${r.score} ${r.label.label}`)
+  const drift = [...rows.slice(0, 16), ...[52, 54, 55, 57].map((v, i) => ({ metric: 'heart_rate', value: v, takenAt: `2026-11-${String(17 + i).padStart(2, '0')}T07:00:00Z` }))]
+  check('a real drift from that normal still climbs', computeIndex(drift, thresholds).score > r.score, `${r.score} -> ${computeIndex(drift, thresholds).score}`)
+}
+
 console.log(failed === 0 ? 'all passed' : `${failed} failed`)
 process.exit(failed === 0 ? 0 : 1)

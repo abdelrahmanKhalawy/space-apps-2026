@@ -1,4 +1,5 @@
 import SpeakButton from '../voice/SpeakButton.jsx'
+import ProtocolRunner from '../protocol/ProtocolRunner.jsx'
 import { buildReportWithConsent, loadConsent } from '../privacy/consent.js'
 import { useEffect, useState } from 'react'
 import { HAZARD_NAMES, METRIC_NAMES, unitLabel } from '../dashboard/metricInfo.js'
@@ -144,6 +145,7 @@ export default function DecisionScreen({ status, units }) {
                 <li key={i}>{step}</li>
               ))}
             </ol>
+            <ProtocolRunner item={m} mission={mission} unit={units[m.metric]} />
           </li>
         ))}
       </ul>

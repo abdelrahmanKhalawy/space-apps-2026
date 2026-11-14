@@ -5,11 +5,14 @@ import DeviceSimulator from './live/DeviceSimulator.jsx'
 import CameraPulse from './live/CameraPulse.jsx'
 import useLive from './live/useLive.js'
 import useOutbox from './offline/useOutbox.js'
+import Tour from './tour/Tour.jsx'
+import { getLang, setLang, useLang } from './i18n/lang.js'
 import EntryForm from './entry/EntryForm.jsx'
 import GroundScreen from './ground/GroundScreen.jsx'
 
 const Evidence = lazy(() => import('./evidence/Evidence.jsx'))
 const ReplayView = lazy(() => import('./replay/ReplayView.jsx'))
+const ImportView = lazy(() => import('./import/ImportView.jsx'))
 const CrewView = lazy(() => import('./crew/CrewView.jsx'))
 const ChecksView = lazy(() => import('./checks/ChecksView.jsx'))
 
@@ -19,6 +22,7 @@ const TABS = [
   { id: 'log', label: 'Log a check' },
   { id: 'checks', label: 'Checks' },
   { id: 'replay', label: 'Replay' },
+  { id: 'yourdata', label: 'Your data' },
   { id: 'crew', label: 'Crew' },
   { id: 'evidence', label: 'Evidence' },
 ]
@@ -33,10 +37,16 @@ function CrewApp() {
   // Both the Status and Body screens re-fetch whenever `tick` changes.
   const { tick, connected } = useLive()
   const { pending } = useOutbox()
-  const SCREENS = { status: <Dashboard reloadKey={tick} />, body: <BodyView reloadKey={tick} />, log: <EntryForm />,
+  const lang = useLang() // the advice language: changing it reloads the screens that show advice
+  const SCREENS = { status: <Dashboard reloadKey={`${tick}-${lang}`} />, body: <BodyView reloadKey={`${tick}-${lang}`} />, log: <EntryForm />,
     checks: (
       <Suspense fallback={<p className="hint">Loading…</p>}>
         <ChecksView />
+      </Suspense>
+    ),
+    yourdata: (
+      <Suspense fallback={<p className="hint">Loading…</p>}>
+        <ImportView />
       </Suspense>
     ),
     replay: (
@@ -60,6 +70,17 @@ function CrewApp() {
     fetch('/api/health').then(r => r.text()).then(setHealth).catch(() => setHealth('down'))
   }, [])
 
+  // The tour (and any #link) can switch screens by changing the hash.
+  useEffect(() => {
+    const onHash = () => {
+      const h = location.hash.slice(1)
+      if (TABS.some(t => t.id === h)) setTab(h)
+      else if (h === '') setTab('status')
+    }
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+
   const choose = id => {
     setTab(id)
     history.replaceState(null, '', id === 'status' ? location.pathname : `#${id}`)
@@ -67,6 +88,7 @@ function CrewApp() {
 
   return (
     <div className="shell">
+      <a className="skip" href="#main">Skip to content</a>
       <header className="topbar">
         <div className="topbar-in">
           <div className="brand">
@@ -102,13 +124,18 @@ function CrewApp() {
         <div className="tools">
           <CameraPulse />
           <DeviceSimulator />
+          <button type="button" className="lang-btn" onClick={() => setLang(getLang() === 'ar' ? 'en' : 'ar')} aria-pressed={lang === 'ar'}
+            title="Language of the advice texts">
+            {lang === 'ar' ? 'Advice: العربية' : 'Advice: English'}
+          </button>
         </div>
+        <Tour onGo={id => { location.hash = id === 'status' ? '' : id; if (id === 'status') history.replaceState(null, '', location.pathname); setTab(id) }} />
         {pending > 0 && (
           <p className="notice" role="status">
             {pending} reading{pending === 1 ? '' : 's'} saved on this device, waiting for a connection.
           </p>
         )}
-        <main>{SCREENS[tab]}</main>
+        <main id="main" tabIndex="-1">{SCREENS[tab]}</main>
         <footer>
           <p className="disclaimer">Decision support, not a diagnosis.</p>
           <small>

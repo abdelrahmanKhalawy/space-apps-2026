@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import results from '../../../data/trial/results.json'
+import pulse from '../../../data/validation/bidmc.json'
 import thresholds from '../dashboard/thresholds.js'
 import { METRICS, METRIC_LABEL, allAlarms, makeCrew, mulberry32 } from './trial.js'
 
@@ -257,12 +258,41 @@ export default function Evidence() {
       <Replay />
 
       <section className="ev-block">
+        <h3>The pulse algorithm on real recordings</h3>
+        <p className="hint">
+          The camera feature uses one algorithm to read a heart rate from a finger signal. We ran it on {pulse.summary.recordings} real recorded finger signals
+          (the public BIDMC dataset) and compared it with the heart rate from the ECG recorded at the same time.
+        </p>
+        <div className="ev-stats">
+          <Stat big={`${pulse.summary.mean_abs_error_bpm} bpm`} label="average error on readings the app accepts" note={`Median ${pulse.summary.median_abs_error_bpm} bpm. 90% of readings within ${pulse.summary.p90_abs_error_bpm} bpm.`} />
+          <Stat big={`${pulse.summary.within_5_bpm_pct}%`} label="of accepted readings within 5 bpm" note={`${pulse.summary.within_2_bpm_pct}% within 2 bpm.`} />
+          <Stat big={`${pulse.summary.accepted_share}%`} label="of 25-second windows accepted" note={`${pulse.summary.accepted_windows} of ${pulse.summary.windows}. The rest the app rejects instead of guessing.`} />
+        </div>
+        <p className="hint">
+          Limits: these are pulse-oximeter signals from hospital patients, not phone-camera video, so this checks the signal processing on real pulses and
+          real noise, not the camera or a moving hand. Dataset: PhysioNet BIDMC (Open Data Commons Attribution License). Reproduce with the “Validate pulse algorithm” workflow.
+        </p>
+      </section>
+
+      <section className="ev-block">
+        <h3>Outside evidence for the idea</h3>
+        <p className="hint">
+          Comparing a person with their own baseline is an established method in wearables research. In a study of 32 people who caught COVID-19 (found among
+          nearly 5,300 smartwatch users), 63% of cases could have been flagged <em>before symptoms began</em> from resting heart rate rising above the person&rsquo;s own
+          baseline (Mishra et al., <em>Nature Biomedical Engineering</em>, 2020). The same paper is candid about the limits: it cannot tell COVID-19 from a cold, and air
+          travel and altitude also move the numbers. That is why AstroPulse asks &ldquo;person or environment?&rdquo; and shows what it does not know.
+        </p>
+      </section>
+
+      <section className="ev-block">
         <h3>What this does not show</h3>
         <ul className="ev-limits">
           <li>The crews are invented. Between-person spread and day-to-day noise are assumptions, not measurements (sleep is centred near the ISS figure of about 6.2 h from one published sample).</li>
           <li>Drift is a straight line on up to three metrics. Real health problems are messier.</li>
           <li>No real astronaut data was used. Real validation would need analog missions such as HERA or CHAPEA.</li>
-          <li>AstroPulse is a prototype and not a medical device.</li>
+          <li>AstroPulse is a prototype and not a medical device. It supports a decision; it does not diagnose, and it never replaces a doctor.</li>
+          <li>A flag means &ldquo;this is different from your usual&rdquo;, not &ldquo;you are ill&rdquo;. Travel, workload, a cold or a bad week all move these numbers.</li>
+          <li>Your own CSV never leaves your browser, and the crew member chooses what is shared in a report. A red alert is always sent, so privacy never hides an emergency.</li>
         </ul>
         <p className="hint">Reproduce: <code>python ai/trial.py</code>. The browser detectors are checked against the Python ones by <code>node web/src/evidence/parity.mjs</code>.</p>
       </section>
