@@ -1,0 +1,30 @@
+name: Validate pulse algorithm
+
+# Runs the phone-camera pulse algorithm on REAL recorded PPG (BIDMC PPG and Respiration Dataset, PhysioNet,
+# 53 recordings with an ECG heart rate) and reports the accuracy. It runs on GitHub's servers because the
+# team's own network can't reach PhysioNet. Manual: Actions -> "Validate pulse algorithm" -> Run workflow.
+# The result is attached as an artifact (bidmc.json) and printed in the run summary.
+on:
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run the algorithm on the 53 recordings
+        run: node web/scripts/validate-bidmc.mjs --download --out validation/bidmc.json
+      - name: Show the result
+        run: |
+          echo '## Pulse algorithm vs real recordings (BIDMC)' >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat validation/bidmc.json >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bidmc-validation
+          path: validation/bidmc.json

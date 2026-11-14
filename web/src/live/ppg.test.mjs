@@ -101,6 +101,11 @@ check('dark lens is not a finger', !fingerOnLens({ r: 20, g: 5, b: 5 }), '')
   const b = analyzeBest(redGood)
   check('red clean, green flat: red is used', b.bpm !== null && Math.abs(b.bpm - 72) <= 2 && b.channel === 'r', `got ${b.bpm} via ${b.channel}`)
 
+  // camera polarity: the red channel DIPS on each beat (more blood, less light), the opposite of an oximeter trace
+  const dips = rgb(v => 200 - (v - 120) * 2, () => 0)
+  const d = analyzeBest(dips)
+  check('red dips on each beat (camera polarity): still 72', d.bpm !== null && Math.abs(d.bpm - 72) <= 2, `got ${d.bpm}, polarity ${d.polarity}`)
+
   const dead = rgb(() => 255, () => 255)
   const c = analyzeBest(dead)
   check('everything clipped: no reading, no crash', c.bpm === null && c.quality === 'none', `quality ${c.quality}`)
