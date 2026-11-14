@@ -157,7 +157,7 @@ export default function CameraPulse({ onUse = null, buttonLabel = 'Measure my pu
       )}
       {phase !== 'idle' && (
         <div className="cam-panel" role="region" aria-label="Camera pulse measurement">
-          <video ref={video} playsInline muted className="cam-video" />
+          <video ref={video} playsInline muted className={phase === 'measuring' ? 'cam-video live' : 'cam-video'} aria-label="What the camera sees" />
           {phase === 'starting' && <p className="hint">Starting the camera…</p>}
           {phase === 'error' && (
             <>
@@ -170,6 +170,10 @@ export default function CameraPulse({ onUse = null, buttonLabel = 'Measure my pu
             <>
               <p className="cam-step">
                 {finger ? 'Hold still. Keep your fingertip fully over the camera lens.' : 'Cover the camera lens (and the flash) completely with your fingertip.'}
+              </p>
+              <p className="cam-where">
+                <strong>Where to put your finger:</strong> look at the small picture above. Slide the pad of your finger over the camera lenses (and the flash)
+                until the picture turns <strong>solid red</strong>. Phones with several lenses use one of them: keep moving until it is all red, then hold still.
               </p>
               {!torchOn && <p className="hint">This browser can't switch the flash on, so use bright light (a window or a lamp) and rest the fingertip gently on the lens. Don't press hard: that stops the blood flow.</p>}
               {rgb && <p className="hint cam-rgb">Camera sees: red {rgb.r} · green {rgb.g} · blue {rgb.b} {finger ? '(fingertip detected)' : '(no fingertip yet)'}</p>}
