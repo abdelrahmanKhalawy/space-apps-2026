@@ -1,6 +1,6 @@
 // Run: node web/src/live/ppg.test.mjs
 // Synthetic fingertip signals with a known heart rate, checked against analyze().
-import { analyze, fingerOnLens } from './ppg.js'
+import { analyze, analyzeBest, fingerOnLens } from './ppg.js'
 
 let failed = 0
 const check = (name, ok, detail) => {
@@ -85,6 +85,26 @@ for (const bpm of [52, 65, 72, 88, 110, 140]) {
 check('finger on lens (torch)', fingerOnLens({ r: 230, g: 40, b: 30 }), '')
 check('no finger (grey room)', !fingerOnLens({ r: 110, g: 105, b: 100 }), '')
 check('dark lens is not a finger', !fingerOnLens({ r: 20, g: 5, b: 5 }), '')
+
+// 6) real phones: the red channel may be clipped at 255 (torch) while the pulse lives in green, or the other way round
+{
+  const beats = regularBeats(72)
+  const base = simulate({ beatTimes: beats, seed: 21 })
+  const clean = base.map(s => s.v)
+  const rgb = (rFn, gFn) => base.map((s, i) => ({ t: s.t, r: rFn(clean[i], i), g: gFn(clean[i], i), b: 40 }))
+
+  const redClipped = rgb(() => 255, v => 80 + (v - 120) * 1.5)
+  const a = analyzeBest(redClipped)
+  check('red clipped at 255: pulse is found in green', a.bpm !== null && Math.abs(a.bpm - 72) <= 2 && a.channel === 'g', `got ${a.bpm} via ${a.channel}`)
+
+  const redGood = rgb(v => v + 100, () => 60)
+  const b = analyzeBest(redGood)
+  check('red clean, green flat: red is used', b.bpm !== null && Math.abs(b.bpm - 72) <= 2 && b.channel === 'r', `got ${b.bpm} via ${b.channel}`)
+
+  const dead = rgb(() => 255, () => 255)
+  const c = analyzeBest(dead)
+  check('everything clipped: no reading, no crash', c.bpm === null && c.quality === 'none', `quality ${c.quality}`)
+}
 
 console.log(failed === 0 ? 'all passed' : `${failed} failed`)
 process.exit(failed === 0 ? 0 : 1)
