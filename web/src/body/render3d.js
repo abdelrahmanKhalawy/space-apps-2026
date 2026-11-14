@@ -2,7 +2,7 @@
 // What you see: a see-through hologram made of scan rings and dots, glowing organs that beat and breathe, a scan
 // plane sweeping up the body, a floor disc in the skin's status color, floating dust, and a camera that flies to the
 // part you pick (an arc with a sideways swing, a pull-back and a tilt), then keeps a slow handheld drift.
-import { buildBody, ORGAN_ORDER, ORGANS3D, ORGAN_LABELS, ORGAN_NUMBERS, SKIN_ANCHOR, VESSELS } from './model.js'
+import { buildBody, buildSkeleton, ORGAN_ORDER, ORGANS3D, ORGAN_LABELS, ORGAN_NUMBERS, SKIN_ANCHOR, VESSELS } from './model.js'
 import { OVERVIEW, makeView, project, poseFor, startFlight, poseAt } from './camera3d.js'
 
 const COLORS = { green: [61, 220, 132], yellow: [255, 204, 77], red: [255, 93, 93], none: [120, 132, 175] }
@@ -129,6 +129,8 @@ export function createBodyRenderer(canvas, { onSelect }) {
   let SY = null
   let SZ = null
   let RIM = null
+  let FACE = null
+  const skeleton = buildSkeleton()
   let raf = 0
   let visible = true
   let destroyed = false
@@ -167,6 +169,7 @@ export function createBodyRenderer(canvas, { onSelect }) {
     SY = new Float32Array(n)
     SZ = new Float32Array(n)
     RIM = new Float32Array(n)
+    FACE = new Uint8Array(n)
   }
 
   function update(next) {
@@ -210,8 +213,10 @@ export function createBodyRenderer(canvas, { onSelect }) {
   const newPaths = () => Array.from({ length: LEVELS }, () => new Path2D())
   const bucket = a => Math.min(LEVELS - 1, Math.floor(a * LEVELS))
 
+  // The body is a glass-like glow: thousands of see-through surface patches added together, so thick or edge-on
+  // parts shine brighter (like an X-ray). The mesh itself only shows where the scan band passes.
   function drawBody(view, t) {
-    const { V, N, rings, links } = body
+    const { V, N, rings, links, quads } = body
     const n = V.length / 3
     for (let i = 0; i < n; i++) {
       const x = V[i * 3]
@@ -221,46 +226,68 @@ export function createBodyRenderer(canvas, { onSelect }) {
       SX[i] = out.x
       SY[i] = out.y
       SZ[i] = out.z
-      // rim light: surfaces seen edge-on glow, surfaces facing you stay faint, so the body reads as a solid shape
+      // rim light: surfaces seen edge-on glow, surfaces facing you stay faint, so the body reads as a volume
       const dx = view.px - x
       const dy = view.py - y
       const dz = view.pz - z
       const d = (N[i * 3] * dx + N[i * 3 + 1] * dy + N[i * 3 + 2] * dz) / (Math.hypot(dx, dy, dz) || 1)
-      RIM[i] = Math.pow(1 - Math.abs(d), 1.5) * (d > -0.15 ? 1 : 0.55)
+      RIM[i] = Math.pow(1 - Math.abs(d), 1.4)
+      FACE[i] = d > 0 ? 1 : 0
     }
-    const shade = (i, j) => {
-      if (SZ[i] < 4 || SZ[j] < 4) return -1
-      return clamp(depthAlpha((SZ[i] + SZ[j]) / 2) * (0.16 + 1.05 * ((RIM[i] + RIM[j]) / 2)), 0, 1)
+
+    // aura behind the body
+    project(view, 0, 100, 0, out)
+    if (out.z > 4) {
+      const gs = 118 * out.k
+      ctx.globalCompositeOperation = 'lighter'
+      ctx.globalAlpha = state.selected ? 0.1 : 0.24
+      ctx.drawImage(sprite(BODY), out.x - gs * 0.6, out.y - gs, gs * 1.2, gs * 2)
+      ctx.globalAlpha = 1
     }
-    const rings_ = newPaths()
-    const meridians = newPaths()
-    const dots = newPaths()
-    const hot = new Path2D()
+
+    // the surface
+    const front = newPaths()
+    const back = newPaths()
+    for (let q = 0; q < quads.length; q += 4) {
+      const a = quads[q]
+      const b = quads[q + 1]
+      const c = quads[q + 2]
+      const e = quads[q + 3]
+      if (SZ[a] < 4 || SZ[b] < 4 || SZ[c] < 4 || SZ[e] < 4) continue
+      const rim = (RIM[a] + RIM[b] + RIM[c] + RIM[e]) / 4
+      const al = clamp(depthAlpha((SZ[a] + SZ[c]) / 2) * (0.12 + 1.05 * rim), 0, 1)
+      const p = (FACE[a] ? front : back)[bucket(al)]
+      p.moveTo(SX[a], SY[a])
+      p.lineTo(SX[b], SY[b])
+      p.lineTo(SX[c], SY[c])
+      p.lineTo(SX[e], SY[e])
+      p.closePath()
+    }
+    ctx.globalCompositeOperation = 'lighter'
+    ctx.lineWidth = 0.7
+    for (let b = 0; b < LEVELS; b++) {
+      const k = (b + 1) / LEVELS
+      ctx.fillStyle = rgba(BODY, k * 0.3)
+      ctx.strokeStyle = rgba(BODY, k * 0.3)
+      ctx.fill(front[b])
+      ctx.stroke(front[b])
+      ctx.fillStyle = rgba(BODY, k * 0.17)
+      ctx.strokeStyle = rgba(BODY, k * 0.17)
+      ctx.fill(back[b])
+      ctx.stroke(back[b])
+    }
+
+    // the outline: the left-most and right-most points of neighbouring rings, joined
     const outline = new Path2D()
-    const scanY = reduced ? -100 : ((t * 0.2) % 1.15) * 195 - 8
     let prev = null
     for (const ring of rings) {
-      const { start, count } = ring
-      const isHot = Math.abs(ring.y - scanY) < 2.4
-      let lo = start
-      let hi = start
-      for (let k = 0; k < count; k++) {
-        const i = start + k
-        const j = start + ((k + 1) % count)
+      let lo = ring.start
+      let hi = ring.start
+      for (let k = 1; k < ring.count; k++) {
+        const i = ring.start + k
         if (SX[i] < SX[lo]) lo = i
         if (SX[i] > SX[hi]) hi = i
-        const a = shade(i, j)
-        if (a < 0) continue
-        const p = rings_[bucket(a)]
-        p.moveTo(SX[i], SY[i])
-        p.lineTo(SX[j], SY[j])
-        if (isHot) {
-          hot.moveTo(SX[i], SY[i])
-          hot.lineTo(SX[j], SY[j])
-        }
-        if ((k & 1) === 0) dots[bucket(clamp(a * 1.1, 0, 1))].rect(SX[i] - 0.8, SY[i] - 0.8, 1.6, 1.6)
       }
-      // the body's outline: join the left-most and right-most points of neighbouring rings
       if (prev && prev.chain === ring.chain && SZ[lo] > 4 && SZ[hi] > 4) {
         outline.moveTo(SX[prev.lo], SY[prev.lo])
         outline.lineTo(SX[lo], SY[lo])
@@ -269,34 +296,90 @@ export function createBodyRenderer(canvas, { onSelect }) {
       }
       prev = { chain: ring.chain, lo, hi }
     }
-    for (let q = 0; q < links.length; q += 2) {
-      const a = shade(links[q], links[q + 1])
-      if (a < 0) continue
-      const p = meridians[bucket(a * 0.8)]
-      p.moveTo(SX[links[q]], SY[links[q]])
-      p.lineTo(SX[links[q + 1]], SY[links[q + 1]])
-    }
-    ctx.globalCompositeOperation = 'lighter'
-    strokeBuckets(rings_, BODY, 3.2, 0.1)
-    strokeBuckets(rings_, BODY, 0.9, 0.5)
-    strokeBuckets(meridians, BODY, 0.8, 0.4)
-    ctx.strokeStyle = 'rgba(150,205,255,0.16)'
+    ctx.strokeStyle = 'rgba(150,205,255,0.14)'
     ctx.lineWidth = 4
     ctx.stroke(outline)
-    ctx.strokeStyle = 'rgba(190,225,255,0.55)'
-    ctx.lineWidth = 1.1
+    ctx.strokeStyle = 'rgba(200,230,255,0.5)'
+    ctx.lineWidth = 1
     ctx.stroke(outline)
-    for (let b = 0; b < LEVELS; b++) {
-      ctx.fillStyle = `rgba(200,228,255,${((b + 1) / LEVELS) * 0.8})`
-      ctx.fill(dots[b])
-    }
+
+    // the scan band: where it passes, the mesh lights up
     if (!reduced) {
-      ctx.strokeStyle = 'rgba(160,230,255,0.12)'
-      ctx.lineWidth = 4
-      ctx.stroke(hot)
-      ctx.strokeStyle = 'rgba(220,250,255,0.55)'
-      ctx.lineWidth = 1.2
-      ctx.stroke(hot)
+      const scanY = ((t * 0.2) % 1.15) * 195 - 8
+      const hot = [new Path2D(), new Path2D(), new Path2D()]
+      const level = y => {
+        const d = Math.abs(y - scanY)
+        return d < 3 ? 2 : d < 6.5 ? 1 : d < 10 ? 0 : -1
+      }
+      for (const ring of rings) {
+        const lv = level(ring.y)
+        if (lv < 0) continue
+        for (let k = 0; k < ring.count; k++) {
+          const i = ring.start + k
+          const j = ring.start + ((k + 1) % ring.count)
+          if (SZ[i] < 4 || SZ[j] < 4) continue
+          hot[lv].moveTo(SX[i], SY[i])
+          hot[lv].lineTo(SX[j], SY[j])
+        }
+      }
+      for (let q = 0; q < links.length; q += 2) {
+        const lv = level(V[links[q] * 3 + 1])
+        if (lv < 0 || SZ[links[q]] < 4 || SZ[links[q + 1]] < 4) continue
+        hot[lv].moveTo(SX[links[q]], SY[links[q]])
+        hot[lv].lineTo(SX[links[q + 1]], SY[links[q + 1]])
+      }
+      for (let lv = 0; lv < 3; lv++) {
+        ctx.strokeStyle = `rgba(170,230,255,${0.25 + lv * 0.28})`
+        ctx.lineWidth = 0.9
+        ctx.stroke(hot[lv])
+      }
+    }
+
+    // sparkles on the skin
+    const sparks = newPaths()
+    for (let i = 0; i < n; i += 2) {
+      if (SZ[i] < 4) continue
+      const tw = reduced ? 0.6 : Math.max(0, Math.sin(t * 1.9 + i * 1.37))
+      const a = depthAlpha(SZ[i]) * (0.15 + 0.85 * RIM[i]) * (0.25 + 0.75 * tw)
+      if (a > 0.08) sparks[bucket(a)].rect(SX[i] - 0.8, SY[i] - 0.8, 1.6, 1.6)
+    }
+    for (let b = 0; b < LEVELS; b++) {
+      ctx.fillStyle = `rgba(215,238,255,${((b + 1) / LEVELS) * 0.95})`
+      ctx.fill(sparks[b])
+    }
+
+    drawSkeleton(view)
+  }
+
+  // The skeleton inside: pale lines and joints, dimmer when an organ is picked so the organ stays the star
+  function drawSkeleton(view) {
+    const dim = state.selected ? 0.5 : 1
+    const lines = newPaths()
+    for (const line of skeleton.lines) {
+      let last = null
+      for (const p of line) {
+        project(view, p[0], p[1], p[2], out)
+        const cur = { x: out.x, y: out.y, z: out.z }
+        if (last && cur.z > 4 && last.z > 4) {
+          const a = clamp(depthAlpha((cur.z + last.z) / 2) * dim, 0, 1)
+          const path = lines[bucket(a)]
+          path.moveTo(last.x, last.y)
+          path.lineTo(cur.x, cur.y)
+        }
+        last = cur
+      }
+    }
+    ctx.globalCompositeOperation = 'lighter'
+    strokeBuckets(lines, [225, 238, 255], 1.1, 0.95)
+    const dots = newPaths()
+    for (const p of skeleton.joints) {
+      project(view, p[0], p[1], p[2], out)
+      if (out.z < 4) continue
+      dots[bucket(clamp(depthAlpha(out.z) * dim, 0, 1))].rect(out.x - 1.2, out.y - 1.2, 2.4, 2.4)
+    }
+    for (let b = 0; b < LEVELS; b++) {
+      ctx.fillStyle = `rgba(240,248,255,${((b + 1) / LEVELS) * 0.95})`
+      ctx.fill(dots[b])
     }
   }
 
@@ -317,7 +400,7 @@ export function createBodyRenderer(canvas, { onSelect }) {
       const total = lens[lens.length - 1] || 1
       ctx.beginPath()
       pts.forEach((p, k) => (k ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)))
-      ctx.strokeStyle = rgba(heart, 0.14 * dim)
+      ctx.strokeStyle = rgba(heart, 0.07 * dim)
       ctx.lineWidth = 1.4
       ctx.stroke()
       const flow = reduced ? 0 : t * (0.16 + 0.12 * beat) + vi * 0.13
@@ -328,9 +411,9 @@ export function createBodyRenderer(canvas, { onSelect }) {
         const u = (f - lens[k - 1]) / ((lens[k] - lens[k - 1]) || 1)
         const x = pts[k - 1].x + (pts[k].x - pts[k - 1].x) * u
         const y = pts[k - 1].y + (pts[k].y - pts[k - 1].y) * u
-        ctx.fillStyle = rgba(heart, (0.4 + 0.35 * beat) * dim)
+        ctx.fillStyle = rgba(heart, (0.28 + 0.3 * beat) * dim)
         ctx.beginPath()
-        ctx.arc(x, y, 1.1 + beat * 0.7, 0, TAU)
+        ctx.arc(x, y, 0.9 + beat * 0.6, 0, TAU)
         ctx.fill()
       }
     })
