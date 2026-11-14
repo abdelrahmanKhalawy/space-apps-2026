@@ -765,3 +765,5 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 :root.hc .tab, :root.hc button, :root.hc input, :root.hc select, :root.hc textarea { border-color: #9aa6e0; }
 :root.hc a { text-decoration: underline; }
 :root.hc :focus-visible { outline: 3px solid #fff !important; outline-offset: 2px; }
+
+.cam-rgb { font-variant-numeric: tabular-nums; opacity: 0.85; }

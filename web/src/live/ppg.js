@@ -145,5 +145,8 @@ export function analyzeBest(samples, fs = FS) {
 /** Is a fingertip covering the lens? Skin lit from behind is strongly red (high red, low green and blue). With the torch
  * the red is very high; in plain room light it is lower, so the floor is modest and the red-dominance ratio does the work. */
 export function fingerOnLens({ r, g, b }) {
-  return r > 55 && r > 1.4 * g && r > 1.4 * b
+  // Without the flash (iPhone Safari cannot turn it on from a web page) a fingertip in room light is DARK red: red 25-80,
+  // green and blue near zero. So the floor is low and the red-dominance ratio does the work. A covered, unlit lens is
+  // near black (red under 20) and a scene with no finger is not red-dominant.
+  return r > 20 && r > 1.4 * g && r > 1.4 * b
 }
