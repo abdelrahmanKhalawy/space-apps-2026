@@ -13,7 +13,8 @@ namespace SpaceApi.SpaceWeather;
 public record SpaceWeatherReport(
     string Level, int SScale, int GScale, int RScale,
     double? ProtonFlux10MeV, double? Kp, double? SolarWindKmS,
-    string? ObservedAt, string Source, bool Simulated, string Headline, string Detail);
+    string? ObservedAt, string Source, bool Simulated, string Headline, string Detail,
+    NasaDonki? Nasa = null);
 
 public static class SpaceWeatherEndpoints
 {
@@ -24,7 +25,7 @@ public static class SpaceWeatherEndpoints
     {
         var snapshotPath = Path.Combine(AppContext.BaseDirectory, "SeedData", "space-weather.json");
 
-        app.MapGet("/api/space-weather", async (string? scenario, IHttpClientFactory http, IMemoryCache cache, ILogger<Program> log) =>
+        app.MapGet("/api/space-weather", async (string? scenario, IHttpClientFactory http, IMemoryCache cache, IConfiguration config, ILogger<Program> log) =>
         {
             if (scenario == "storm") return Results.Ok(Storm());
 
@@ -33,6 +34,15 @@ public static class SpaceWeatherEndpoints
             try
             {
                 var report = await Fetch(http.CreateClient("noaa"));
+                // NASA DONKI adds what happened recently (flares, particle events, storms). Cached longer: it changes slowly and
+                // the free key is rate-limited. Any failure just leaves the NASA line out.
+                var nasa = await cache.GetOrCreateAsync("donki", async e =>
+                {
+                    var found = await DonkiClient.Fetch(http.CreateClient("noaa"), config["Nasa:ApiKey"] ?? "DEMO_KEY", DateTime.UtcNow);
+                    e.AbsoluteExpirationRelativeToNow = found is null ? TimeSpan.FromMinutes(5) : TimeSpan.FromHours(1); // retry a failure soon
+                    return found;
+                });
+                report = report with { Nasa = nasa };
                 cache.Set("space-weather", report, CacheFor);
                 return Results.Ok(report);
             }

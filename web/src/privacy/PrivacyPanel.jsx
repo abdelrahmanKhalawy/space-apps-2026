@@ -19,6 +19,11 @@ export default function PrivacyPanel() {
           <span>Share {info.label.toLowerCase()}</span>
         </label>
       ))}
+      <p className="hint">
+        Your data is yours: <a href="/api/export?crewId=crew-1" download>download your readings (CSV)</a> ·{' '}
+        <a href="/api/export?crewId=crew-1&format=json" download>JSON</a> ·{' '}
+        <a href="/swagger" target="_blank" rel="noreferrer">API documentation</a>
+      </p>
     </details>
   )
 }

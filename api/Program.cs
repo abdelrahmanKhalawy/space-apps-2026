@@ -28,6 +28,14 @@ builder.Services.AddSingleton(sp => Explanations.Load(explanationsPath, sp.GetRe
 builder.Services.AddSingleton<DemoClock>(); // the clock report delays run on (the demo can skip ahead)
 builder.Services.AddSignalR();
 builder.Services.AddMemoryCache();
+// API documentation at /swagger (OpenAPI), generated from the endpoints.
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(o => o.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+{
+    Title = "AstroPulse API",
+    Version = "v1",
+    Description = "Readings, colors, reports to Earth and replies, the anomaly model, space weather and data export. Shapes are described in contracts/ in the repository. Prototype, not a medical device.",
+}));
 builder.Services.AddHttpClient("noaa");
 
 var app = builder.Build();
@@ -45,6 +53,7 @@ using (var scope = app.Services.CreateScope())
 app.MapGet("/api/health", () => Results.Text("ok"));
 app.MapReadings();
 app.MapReports();
+app.MapExport();
 app.MapReplies();
 app.MapDemoRestore();
 app.MapAnalyze();
@@ -52,6 +61,9 @@ app.MapSpaceWeather();
 app.MapExplain();
 app.MapForecast();
 app.MapHub<ReadingsHub>("/hubs/readings");
+
+app.UseSwagger();
+app.UseSwaggerUI(c => c.DocumentTitle = "AstroPulse API");
 
 // The React app is built into wwwroot, so the API serves it from the same link.
 app.UseDefaultFiles();

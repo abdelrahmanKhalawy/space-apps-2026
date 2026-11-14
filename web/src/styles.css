@@ -544,3 +544,5 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 .rp-flag { font-size: 1rem; }
 .rp-idx { text-align: center; font-weight: 700; padding-top: 6px; }
 .rp-index-row th { padding-top: 6px; }
+
+.spw-nasa { margin: 0 0 8px; font-size: 0.82rem; color: var(--muted); line-height: 1.5; }

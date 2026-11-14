@@ -86,6 +86,34 @@ public class ApiIntegrationTests : IClassFixture<ApiFactory>
         Assert.Equal(HttpStatusCode.BadRequest, (await http.PostAsync("/api/readings", Json(Body("laser")))).StatusCode);
     }
 
+
+    // ---- open data and API docs
+    [Fact]
+    public async Task ExportGivesCsvAndJsonOfTheReadings()
+    {
+        var csv = await http.GetAsync("/api/export?crewId=crew-1");
+        Assert.Equal(HttpStatusCode.OK, csv.StatusCode);
+        Assert.StartsWith("text/csv", csv.Content.Headers.ContentType!.ToString());
+        var text = await csv.Content.ReadAsStringAsync();
+        var lines = text.Split((char)10, StringSplitOptions.RemoveEmptyEntries);
+        Assert.Equal("crewId,metric,value,unit,takenAt,source", lines[0]);
+        Assert.True(lines.Length > 1000, "the Day-143 sample should be in the export");
+        Assert.Contains("crew-1,heart_rate,", text);
+
+        var json = await http.GetFromJsonAsync<JsonElement>("/api/export?crewId=crew-1&format=json");
+        Assert.True(json.GetArrayLength() == lines.Length - 1);
+        Assert.Equal("crew-1", json[0].GetProperty("crewId").GetString());
+    }
+
+    [Fact]
+    public async Task ApiDocumentationListsTheMainEndpoints()
+    {
+        var doc = await http.GetStringAsync("/swagger/v1/swagger.json");
+        foreach (var path in new[] { "/api/status", "/api/readings", "/api/reports", "/api/space-weather", "/api/export", "/api/explain" })
+            Assert.Contains(path, doc);
+        Assert.Equal(HttpStatusCode.OK, (await http.GetAsync("/swagger/index.html")).StatusCode);
+    }
+
     // ---- space weather without the network
     [Fact]
     public async Task SimulatedSolarStormIsMarkedSimulated()

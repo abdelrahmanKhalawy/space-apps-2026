@@ -46,6 +46,15 @@ export default function SpaceWeather() {
         <div><dt>Geomagnetic Kp</dt><dd>{w.kp == null ? '—' : w.kp.toFixed(1)}</dd></div>
         <div><dt>Solar wind</dt><dd>{w.solarWindKmS == null ? '—' : Math.round(w.solarWindKmS)} <small>km/s</small></dd></div>
       </dl>
+      {w.nasa && !w.simulated && (
+        <p className="spw-nasa">
+          <span className="tag">NASA DONKI</span>{' '}
+          {w.nasa.flaresLast7Days === 0 ? 'No solar flares in the last 7 days' : `${w.nasa.flaresLast7Days} solar flare${w.nasa.flaresLast7Days === 1 ? '' : 's'} in 7 days (strongest ${w.nasa.strongestFlareClass})`}
+          {' · '}
+          {w.nasa.solarParticleEventsLast30Days === 0 ? 'no solar particle events in 30 days' : `${w.nasa.solarParticleEventsLast30Days} solar particle event${w.nasa.solarParticleEventsLast30Days === 1 ? '' : 's'} in 30 days`}
+          {w.nasa.maxKpLast30Days != null ? ` · strongest geomagnetic storm Kp ${w.nasa.maxKpLast30Days.toFixed(1)}` : ''}
+        </p>
+      )}
       {w.level !== 'calm' && (
         <p className="hint">Radiation can't be felt, and your vitals won't show it. This alert comes from the space environment, not from your body.</p>
       )}
