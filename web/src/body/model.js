@@ -11,13 +11,13 @@ const cr = (p0, p1, p2, p3, t) =>
 // Torso cross-sections, feet to head: [y, half width (x), half depth (z), forward offset (z)]
 export const TORSO = [
   [80, 16, 9.5, -0.3],
-  [84, 17.2, 10.5, -0.6],
-  [92, 17.5, 10.8, -0.6],
+  [84, 17.6, 11.4, -1.2],
+  [92, 18, 11.8, -1.3],
   [100, 15.8, 10, 0],
   [108, 14.5, 9.5, 0.6],
   [114, 15.2, 10, 0.8],
-  [122, 17, 11.5, 1.2],
-  [130, 18, 11.5, 1.2],
+  [122, 17.2, 12, 1.6],
+  [130, 18.4, 12.4, 1.8],
   [138, 19.5, 10, 0.8],
   [143, 22, 8.5, 0],
   [146, 14, 7.5, 0],
@@ -38,8 +38,8 @@ export function torsoAt(y) {
 
 // Limbs: chains of [x, y, z, radius, flatness] for the left side (x > 0); the right side mirrors it.
 const ARM = [
-  [22, 141, 0, 6.8, 1],
-  [27, 133, 0.2, 6, 1],
+  [23, 141, 0, 7.6, 1],
+  [27.5, 133, 0.2, 6.6, 1],
   [31, 123, 0, 5, 1],
   [34, 113, 0, 4.2, 1],
   [37, 102, 0.4, 4.5, 1],
@@ -52,10 +52,10 @@ const ARM = [
 const LEG = [
   [9, 90, -0.6, 9.8, 1],
   [9.2, 78, -0.2, 9.4, 1],
-  [9.4, 64, 0.2, 8.4, 1],
+  [9.4, 64, 0.2, 9.0, 1],
   [9.6, 50, 0.6, 6.4, 1],
   [9.4, 44, 0.2, 5.8, 1],
-  [9.2, 36, -0.9, 6.3, 1],
+  [9.2, 36, -1.1, 7.0, 1],
   [9, 26, -0.6, 5, 1],
   [8.9, 14, -0.4, 3.9, 1],
   [8.9, 8, 0, 3.5, 1],
@@ -71,17 +71,18 @@ const LEG = [
 export function buildBody(density = 1) {
   const pts = []
   const rings = []
+  let chain = 0
   const n = base => Math.max(12, Math.round(base * density))
 
-  const begin = (kind, y, count) => {
-    const ring = { start: pts.length / 3, count, kind, y }
+  const begin = (kind, y, count, c) => {
+    const ring = { start: pts.length / 3, count, kind, y, chain, c }
     rings.push(ring)
     return ring
   }
 
   // Flat rings: head, neck and torso
   const horizontal = (kind, y, a, b, cx, cz, count) => {
-    begin(kind, y, count)
+    begin(kind, y, count, [cx, y, cz])
     for (let k = 0; k < count; k++) {
       const th = (k / count) * TAU
       pts.push(cx + a * Math.cos(th), y, cz + b * Math.sin(th))
@@ -89,12 +90,15 @@ export function buildBody(density = 1) {
   }
 
   const nTorso = n(40)
+  chain++
   for (let y = 80; y <= 148; y += 2.2) {
     const [a, b, cz] = torsoAt(y)
     horizontal('torso', y, a, b, 0, cz, nTorso)
   }
+  chain++
   for (let y = 147; y <= 158; y += 2.2) horizontal('neck', y, 5.2, 5.2, 0, 0.2, n(18))
   const nHead = n(28)
+  chain++
   for (let y = 156; y <= 180.4; y += 2) {
     const k = (y - 168.4) / 12.3
     const s = Math.sqrt(Math.max(0, 1 - k * k))
@@ -105,6 +109,7 @@ export function buildBody(density = 1) {
   // Rings around an axis, for arms and legs
   const limb = (nodes, sign) => {
     const count = n(18)
+    chain++
     for (let s = 0; s < nodes.length - 1; s++) {
       const A = nodes[s]
       const B = nodes[s + 1]
@@ -135,7 +140,7 @@ export function buildBody(density = 1) {
         const cz = lerp(A[2], B[2], t)
         const r = lerp(A[3], B[3], t)
         const flat = lerp(A[4], B[4], t)
-        begin('limb', cy, count)
+        begin('limb', cy, count, [cx, cy, cz])
         for (let q = 0; q < count; q++) {
           const th = (q / count) * TAU
           const c = Math.cos(th) * r
@@ -150,8 +155,41 @@ export function buildBody(density = 1) {
     limb(LEG, sign)
   }
 
-  return { V: Float32Array.from(pts), rings }
+  const V = Float32Array.from(pts)
+
+  // Outward normals (used for the rim glow) and the lines that run down the body from ring to ring
+  const N = new Float32Array(V.length)
+  for (const r of rings) {
+    for (let k = 0; k < r.count; k++) {
+      const i = (r.start + k) * 3
+      const dx = V[i] - r.c[0]
+      const dy = V[i + 1] - r.c[1]
+      const dz = V[i + 2] - r.c[2]
+      const l = Math.hypot(dx, dy, dz) || 1
+      N[i] = dx / l
+      N[i + 1] = dy / l
+      N[i + 2] = dz / l
+    }
+  }
+  const links = []
+  for (let r = 0; r + 1 < rings.length; r++) {
+    const a = rings[r]
+    const b = rings[r + 1]
+    if (a.chain !== b.chain || a.count !== b.count) continue
+    const step = Math.max(2, Math.round(a.count / 10))
+    for (let k = 0; k < a.count; k += step) links.push(a.start + k, b.start + k)
+  }
+  return { V, N, rings, links: Uint32Array.from(links) }
 }
+
+// Blood vessels: routes from the heart out to the head, arms and legs (left side listed; right mirrors).
+// Particles stream along them in time with the heartbeat.
+const SPINE = [[2.4, 126, 4], [0, 138, 2], [0, 148, 0], [0, 158, 0.6], [0, 166, 1]]
+const ARM_V = [[0, 138, 2], [14, 140, 0], [27, 132, 0.2], [34, 113, 0], [40, 100, 0.3], [44, 89, 0]]
+const BELLY = [[2.4, 126, 4], [0, 112, 2], [0, 98, 0], [0, 88, -0.5]]
+const LEG_V = [[0, 88, -0.5], [9, 80, -0.2], [9.5, 60, 0.3], [9.6, 48, 0.6], [9.2, 30, -0.8], [8.9, 10, -0.3]]
+const mirror = pts => pts.map(p => [-p[0], p[1], p[2]])
+export const VESSELS = [SPINE, ARM_V, mirror(ARM_V), BELLY, LEG_V, mirror(LEG_V)]
 
 // Organs as ellipsoids: center c and radii r (cm). Lungs are two lobes.
 export const ORGAN_ORDER = ['brain', 'lungs', 'heart', 'metabolism']
