@@ -106,7 +106,7 @@ function CrewApp() {
             </div>
             <span className={connected ? 'live-pill on' : 'live-pill'} role="status" data-testid="live-pill">
               <span className="live-dot" aria-hidden="true" />
-              {connected ? 'Live' : 'Updating every 5 s'}
+              {connected ? 'Live' : 'Auto-refresh'}
             </span>
           </div>
           <nav className="tabs" role="tablist" aria-label="Screens">
@@ -126,15 +126,19 @@ function CrewApp() {
         </div>
       </header>
       <div className="app">
-        <Tour onGo={id => { location.hash = id === 'status' ? '' : id; if (id === 'status') history.replaceState(null, '', location.pathname); setTab(id) }} />
-        <div className="tools">
-          <CameraPulse />
-          <DeviceSimulator />
-          <button type="button" className="lang-btn" onClick={() => setLang(getLang() === 'ar' ? 'en' : 'ar')} aria-pressed={lang === 'ar'}
-            title="Language of the advice texts">
-            {lang === 'ar' ? 'Advice: العربية' : 'Advice: English'}
-          </button>
-        </div>
+        <Tour showAgain={tab === 'status'} onGo={id => { location.hash = id === 'status' ? '' : id; if (id === 'status') history.replaceState(null, '', location.pathname); setTab(id) }} />
+        {['status', 'body', 'log'].includes(tab) && (
+          <div className="tools">
+            <CameraPulse />
+            <DeviceSimulator />
+            {tab !== 'log' && (
+              <button type="button" className="lang-btn" onClick={() => setLang(getLang() === 'ar' ? 'en' : 'ar')} aria-pressed={lang === 'ar'}
+                title="Language of the advice texts">
+                {lang === 'ar' ? 'Advice: العربية' : 'Advice: English'}
+              </button>
+            )}
+          </div>
+        )}
         {pending > 0 && (
           <p className="notice" role="status">
             {pending} reading{pending === 1 ? '' : 's'} saved on this device, waiting for a connection.
@@ -144,9 +148,9 @@ function CrewApp() {
         <footer>
           <p className="disclaimer">Decision support, not a diagnosis.</p>
           <small>
-            API: {health} ·{' '}
+            {health !== 'ok' && health !== '...' && <>Server: {health} · </>}
             <a className="footer-link" href="#ground" target="_blank" rel="noreferrer">
-              Ground control view
+              Open the flight surgeon's screen
             </a>
           </small>
         </footer>
