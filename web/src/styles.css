@@ -418,6 +418,9 @@ label .unit { position: absolute; right: 12px; bottom: 15px; }
 .tools .device-sim, .tools .cam-btn { margin-top: 0; }
 .cam-panel { width: 100%; max-width: 420px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; text-align: left; }
 .cam-video { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+/* while measuring, the camera picture is shown, so the person can SEE which lens is in use and when the finger covers it */
+.cam-video.live { position: static; display: block; width: 132px; height: 99px; margin: 0 0 8px; object-fit: cover; opacity: 1; border: 2px solid var(--accent); border-radius: 12px; background: #000; }
+.cam-where { margin: 0 0 8px; font-size: 0.88rem; line-height: 1.5; }
 .cam-step { margin: 0 0 8px; font-size: 0.92rem; }
 .cam-bar { height: 8px; background: var(--bg); border-radius: 999px; overflow: hidden; margin-bottom: 8px; }
 .cam-bar div { height: 100%; background: var(--accent); transition: width 0.1s linear; }
