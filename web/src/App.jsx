@@ -81,6 +81,11 @@ function CrewApp() {
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
 
+  // On a phone the tab strip scrolls sideways: keep the current tab in view (the tour changes tabs for you)
+  useEffect(() => {
+    document.querySelector('.tab.on')?.scrollIntoView?.({ inline: 'center', block: 'nearest', behavior: 'smooth' })
+  }, [tab])
+
   const choose = id => {
     setTab(id)
     history.replaceState(null, '', id === 'status' ? location.pathname : `#${id}`)
@@ -121,6 +126,7 @@ function CrewApp() {
         </div>
       </header>
       <div className="app">
+        <Tour onGo={id => { location.hash = id === 'status' ? '' : id; if (id === 'status') history.replaceState(null, '', location.pathname); setTab(id) }} />
         <div className="tools">
           <CameraPulse />
           <DeviceSimulator />
@@ -129,7 +135,6 @@ function CrewApp() {
             {lang === 'ar' ? 'Advice: العربية' : 'Advice: English'}
           </button>
         </div>
-        <Tour onGo={id => { location.hash = id === 'status' ? '' : id; if (id === 'status') history.replaceState(null, '', location.pathname); setTab(id) }} />
         {pending > 0 && (
           <p className="notice" role="status">
             {pending} reading{pending === 1 ? '' : 's'} saved on this device, waiting for a connection.
