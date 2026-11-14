@@ -1,0 +1,71 @@
+name: Deploy to Azure
+
+# Publishes the current main to https://space-monkeys-2026.azurewebsites.net from GitHub's own servers,
+# so it works even when the team's network blocks Azure.
+#
+# One-time setup (see api/README.md, "Deploy from GitHub"): add the repository secret
+# AZURE_WEBAPP_PUBLISH_PROFILE (Azure portal -> the web app -> Get publish profile).
+#
+# Run it by hand: Actions -> "Deploy to Azure" -> Run workflow.
+# To also deploy on every push to main, add a repository VARIABLE named AUTO_DEPLOY with the value true.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.event_name == 'workflow_dispatch' || vars.AUTO_DEPLOY == 'true'
+    runs-on: ubuntu-latest
+    env:
+      APP_NAME: space-monkeys-2026
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Build the screens into api/wwwroot
+        working-directory: web
+        run: |
+          npm ci
+          npm run build
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Publish the server
+        run: dotnet publish api/SpaceApi.csproj -c Release -o publish
+
+      - name: Check the publish folder has the screens
+        run: |
+          test -f publish/wwwroot/index.html
+          test -f publish/SeedData/thresholds.json
+          test -f publish/SeedData/day143.json
+          echo "publish folder looks right"
+
+      - name: Deploy
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ env.APP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: publish
+
+      - name: Smoke test the live site
+        run: |
+          base="https://${APP_NAME}.azurewebsites.net"
+          for i in $(seq 1 12); do
+            if curl -fsS "$base/api/health" | grep -q ok; then ok=1; break; fi
+            echo "waiting for the app to start ($i)..."; sleep 10
+          done
+          test "${ok:-0}" = 1
+          curl -fsS "$base/api/status?crewId=crew-1" | grep -q '"metrics"'
+          curl -fsS "$base/api/space-weather" | grep -q '"level"'
+          curl -fsS "$base/" | grep -qi '<div id="root">'
+          echo "live site is up: $base"

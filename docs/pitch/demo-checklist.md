@@ -9,7 +9,7 @@ Do this in order, 20 minutes before presenting. Everything needs only a phone or
 - [ ] Phone volume on (for **Read aloud**), screen timeout off, battery above 50%, power bank ready.
 - [ ] Laptop: second tab on the **Replay** tab at day 1, third tab on **Evidence**.
 - [ ] Install the app to the phone's home screen once (offline fallback), then confirm the Status page opens in airplane mode.
-- [ ] `npm test` / CI green on `main`; the live link is the latest `main` (`/api/health` says `ok`).
+- [ ] CI green on `main`, and the live link is the latest `main`: run **Actions → Deploy to Azure** (see `api/README.md`) and check that run is green.
 
 ## The 60 seconds
 1. Judge puts a finger on the camera → pulse appears (fallback: **Simulate readings**).
